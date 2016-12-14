@@ -15,6 +15,7 @@ option(ALLOY_VERBOSE "increase output verbosity"         OFF)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
+include(Deploy)
 include(TestTree)
 include(CompileFlags)
 
@@ -42,6 +43,8 @@ set_target_properties(Alloy PROPERTIES
     INTERFACE_COMPILE_FEATURES cxx_std_17
     INTERFACE_INCLUDE_DIRECTORIES ${ALLOY_INCLUDE_DIR}
 )
+
+deploy(Alloy)
 
 target_compile_flags(Alloy INTERFACE -W)
 target_compile_flags(Alloy INTERFACE -Wall)
