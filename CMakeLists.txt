@@ -43,6 +43,8 @@ set_target_properties(Alloy PROPERTIES
     INTERFACE_COMPILE_FEATURES cxx_std_17
 )
 
+deploy_header_library(Alloy)
+
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 target_compile_flags(Alloy INTERFACE -W)
