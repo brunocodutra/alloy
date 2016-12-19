@@ -12,6 +12,7 @@ project(Alloy CXX)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
+include(Test)
 include(Deploy)
 
 set(ALLOY_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include/")
@@ -20,3 +21,5 @@ add_header_library(Alloy "${ALLOY_INCLUDE_DIR}/alloy.hpp")
 set_target_properties(Alloy PROPERTIES
     INTERFACE_COMPILE_FEATURES cxx_std_17
 )
+
+add_subdirectory(test)
