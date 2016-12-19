@@ -17,3 +17,7 @@ set_target_properties(Alloy PROPERTIES
     INTERFACE_COMPILE_FEATURES cxx_std_17
     INTERFACE_INCLUDE_DIRECTORIES ${ALLOY_INCLUDE_DIR}
 )
+
+enable_testing()
+
+add_subdirectory(test)
