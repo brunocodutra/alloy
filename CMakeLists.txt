@@ -4,6 +4,10 @@
 
 cmake_minimum_required(VERSION 3.8)
 
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE "Release" CACHE STRING "")
+endif()
+
 project(Alloy CXX)
 
 set(ALLOY_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include/")
