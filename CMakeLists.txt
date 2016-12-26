@@ -10,6 +10,10 @@ endif()
 
 project(Alloy CXX)
 
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+
+include(TestTree)
+
 set(ALLOY_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include/")
 
 add_library(Alloy INTERFACE)
