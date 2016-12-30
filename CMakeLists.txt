@@ -15,6 +15,7 @@ option(ALLOY_VERBOSE "increase output verbosity"         OFF)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
+include(Metal)
 include(Deploy)
 include(TestTree)
 include(CompileFlags)
@@ -41,7 +42,7 @@ add_library(Alloy INTERFACE)
 set_target_properties(Alloy PROPERTIES
     INTERFACE_LIB_VERSION ${ALLOY_VERSION}
     INTERFACE_COMPILE_FEATURES cxx_std_17
-    INTERFACE_INCLUDE_DIRECTORIES ${ALLOY_INCLUDE_DIR}
+    INTERFACE_INCLUDE_DIRECTORIES "${ALLOY_INCLUDE_DIR};${Metal_INCLUDE_DIR}"
 )
 
 deploy(Alloy)
