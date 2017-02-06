@@ -10,6 +10,17 @@
 #include <type_traits>
 
 namespace alloy::detail {
+    inline constexpr enum class valid_t {} valid = {};
+
+    template<bool... Cs>
+    struct conj : std::is_same<conj<Cs...>, conj<(Cs, true)...>> {};
+
+    template<bool... Cs>
+    using where = std::enable_if_t<conj<Cs...>::value, valid_t>;
+
+    template<bool... Cs>
+    using unless = std::enable_if_t<!conj<Cs...>::value, valid_t>;
+
     template<typename T>
     struct _strip_ref {using type = T;};
 
