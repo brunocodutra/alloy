@@ -9,6 +9,11 @@
 
 #include <alloy/detail/traits.hpp>
 
+#include <metal/list/iota.hpp>
+#include <metal/list/list.hpp>
+#include <metal/number/number.hpp>
+#include <metal/number/numbers.hpp>
+
 #include <cstddef>
 
 namespace alloy::detail {
@@ -95,6 +100,20 @@ namespace alloy::detail {
         constexpr object(object&&) = default;
         constexpr object(object const&) = default;
     };
+
+    template<typename, typename>
+    struct _object_t {};
+
+    template<auto... Is, typename... Xs>
+    struct _object_t<metal::numbers<Is...>, metal::list<Xs...>> {
+        using type = object<prop<Is, Xs>...>;
+    };
+
+    template<typename... Xs>
+    using object_t = typename _object_t<
+        metal::iota<metal::number<0>, metal::number<sizeof...(Xs)>>,
+        metal::list<Xs...>
+    >::type;
 }
 
 #endif
