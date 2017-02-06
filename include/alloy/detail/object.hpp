@@ -7,8 +7,9 @@
 
 #include <alloy/config.hpp>
 
+#include <alloy/detail/traits.hpp>
+
 #include <cstddef>
-#include <type_traits>
 
 namespace alloy::detail {
     template<std::size_t I, typename X,
@@ -31,6 +32,22 @@ namespace alloy::detail {
             noexcept(noexcept(X(static_cast<Y&&>(y))))
             : x(static_cast<Y&&>(y))
         {}
+
+        constexpr operator transfer<prop&, X>() & noexcept {
+            return static_cast<transfer<prop&, X>>(x);
+        }
+
+        constexpr operator transfer<prop const&, X>() const& noexcept {
+            return static_cast<transfer<prop const&, X>>(x);
+        }
+
+        constexpr operator transfer<prop&&, X>() && noexcept {
+            return static_cast<transfer<prop&&, X>>(x);
+        }
+
+        constexpr operator transfer<prop const&&, X>() const&& noexcept {
+            return static_cast<transfer<prop const&&, X>>(x);
+        }
     };
 
     template<std::size_t I, typename X>
