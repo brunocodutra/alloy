@@ -9,6 +9,7 @@
 
 #include <alloy/detail/lookup.hpp>
 #include <alloy/detail/object.hpp>
+#include <alloy/detail/return.hpp>
 #include <alloy/detail/traits.hpp>
 
 #include <utility>
@@ -214,11 +215,38 @@ namespace alloy::detail {
         constexpr tuple(tuple&&) = default;
         constexpr tuple(tuple const&) = default;
     };
+
+    template<typename... Xs>
+    constexpr auto make_tuple(Xs&&... xs) ALLOY_RETURN(
+        tuple<Xs...>(static_cast<Xs&&>(xs)...)
+    )
+
+    inline constexpr struct {
+        template<typename... Args>
+        constexpr auto operator ()(Args&&... args) const ALLOY_RETURN(
+            make_tuple(static_cast<Args&&>(args)...)
+        )
+    } _make_tuple{};
+
+    template<typename... Xs>
+    constexpr auto forward_as_tuple(Xs&&... xs) noexcept {
+        return tuple<Xs&&...>(static_cast<Xs&&>(xs)...);
+    }
+
+    inline constexpr struct {
+        template<typename... Args>
+        constexpr auto operator ()(Args&&... args) const ALLOY_RETURN(
+            forward_as_tuple(static_cast<Args&&>(args)...)
+        )
+    } _forward_as_tuple{};
 }
 
 namespace alloy {
     template<typename... Xs>
     using tuple = detail::tuple<Xs...>;
+
+    inline constexpr auto& make_tuple = detail::_make_tuple;
+    inline constexpr auto& forward_as_tuple = detail::_forward_as_tuple;
 }
 
 #endif
