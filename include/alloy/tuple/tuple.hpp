@@ -12,6 +12,7 @@
 #include <alloy/detail/return.hpp>
 #include <alloy/detail/traits.hpp>
 
+#include <cstddef>
 #include <utility>
 
 namespace alloy::detail {
@@ -239,6 +240,37 @@ namespace alloy::detail {
             forward_as_tuple(static_cast<Args&&>(args)...)
         )
     } _forward_as_tuple{};
+
+    template<std::size_t I, typename X>
+    constexpr X& get(prop<I, X>& prop) noexcept {
+        return prop;
+    }
+
+    template<std::size_t I, typename X>
+    constexpr X const& get(prop<I, X> const& prop) noexcept {
+        return prop;
+    }
+
+    template<std::size_t I, typename X>
+    constexpr X&& get(prop<I, X>&& p) noexcept {
+        return static_cast<prop<I, X>&&>(p);
+    }
+
+    template<std::size_t I, typename X>
+    constexpr X const&& get(prop<I, X> const&& p) noexcept {
+        return static_cast<prop<I, X> const&&>(p);
+    }
+
+    template<auto I>
+    struct _get_t {
+        template<typename... Args>
+        constexpr auto operator ()(Args&&... args) const ALLOY_RETURN(
+            get<I>(static_cast<Args&&>(args)...)
+        )
+    };
+
+    template<auto I>
+    constexpr _get_t<I> _get{};
 }
 
 namespace alloy {
@@ -247,6 +279,9 @@ namespace alloy {
 
     inline constexpr auto& make_tuple = detail::_make_tuple;
     inline constexpr auto& forward_as_tuple = detail::_forward_as_tuple;
+
+    template<auto I>
+    constexpr auto& get = detail::_get<I>;
 }
 
 #endif
