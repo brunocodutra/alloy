@@ -7,13 +7,24 @@
 
 #include <alloy/config.hpp>
 
+#include <alloy/detail/lookup.hpp>
 #include <alloy/detail/object.hpp>
 #include <alloy/detail/traits.hpp>
+
+#include <utility>
 
 namespace alloy::detail {
     template<typename... Xs>
     class tuple : public object_t<Xs...> {
         using base = object_t<Xs...>;
+
+        struct _ {};
+
+        template<typename... Props, typename T>
+        explicit constexpr tuple(_, metal::list<Props...>, T&& t)
+            noexcept(noexcept(base(ALLOY_LOOKUP(Props, T&&, t)...)))
+            : base(ALLOY_LOOKUP(Props, T&&, t)...)
+        {}
 
     public:
         template<bool T = true,
@@ -56,6 +67,44 @@ namespace alloy::detail {
         explicit constexpr tuple(Ys&&... ys)
             noexcept(noexcept(base(static_cast<Ys&&>(ys)...)))
             : base(static_cast<Ys&&>(ys)...)
+        {}
+
+        template<typename... Ys,
+            typename props = props<tuple<Ys...>>,
+            where<std::is_convertible<Ys const&, Xs>::value...> = valid
+        >
+        constexpr tuple(tuple<Ys...> const& ys)
+            noexcept(noexcept(tuple(_{}, props{}, ys)))
+            : tuple(_{}, props{}, ys)
+        {}
+
+        template<typename... Ys,
+            typename props = props<tuple<Ys...>>,
+            where<std::is_constructible<Xs, Ys const&>::value...> = valid,
+            unless<std::is_convertible<Ys const&, Xs>::value...> = valid
+        >
+        explicit constexpr tuple(tuple<Ys...> const& ys)
+            noexcept(noexcept(tuple(_{}, props{}, ys)))
+            : tuple(_{}, props{}, ys)
+        {}
+
+        template<typename... Ys,
+            typename props = props<tuple<Ys...>>,
+            where<std::is_convertible<Ys&&, Xs>::value...> = valid
+        >
+        constexpr tuple(tuple<Ys...>&& ys)
+            noexcept(noexcept(tuple(_{}, props{}, std::move(ys))))
+            : tuple(_{}, props{}, std::move(ys))
+        {}
+
+        template<typename... Ys,
+            typename props = props<tuple<Ys...>>,
+            where<std::is_constructible<Xs, Ys&&>::value...> = valid,
+            unless<std::is_convertible<Ys&&, Xs>::value...> = valid
+        >
+        explicit constexpr tuple(tuple<Ys...>&& ys)
+            noexcept(noexcept(tuple(_{}, props{}, std::move(ys))))
+            : tuple(_{}, props{}, std::move(ys))
         {}
 
         constexpr tuple(tuple&&) = default;

@@ -92,6 +92,9 @@ namespace alloy::detail {
 
     template<typename T, typename U>
     using transfer = transfer_cv<T, transfer_ref<T, U>>;
+
+    template<typename T>
+    using props = typename strip<T>::props;
 }
 
 #endif

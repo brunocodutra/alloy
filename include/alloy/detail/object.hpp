@@ -23,6 +23,8 @@ namespace alloy::detail {
     struct prop {
         X x;
 
+        using type = X;
+
         constexpr prop() = default;
         constexpr prop(prop&&) = default;
         constexpr prop(prop const&) = default;
@@ -57,6 +59,8 @@ namespace alloy::detail {
 
     template<std::size_t I, typename X>
     struct prop<I, X, true> : X {
+        using type = X;
+
         constexpr prop() = default;
         constexpr prop(prop&&) = default;
         constexpr prop(prop const&) = default;
@@ -78,6 +82,8 @@ namespace alloy::detail {
 
     template<auto... Is, typename... Xs>
     struct object<prop<Is, Xs>...> : prop<Is, Xs>... {
+        using props = metal::list<prop<Is, Xs>...>;
+
         constexpr object() = default;
         constexpr object(object&&) = default;
         constexpr object(object const&) = default;
@@ -96,6 +102,8 @@ namespace alloy::detail {
 
     template<>
     struct object<> {
+        using props = metal::list<>;
+
         constexpr object() = default;
         constexpr object(object&&) = default;
         constexpr object(object const&) = default;
