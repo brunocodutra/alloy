@@ -6,6 +6,7 @@
 #define ALLOY_LAMBDA_INVOKE_HPP
 
 #include <alloy/config.hpp>
+#include <alloy/number/number.hpp>
 
 #include <alloy/detail/return.hpp>
 #include <alloy/detail/traits.hpp>
@@ -54,10 +55,32 @@ namespace alloy::detail {
             invoke(static_cast<Args&&>(args)...)
         )
     } _invoke{};
+
+    template<typename Lbd, typename... Args>
+    constexpr auto is_invocable(Lbd&& lbd, Args&&... args) noexcept
+        -> decltype(
+            void(invoke(static_cast<Lbd&&>(lbd), static_cast<Args&&>(args)...)),
+            number<true>{}
+        ) {
+        return {};
+    }
+
+    template<typename... Args>
+    constexpr number<false> is_invocable(Args&&...) noexcept {
+        return {};
+    }
+
+    inline constexpr struct {
+        template<typename... Args>
+        constexpr auto operator ()(Args&&... args) const ALLOY_RETURN(
+            is_invocable(static_cast<Args&&>(args)...)
+        )
+    } _is_invocable{};
 }
 
 namespace alloy {
     inline constexpr auto& invoke = detail::_invoke;
+    inline constexpr auto& is_invocable = detail::_is_invocable;
 }
 
 #endif
