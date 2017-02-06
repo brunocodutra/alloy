@@ -111,6 +111,103 @@ namespace alloy::detail {
         constexpr tuple(tuple const&) = default;
     };
 
+    template<typename X>
+    class tuple<X> : public object_t<X> {
+        using base = object_t<X>;
+
+    public:
+        template<bool T = true,
+            where<std::is_default_constructible<X>::value, T> = valid
+        >
+        constexpr tuple()
+            noexcept(noexcept(base()))
+            : base()
+        {}
+
+        template<bool T = true,
+            where<std::is_convertible<X const&, X>::value, T> = valid
+        >
+        constexpr tuple(X const& x)
+            noexcept(noexcept(base(x)))
+            : base(x)
+        {}
+
+        template<bool T = true,
+            where<std::is_constructible<X, X const&>::value, T> = valid,
+            unless<std::is_convertible<X const&, X>::value, T> = valid
+        >
+        explicit constexpr tuple(X const& x)
+            noexcept(noexcept(base(x)))
+            : base(x)
+        {}
+
+        template<typename Y,
+            where<std::is_convertible<Y&&, X>::value> = valid
+        >
+        constexpr tuple(Y&& y)
+            noexcept(noexcept(base(static_cast<Y&&>(y))))
+            : base(static_cast<Y&&>(y))
+        {}
+
+        template<typename Y,
+            where<std::is_constructible<X, Y&&>::value> = valid,
+            unless<std::is_convertible<Y&&, X>::value> = valid
+        >
+        explicit constexpr tuple(Y&& y)
+            noexcept(noexcept(base(static_cast<Y&&>(y))))
+            : base(static_cast<Y&&>(y))
+        {}
+
+        template<typename Y,
+            typename prop = prop<0U, Y>,
+            where<std::is_convertible<Y const&, X>::value> = valid,
+            unless<std::is_convertible<tuple<Y> const&, X>::value> = valid,
+            unless<std::is_same<X, Y>::value> = valid
+        >
+        constexpr tuple(tuple<Y> const& y)
+            noexcept(noexcept(base(ALLOY_LOOKUP(prop, tuple<Y> const&, y))))
+            : base(ALLOY_LOOKUP(prop, tuple<Y> const&, y))
+        {}
+
+        template<typename Y,
+            typename prop = prop<0U, Y>,
+            where<std::is_constructible<X, Y const&>::value> = valid,
+            unless<std::is_convertible<Y const&, X>::value> = valid,
+            unless<std::is_constructible<X, tuple<Y> const&>::value> = valid,
+            unless<std::is_same<X, Y>::value> = valid
+        >
+        explicit constexpr tuple(tuple<Y> const& y)
+            noexcept(noexcept(base(ALLOY_LOOKUP(prop, tuple<Y> const&, y))))
+            : base(ALLOY_LOOKUP(prop, tuple<Y> const&, y))
+        {}
+
+        template<typename Y,
+            typename prop = prop<0U, Y>,
+            where<std::is_convertible<Y&&, X>::value> = valid,
+            unless<std::is_convertible<tuple<Y>, X>::value> = valid,
+            unless<std::is_same<X, Y>::value> = valid
+        >
+        constexpr tuple(tuple<Y>&& y)
+            noexcept(noexcept(base(ALLOY_LOOKUP(prop, tuple<Y>&&, y))))
+            : base(ALLOY_LOOKUP(prop, tuple<Y>&&, y))
+        {}
+
+        template<typename Y,
+            typename prop = prop<0U, Y>,
+            where<std::is_constructible<X, Y&&>::value> = valid,
+            unless<std::is_convertible<Y&&, X>::value> = valid,
+            unless<std::is_constructible<X, tuple<Y>>::value> = valid,
+            unless<std::is_same<X, Y>::value> = valid
+        >
+        explicit constexpr tuple(tuple<Y>&& y)
+            noexcept(noexcept(base(ALLOY_LOOKUP(prop, tuple<Y>&&, y))))
+            : base(ALLOY_LOOKUP(prop, tuple<Y>&&, y))
+        {}
+
+        constexpr tuple(tuple&&) = default;
+        constexpr tuple(tuple const&) = default;
+    };
+
     template<>
     struct tuple<> : object_t<> {
         constexpr tuple() = default;
