@@ -8,9 +8,12 @@
 #include <alloy/config.hpp>
 
 #include <cstddef>
+#include <type_traits>
 
 namespace alloy::detail {
-    template<std::size_t I, typename X>
+    template<std::size_t I, typename X,
+        bool = std::is_empty<X>::value && !std::is_final<X>::value
+    >
     struct prop {
         X x;
 
@@ -27,6 +30,24 @@ namespace alloy::detail {
         constexpr prop(Y&& y)
             noexcept(noexcept(X(static_cast<Y&&>(y))))
             : x(static_cast<Y&&>(y))
+        {}
+    };
+
+    template<std::size_t I, typename X>
+    struct prop<I, X, true> : X {
+        constexpr prop() = default;
+        constexpr prop(prop&&) = default;
+        constexpr prop(prop const&) = default;
+
+        constexpr prop(X const& x)
+            noexcept(noexcept(X(x)))
+            : X(x)
+        {}
+
+        template<typename Y>
+        constexpr prop(Y&& y)
+            noexcept(noexcept(X(static_cast<Y&&>(y))))
+            : X(static_cast<Y&&>(y))
         {}
     };
 
