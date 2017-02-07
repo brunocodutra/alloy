@@ -5,6 +5,7 @@
 #ifndef ALLOY_TUPLE_HPP
 #define ALLOY_TUPLE_HPP
 
+#include <alloy/tuple/accumulate.hpp>
 #include <alloy/tuple/apply.hpp>
 #include <alloy/tuple/at.hpp>
 #include <alloy/tuple/indices.hpp>
