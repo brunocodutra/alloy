@@ -5,6 +5,9 @@
 #ifndef ALLOY_NUMBER_HPP
 #define ALLOY_NUMBER_HPP
 
+#include <alloy/number/and.hpp>
+#include <alloy/number/not.hpp>
 #include <alloy/number/number.hpp>
+#include <alloy/number/or.hpp>
 
 #endif
