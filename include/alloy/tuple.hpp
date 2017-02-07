@@ -5,6 +5,7 @@
 #ifndef ALLOY_TUPLE_HPP
 #define ALLOY_TUPLE_HPP
 
+#include <alloy/tuple/apply.hpp>
 #include <alloy/tuple/size.hpp>
 #include <alloy/tuple/tuple.hpp>
 
