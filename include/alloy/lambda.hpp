@@ -5,6 +5,7 @@
 #ifndef ALLOY_LAMBDA_HPP
 #define ALLOY_LAMBDA_HPP
 
+#include <alloy/lambda/curry.hpp>
 #include <alloy/lambda/invoke.hpp>
 
 #endif

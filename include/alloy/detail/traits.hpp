@@ -95,6 +95,9 @@ namespace alloy::detail {
 
     template<typename T>
     using props = typename strip<T>::props;
+
+    template<typename T>
+    using type = typename strip<T>::type;
 }
 
 #endif
