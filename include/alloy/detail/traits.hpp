@@ -98,6 +98,9 @@ namespace alloy::detail {
 
     template<typename T>
     using type = typename strip<T>::type;
+
+    template<typename T>
+    constexpr auto value = strip<T>::value;
 }
 
 #endif
