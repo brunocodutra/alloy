@@ -11,6 +11,8 @@
 #include <alloy/tuple/indices.hpp>
 #include <alloy/tuple/iota.hpp>
 #include <alloy/tuple/operators.hpp>
+#include <alloy/tuple/reverse.hpp>
+#include <alloy/tuple/rotate.hpp>
 #include <alloy/tuple/size.hpp>
 #include <alloy/tuple/transform.hpp>
 #include <alloy/tuple/tuple.hpp>
