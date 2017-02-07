@@ -2,13 +2,9 @@
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 
-#ifndef ALLOY_HPP
-#define ALLOY_HPP
+#ifndef ALLOY_VALUE_HPP
+#define ALLOY_VALUE_HPP
 
-#include <alloy/config.hpp>
-#include <alloy/lambda.hpp>
-#include <alloy/number.hpp>
-#include <alloy/tuple.hpp>
-#include <alloy/value.hpp>
+#include <alloy/value/equal.hpp>
 
 #endif
