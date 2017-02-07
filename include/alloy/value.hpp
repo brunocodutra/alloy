@@ -6,5 +6,6 @@
 #define ALLOY_VALUE_HPP
 
 #include <alloy/value/equal.hpp>
+#include <alloy/value/fold.hpp>
 
 #endif
