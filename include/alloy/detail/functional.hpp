@@ -52,6 +52,9 @@ namespace alloy::detail {
         static_cast<F&&>(f)(static_cast<Args&&>(args)...)
     )
 
+    template<typename F, typename... Args>
+    using invoke_t = decltype(invoke(std::declval<F>(), std::declval<Args>()...));
+
     template<typename F, typename = valid_t>
     struct invocable {
         F f;
