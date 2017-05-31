@@ -5,6 +5,7 @@
 #ifndef ALLOY_DETAIL_HPP
 #define ALLOY_DETAIL_HPP
 
+#include "detail/functional.hpp"
 #include "detail/traits.hpp"
 
 #endif

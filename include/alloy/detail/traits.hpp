@@ -14,6 +14,9 @@ namespace alloy::detail {
 
     template<auto cond>
     using requires = std::enable_if_t<cond, valid_t>;
+
+    template<typename T>
+    using strip = std::remove_cv_t<std::remove_reference_t<T>>;
 }
 
 #endif
