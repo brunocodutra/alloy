@@ -6,6 +6,7 @@
 #define ALLOY_HPP
 
 #include "alloy/config.hpp"
+#include "alloy/constant.hpp"
 #include "alloy/detail.hpp"
 
 #endif
