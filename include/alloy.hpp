@@ -9,5 +9,6 @@
 #include "alloy/constant.hpp"
 #include "alloy/detail.hpp"
 #include "alloy/external.hpp"
+#include "alloy/model.hpp"
 
 #endif

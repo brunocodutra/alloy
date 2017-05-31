@@ -6,6 +6,7 @@
 #define ALLOY_DETAIL_TRAITS_HPP
 
 #include "../config.hpp"
+#include "../external.hpp"
 
 #include <type_traits>
 
@@ -17,6 +18,22 @@ namespace alloy::detail {
 
     template<typename T>
     using strip = std::remove_cv_t<std::remove_reference_t<T>>;
+
+    template<typename, template<typename...> class, typename = valid_t>
+    struct _instanceof : std::false_type {};
+
+    template<typename... Xs, template<typename...> class X, template<typename...> class Y>
+    struct _instanceof<X<Xs...>, Y, requires<metal::is_value<Y<Xs...>>::value>>
+        : std::is_same<X<Xs...>, Y<Xs...>>
+    {};
+
+    template<typename X, template<typename...> class Tmpl>
+    constexpr bool instanceof = _instanceof<strip<X>, Tmpl>::value;
+
+    template<typename X>
+    constexpr bool inheritable = std::is_class<X>::value
+      && !std::is_polymorphic<X>::value
+      && !std::is_final<X>::value;
 }
 
 #endif
