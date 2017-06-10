@@ -8,5 +8,6 @@
 #include "alloy/config.hpp"
 #include "alloy/constant.hpp"
 #include "alloy/detail.hpp"
+#include "alloy/external.hpp"
 
 #endif
