@@ -16,7 +16,7 @@ namespace alloy::detail {
     struct dispatcher {
         template<typename R, typename F, typename... Args>
         static constexpr R dispatch(F&& snk, Args&&... args) {
-            return detail::invoke(
+            return invoke(
                 static_cast<F&&>(snk),
                 forward(static_cast<Args&&>(args)...)[Is{}]...
             );
@@ -91,7 +91,7 @@ namespace alloy::detail {
     constexpr auto at() noexcept {
         return [](auto&& snk) noexcept {
             return [&snk](auto&&...) -> decltype(auto) {
-                return detail::invoke(static_cast<decltype(snk)>(snk));
+                return invoke(static_cast<decltype(snk)>(snk));
             };
         };
     }

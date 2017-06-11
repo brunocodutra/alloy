@@ -24,22 +24,22 @@ namespace alloy::detail {
 
         template<typename... Args>
         constexpr decltype(auto) operator ()(Args&&... args) & {
-            return detail::invoke(static_cast<F&>(f), static_cast<Args&&>(args)...);
+            return invoke(static_cast<F&>(f), static_cast<Args&&>(args)...);
         }
 
         template<typename... Args>
         constexpr decltype(auto) operator ()(Args&&... args) const& {
-            return detail::invoke(static_cast<F const&>(f), static_cast<Args&&>(args)...);
+            return invoke(static_cast<F const&>(f), static_cast<Args&&>(args)...);
         }
 
         template<typename... Args>
         constexpr decltype(auto) operator ()(Args&&... args) && {
-            return detail::invoke(static_cast<F&&>(f), static_cast<Args&&>(args)...);
+            return invoke(static_cast<F&&>(f), static_cast<Args&&>(args)...);
         }
 
         template<typename... Args>
         constexpr decltype(auto) operator ()(Args&&... args) const&& {
-            return detail::invoke(static_cast<F const&&>(f), static_cast<Args&&>(args)...);
+            return invoke(static_cast<F const&&>(f), static_cast<Args&&>(args)...);
         }
     };
 
@@ -119,7 +119,7 @@ namespace alloy::detail {
         requires<instanceof<Stm, stream>> = valid
     >
     constexpr decltype(auto) operator <<(Snk&& snk, Stm&& stm) {
-        return sink{detail::invoke(static_cast<Stm&&>(stm), static_cast<Snk&&>(snk))};
+        return sink{invoke(static_cast<Stm&&>(stm), static_cast<Snk&&>(snk))};
     }
 
     template<typename Snk, typename Src,
@@ -128,7 +128,7 @@ namespace alloy::detail {
         requires<instanceof<Snk, sink> || instanceof<Src, source>> = valid
     >
     constexpr decltype(auto) operator <<(Snk&& snk, Src&& src) {
-        return detail::invoke(static_cast<Src&&>(src), static_cast<Snk&&>(snk));
+        return invoke(static_cast<Src&&>(src), static_cast<Snk&&>(snk));
     }
 }
 
