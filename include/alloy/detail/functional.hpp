@@ -53,7 +53,7 @@ namespace alloy::detail {
     )
 
     template<typename F, typename... Args>
-    using invoke_t = decltype(invoke(std::declval<F>(), std::declval<Args>()...));
+    using invoke_t = decltype(detail::invoke(std::declval<F>(), std::declval<Args>()...));
 
     template<typename F, typename = valid_t>
     struct invocable {
@@ -69,22 +69,22 @@ namespace alloy::detail {
 
         template<typename... Args>
         constexpr decltype(auto) operator ()(Args&&... args) & {
-            return invoke(static_cast<F&>(f), static_cast<Args&&>(args)...);
+            return detail::invoke(static_cast<F&>(f), static_cast<Args&&>(args)...);
         }
 
         template<typename... Args>
         constexpr decltype(auto) operator ()(Args&&... args) const& {
-            return invoke(static_cast<F const&>(f), static_cast<Args&&>(args)...);
+            return detail::invoke(static_cast<F const&>(f), static_cast<Args&&>(args)...);
         }
 
         template<typename... Args>
         constexpr decltype(auto) operator ()(Args&&... args) && {
-            return invoke(static_cast<F&&>(f), static_cast<Args&&>(args)...);
+            return detail::invoke(static_cast<F&&>(f), static_cast<Args&&>(args)...);
         }
 
         template<typename... Args>
         constexpr decltype(auto) operator ()(Args&&... args) const&& {
-            return invoke(static_cast<F const&&>(f), static_cast<Args&&>(args)...);
+            return detail::invoke(static_cast<F const&&>(f), static_cast<Args&&>(args)...);
         }
     };
 
@@ -119,7 +119,7 @@ namespace alloy::detail {
 
         template<typename State>
         friend constexpr decltype(auto) operator >>=(State&& state, folder ref) {
-            return invoke(+ref, static_cast<State&&>(state), *ref);
+            return detail::invoke(+ref, static_cast<State&&>(state), *ref);
         }
 
         friend constexpr decltype(auto) operator <<=(folder ref, nil) noexcept {
@@ -128,7 +128,7 @@ namespace alloy::detail {
 
         template<typename State>
         friend constexpr decltype(auto) operator <<=(folder ref, State&& state) {
-            return invoke(+ref, *ref, static_cast<State&&>(state));
+            return detail::invoke(+ref, *ref, static_cast<State&&>(state));
         }
     };
 

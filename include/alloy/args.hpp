@@ -128,7 +128,7 @@ namespace alloy::detail {
 
         template<typename Self, typename F>
         static constexpr decltype(auto) call(Self&& self, F&& f) {
-            return invoke(
+            return detail::invoke(
                 static_cast<F&&>(f),
                 args::at<arg<Ks, Vs>>(static_cast<Self&&>(self))...
             );
