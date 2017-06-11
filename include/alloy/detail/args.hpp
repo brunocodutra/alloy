@@ -9,7 +9,7 @@
 #include "../constant.hpp"
 #include "../external.hpp"
 
-#include "../detail/functional.hpp"
+#include "../detail/invoke.hpp"
 #include "../detail/traits.hpp"
 
 namespace alloy::detail {

@@ -6,7 +6,8 @@
 #define ALLOY_DETAIL_HPP
 
 #include "detail/args.hpp"
-#include "detail/functional.hpp"
+#include "detail/fold.hpp"
+#include "detail/invoke.hpp"
 #include "detail/traits.hpp"
 
 #endif
