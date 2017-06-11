@@ -18,7 +18,7 @@ namespace alloy::detail {
 
 namespace alloy {
     inline constexpr auto forward = [](auto&&... xs) noexcept {
-        return detail::forward(static_cast<decltype(xs)&&>(xs)...);
+        return detail::forward(static_cast<decltype(xs)>(xs)...);
     };
 }
 

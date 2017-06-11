@@ -93,7 +93,7 @@ namespace alloy::detail {
     constexpr decltype(auto) operator <<(S&& s, T&& t) {
         return stream{
             [&s, &t](auto&& snk) -> decltype(auto) {
-                return static_cast<decltype(snk)&&>(snk)
+                return static_cast<decltype(snk)>(snk)
                     << static_cast<S&&>(s)
                     << static_cast<T&&>(t);
             }
@@ -107,7 +107,7 @@ namespace alloy::detail {
     constexpr decltype(auto) operator <<(Stm&& stm, Src&& src) {
         return source{
             [&stm, &src](auto&& snk) -> decltype(auto) {
-                return static_cast<decltype(snk)&&>(snk)
+                return static_cast<decltype(snk)>(snk)
                     << static_cast<Stm&&>(stm)
                     << static_cast<Src&&>(src);
             }

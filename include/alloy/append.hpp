@@ -15,9 +15,9 @@ namespace alloy {
             [&ys...](auto&& snk) noexcept {
                 return [&ys..., &snk](auto&&... xs) -> decltype(auto) {
                     return detail::invoke(
-                        static_cast<decltype(snk)&&>(snk),
-                        static_cast<decltype(xs)&&>(xs)...,
-                        static_cast<decltype(ys)&&>(ys)...
+                        static_cast<decltype(snk)>(snk),
+                        static_cast<decltype(xs)>(xs)...,
+                        static_cast<decltype(ys)>(ys)...
                     );
                 };
             }

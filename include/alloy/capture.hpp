@@ -18,7 +18,7 @@ namespace alloy::detail {
 
 namespace alloy {
     inline constexpr auto capture = [](auto&&... xs) {
-        return detail::capture(static_cast<decltype(xs)&&>(xs)...);
+        return detail::capture(static_cast<decltype(xs)>(xs)...);
     };
 }
 

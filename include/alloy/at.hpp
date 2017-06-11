@@ -61,8 +61,8 @@ namespace alloy::detail {
                     foldr([](std::size_t i, std::size_t j) {
                         return i + sizeof...(args)*j;
                     }, static_cast<Is&&>(is)...),
-                    static_cast<decltype(snk)&&>(snk),
-                    static_cast<decltype(args)&&>(args)...
+                    static_cast<decltype(snk)>(snk),
+                    static_cast<decltype(args)>(args)...
                 );
             };
         };
@@ -81,8 +81,8 @@ namespace alloy::detail {
                 >;
 
                 return dispatcher<constant<is>...>::template dispatch<R>(
-                    static_cast<decltype(snk)&&>(snk),
-                    static_cast<decltype(args)&&>(args)...
+                    static_cast<decltype(snk)>(snk),
+                    static_cast<decltype(args)>(args)...
                 );
             };
         };
@@ -91,7 +91,7 @@ namespace alloy::detail {
     constexpr auto at() noexcept {
         return [](auto&& snk) noexcept {
             return [&snk](auto&&...) -> decltype(auto) {
-                return detail::invoke(static_cast<decltype(snk)&&>(snk));
+                return detail::invoke(static_cast<decltype(snk)>(snk));
             };
         };
     }
@@ -99,7 +99,7 @@ namespace alloy::detail {
 
 namespace alloy {
     inline constexpr auto at = [](auto&&... is) {
-        return stream{detail::at(static_cast<decltype(is)&&>(is)...)};
+        return stream{detail::at(static_cast<decltype(is)>(is)...)};
     };
 }
 
