@@ -12,6 +12,7 @@
 #include "alloy/constant.hpp"
 #include "alloy/detail.hpp"
 #include "alloy/external.hpp"
+#include "alloy/join.hpp"
 #include "alloy/model.hpp"
 #include "alloy/prepend.hpp"
 
