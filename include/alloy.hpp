@@ -17,5 +17,6 @@
 #include "alloy/join.hpp"
 #include "alloy/model.hpp"
 #include "alloy/prepend.hpp"
+#include "alloy/unpack.hpp"
 
 #endif
