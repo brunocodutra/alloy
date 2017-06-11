@@ -6,7 +6,8 @@
 #define ALLOY_CONSTANT_HPP
 
 #include "config.hpp"
-#include "detail.hpp"
+
+#include <type_traits>
 
 namespace alloy {
     template<auto c>

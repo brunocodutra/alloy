@@ -2,13 +2,15 @@
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 
-#ifndef ALLOY_ARGS_HPP
-#define ALLOY_ARGS_HPP
+#ifndef ALLOY_DETAIL_ARGS_HPP
+#define ALLOY_DETAIL_ARGS_HPP
 
-#include "config.hpp"
-#include "constant.hpp"
-#include "detail.hpp"
-#include "model.hpp"
+#include "../config.hpp"
+#include "../constant.hpp"
+#include "../external.hpp"
+
+#include "../detail/functional.hpp"
+#include "../detail/traits.hpp"
 
 namespace alloy::detail {
     template<typename K, typename V = K, typename = valid_t>
@@ -144,18 +146,6 @@ namespace alloy::detail {
             metal::list<Vs...>
         >
     >;
-}
-
-namespace alloy {
-    template<typename... Vs>
-    constexpr decltype(auto) forward(Vs&&... vs) noexcept {
-        return source{detail::args_t<Vs&&...>{static_cast<Vs&&>(vs)...}};
-    }
-
-    template<typename... Vs>
-    constexpr decltype(auto) capture(Vs&&... vs) {
-        return source{detail::args_t<Vs...>{static_cast<Vs&&>(vs)...}};
-    }
 }
 
 #endif

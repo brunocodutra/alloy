@@ -6,8 +6,8 @@
 #define ALLOY_JOIN_HPP
 
 #include "config.hpp"
-#include "args.hpp"
 #include "detail.hpp"
+#include "forward.hpp"
 #include "model.hpp"
 
 namespace alloy::detail {
