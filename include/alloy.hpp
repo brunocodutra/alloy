@@ -6,11 +6,13 @@
 #define ALLOY_HPP
 
 #include "alloy/config.hpp"
+#include "alloy/append.hpp"
 #include "alloy/args.hpp"
 #include "alloy/at.hpp"
 #include "alloy/constant.hpp"
 #include "alloy/detail.hpp"
 #include "alloy/external.hpp"
 #include "alloy/model.hpp"
+#include "alloy/prepend.hpp"
 
 #endif
