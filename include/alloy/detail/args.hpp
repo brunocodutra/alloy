@@ -19,6 +19,10 @@ namespace alloy::detail {
 
         using type = V;
 
+        constexpr arg() = delete;
+        constexpr arg(arg&&) = default;
+        constexpr arg(arg const&) = default;
+
         constexpr arg(V&& v)
             : v{static_cast<V&&>(v)}
         {}
@@ -44,6 +48,10 @@ namespace alloy::detail {
     struct arg<K, V, requires<inheritable<V>>> : V {
         using type = V;
 
+        constexpr arg() = delete;
+        constexpr arg(arg&&) = default;
+        constexpr arg(arg const&) = default;
+
         constexpr arg(V&& v)
             : V{static_cast<V&&>(v)}
         {}
@@ -54,6 +62,9 @@ namespace alloy::detail {
 
     template<typename... Ks, typename... Vs>
     struct args<arg<Ks, Vs>...> : arg<Ks, Vs>... {
+        constexpr args(args&&) = default;
+        constexpr args(args const&) = default;
+
         constexpr args(Vs&&... vs)
             : arg<Ks, Vs>{static_cast<Vs&&>(vs)}...
         {}
