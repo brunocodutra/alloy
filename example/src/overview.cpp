@@ -1,16 +1,10 @@
-# Alloy
+// Copyright Bruno Dutra 2017
+// Distributed under the Boost Software License, Version 1.0.
+// See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 
-[![travis.badge]][travis.alloy]
+// NOTE: keep in sync with the README
 
-## Overview
-
-**Alloy** solves the problem of runtime manipulation of heterogeneous values
-with more flexibility and expressive power than the tools provided by the
-standard library. In a nutshell, it builds upon an easy to grasp abstraction
-based o simple function objects, which becomes especially convenient with the
-introduction of `constexpr` lambdas in C++17.
-
-```.cpp
+/// [overview]
 #include "alloy.hpp"
 
 #include <iostream>
@@ -90,28 +84,4 @@ int main() {
 
     print << alloy::forward("enjoy modern C++!");
 }
-
-```
-
-[Run it online on Wandbox][wandbox]!
-
-## Portability
-
-The following compilers are continuously tested on [Travis CI][travis.alloy].
-
-| Compiler          | Version   | Operating System
-|-------------------|-----------|-----------------------
-| GCC               | 7         | Ubuntu 14.04 LTS
-| Clang             | 5.0       | Ubuntu 14.04 LTS
-
-## License
-
-Alloy is distributed under the
-[Boost Software License, Version 1.0][boost.license].
-
-[travis.alloy]:     http://travis-ci.org/brunocodutra/alloy
-[travis.badge]:     http://travis-ci.org/brunocodutra/alloy.svg?branch=master
-
-[boost.license]:    http://boost.org/LICENSE_1_0.txt
-
-[wandbox]:          https://wandbox.org/permlink/G00qx9oFQK3mv3KT
+/// [overview]

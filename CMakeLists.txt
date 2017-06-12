@@ -76,3 +76,4 @@ target_compile_flags(Alloy INTERFACE -fsanitize=address,leak,undefined
 )
 
 add_subdirectory(test)
+add_subdirectory(example)
