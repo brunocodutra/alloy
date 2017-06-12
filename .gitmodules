@@ -1,0 +1,6 @@
+[submodule "cmake"]
+	path = cmake
+	url = https://github.com/brunocodutra/cmake-utils.git
+[submodule "include/alloy/external/metal"]
+	path = include/alloy/external/metal
+	url = https://github.com/brunocodutra/metal.git
