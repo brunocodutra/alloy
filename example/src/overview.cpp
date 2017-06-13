@@ -9,79 +9,100 @@
 
 #include <iostream>
 #include <utility>
-#include <string_view>
 
 int main() {
-    using namespace  std::literals::string_view_literals;
-
-    // suppose you have a routine that consumes data
+    // suppose you have a data consumer
     constexpr auto print = [](auto&&... data) {
-        // in this example we'll simply print to the standard output
+        // just print to the standard output
         (std::cout << ... << std::forward<decltype(data)>(data)) << std::endl;
     };
 
-    // you just have to produce data
-    print << alloy::forward("The answer is: ", 42); // prints The answer is 42
+    // the next thing you'll need is, well, data
+    constexpr auto answer = alloy::capture("The answer is", ' ', 42);
 
-    // you can also just as easily store data to be consumed later
-    constexpr auto data = alloy::capture(42, ' ', "Hello World"sv, '!');
+    // and you are ready to roll
+    answer(print); // prints The answer is 42
 
-    print << data; // prints 42 Hello World!
+    // that's cool and all, but kind of feels backwards, doesn't it?
+    // fear not, for Alloy got you covered!
 
-    // you can also process data before it's consumed
-    // here we cherry -ick individual elements
-    print << alloy::at(2, 3) << data; // prints Hello World!
+    // you can use `operator <<` to spell the exact same thing
+    print << answer; // prints The answer is 42
 
-    // that's right, you can use runtime indices with Alloy!!
+    // that's not all, using `operator <<` you can easily chain algorithms
 
-    // you can even pick the same element multiple times
-    print << alloy::at(2, 3, 3) << data; // prints Hello World!!
+    // but first we need more data
+    constexpr auto data = alloy::capture("World", ' ', "Hello" , '!');
 
-    // or none at all
-    print << alloy::at() << data; // prints an empty line
+    // now you can for example cherry-pick individual elements
+    print << alloy::at(2, 1, 0, 3) << data; // prints Hello World!
 
-    // you also build a pipeline out of data processors
-    print << alloy::prepend("Say", ' ')
-          << alloy::append('s', '!')
-          << alloy::at(2)
-          << data; // prints Say Hello Worlds!
+    // that's right, you can index heterogeneous datasets at runtime!!
 
-    // with Alloy you can kiss `std::apply` goodbye
+    // you can also feed more data on the fly
+    print << alloy::append('C', '+', '+', '!')
+          << alloy::prepend("Say")
+          << alloy::append(" to (post) modern ")
+          << alloy::at(1, 2)
+          << data; // prints Say Hello to (post) modern C++!
+
+    // wait, there's more, with Alloy you can kiss `std::apply` goodbye
     print << alloy::unpack(std::make_tuple(3, '.', 1, 4)); // prints 3.14
 
+    // ever wanted to iterate through a `std::tuple` in a for-loop?
+    constexpr auto tup = std::make_tuple(0, '1', "two");
+
+    // now you can!
+    for(std::size_t i = 0; i < std::tuple_size<decltype(tup)>{}; ++i)
+        print << alloy::prepend(i, ": ") << alloy::at(i) << alloy::unpack(tup);
+
+    // prints
+    // 0: 0
+    // 1: 1
+    // 2: two
+
     // `std::visit` is also a thing of the past
-    constexpr std::variant<int, char, std::string_view> i = 3;
-    constexpr std::variant<int, char, std::string_view> c = '.';
-    constexpr std::variant<int, char, std::string_view> s = "1"sv;
+    constexpr std::variant<int, char, char const*> i = 3;
+    constexpr std::variant<int, char, char const*> c = '.';
+    constexpr std::variant<int, char, char const*> s = "1";
 
     print << alloy::unpack(i, c, s); // prints 3.1
 
-    // you can even mix tuples and variants together!
+    // while you are at it, why not mixing tuples and variants together?
     print << alloy::unpack(i, c, s, std::make_tuple(4, "15")); // prints 3.1415
 
-    // you can also provide custom data producers
+    // do you think tuples and variants are too mainstream?
+    // not a problem, you can also provide your very own custom data sources
     constexpr auto produce = [](auto&& consume) {
         return consume("Hello", ' ', "World");
     };
 
-    // just don't forget to disambiguate the overloaded call to `operator <<`
     // the following are all equivalent and print Hello World
     print << alloy::source{produce};
     alloy::sink{print} << produce;
     alloy::sink{print} << alloy::source{produce};
 
-    // likewise, you can also provide custom middle-ware
-    constexpr auto process = [](auto&& consume) {
-        return [&consume](auto&& hello, auto&& _, auto&& world) {
-            return consume(hello, _, "brave", _, "new", _, world, '!');
+    // you can provide your very own custom data transformers as well
+    constexpr auto process = [](auto&& sink) {
+        return [&sink](auto&& hello, auto&& _, auto&& world) {
+            return sink(hello, _, "brave", _, "new", _, world, '!');
         };
     };
 
-    // it's enough to disambiguate a single entity in the pipeline
     print << alloy::stream{process} << produce; // prints Hello brave new World!
 
-    // don't worry, disambiguators are just tags that come at zero-overhead
+    // you are only bounded by your imagination
+    // enjoy (post) modern C++
 
-    print << alloy::forward("enjoy modern C++!");
+    constexpr auto wrap = [](auto&& sink) {
+        return [&sink](auto&& word) {
+            return sink('(', word, ')');
+        };
+    };
+
+    print << alloy::append(' ', "modern C++")
+          << alloy::prepend("enjoy", ' ')
+          << wrap
+          << alloy::forward("post");
 }
 /// [overview]
