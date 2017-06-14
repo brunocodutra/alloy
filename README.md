@@ -1,6 +1,5 @@
 # Alloy
-
-[![travis.badge]][travis.alloy]
+Enjoy (post) modern C++
 
 ## Overview
 
