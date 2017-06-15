@@ -112,6 +112,96 @@ int main() {
 
 [Try it live on Wandbox][wandbox]
 
+## Motivation
+
+Have you ever wished `std::tuple` provided an overload for `operator []` just
+like`std::vector` and `std::map` do?
+
+As you might have guessed, it's actually impossible to overload the subscript
+operator for tuples, but the reason why might not be obvious at first.
+
+An example is worth a thousand words, so can you guess the type of `x` below?
+
+```.cpp
+auto x = std::make_tuple(1, 1.0, '1', "one")[std::rand() % 4];
+```
+
+The type of `x` depends on a run-time value and therefore may not be deduced by
+the compiler, which is thus unable to compile such a program to begin with.
+
+Fine, as long as we are able to, say, filter the elements in a `std::tuple`
+based on a predicate, we should be able to tackle most real world problems.
+That should be easy right?
+
+Nope.
+
+Can you deduce the type of `x` this time?
+
+```.cpp
+template<typename Tuple, typename Predicate>
+decltype(auto) filter(Tuple&&, Predicate&&);
+
+auto x = filter(std::make_tuple(1, 1.0, '1', "one"), [](auto&&) {
+    return std::rand() % 2;
+});
+```
+
+Heck, the predicate doesn't even depend on the elements themselves, but still we
+are unable to deduce the return type!
+
+Alright, forget about returning values, let's forward results to a callback 
+function instead.
+
+```.cpp
+template<typename Tuple, typename Predicate, typename Callback>
+void filter(Tuple&&, Predicate&&, Callback&&);
+
+auto predicate = [](auto&&) {
+    return std::rand() % 2;
+};
+
+auto callback = [](auto&& z) { /* ... */ };
+
+filter(std::make_tuple(1, 1.0, '1', "one"), predicate, callback);
+```
+
+That was easy after all... or was it? Let us not forget that we still need to
+implement `filter`.
+
+How can the standard library help us get there, you might have asked yourself,
+and the answer is quite simple in fact: _It can't really._
+
+Sure `std::apply` can help us extract the elements out of the tuple, but that's
+about all the standard library can do for us, from then on we are on our own.
+
+```.cpp
+template<typename Tuple, typename Predicate, typename Callback>
+void filter(Tuple&& tuple, Predicate&& predicate, Callback&& callback) {
+    constexpr auto impl = [&predicate, &callback](auto&&... elements) {
+        // TODO: do the heavy lifting :(
+    };
+
+    std::apply(std::forward<Tuple>(tuple), impl);
+}
+```
+
+We don't want to keep reinventing the wheel, we want to solve real problems, but
+for that we need the building blocks.
+
+```.cpp
+auto tuple = std::make_tuple(1, 1.0, '1', "one");
+
+auto predicate = [](auto&&) {
+    return std::rand() % 2;
+};
+
+auto callback = [](auto&& z) { /* ... */ };
+
+callback << alloy::filter(predicate) << alloy::unpack(tuple);
+```
+
+We need Alloy.
+
 ## Portability
 
 The following compilers are continuously tested on [Travis CI][travis.alloy].
