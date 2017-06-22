@@ -9,21 +9,11 @@
 #include "../constant.hpp"
 #include "../detail/dispatcher.hpp"
 #include "../detail/invoke.hpp"
+#include "../detail/picker.hpp"
 #include "../source/forward.hpp"
 #include "../stream/model.hpp"
 
 namespace alloy::detail {
-    template<typename... Is>
-    struct picker {
-        template<typename R, typename F, typename... Args>
-        static constexpr R dispatch(F&& snk, Args&&... args) {
-            return invoke(
-                static_cast<F&&>(snk),
-                forward(static_cast<Args&&>(args)...)[Is{}]...
-            );
-        }
-    };
-
     template<typename... Is>
     constexpr auto at(Is&&... is) noexcept {
         return [&is...](auto&& snk) noexcept {
