@@ -6,17 +6,13 @@
 #define ALLOY_HPP
 
 #include "alloy/config.hpp"
-#include "alloy/append.hpp"
-#include "alloy/at.hpp"
-#include "alloy/capture.hpp"
 #include "alloy/constant.hpp"
 #include "alloy/defer.hpp"
 #include "alloy/detail.hpp"
 #include "alloy/external.hpp"
-#include "alloy/forward.hpp"
-#include "alloy/join.hpp"
-#include "alloy/model.hpp"
-#include "alloy/prepend.hpp"
-#include "alloy/unpack.hpp"
+#include "alloy/operators.hpp"
+#include "alloy/sink.hpp"
+#include "alloy/source.hpp"
+#include "alloy/stream.hpp"
 
 #endif

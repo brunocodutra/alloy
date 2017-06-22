@@ -2,12 +2,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 
-#ifndef ALLOY_CAPTURE_HPP
-#define ALLOY_CAPTURE_HPP
+#ifndef ALLOY_SOURCE_CAPTURE_HPP
+#define ALLOY_SOURCE_CAPTURE_HPP
 
-#include "config.hpp"
-#include "detail.hpp"
-#include "model.hpp"
+#include "../config.hpp"
+#include "../detail/args.hpp"
+#include "../source/model.hpp"
 
 namespace alloy::detail {
     template<typename... Vs>

@@ -6,7 +6,6 @@
 #define ALLOY_DETAIL_INVOKE_HPP
 
 #include "../config.hpp"
-
 #include "../detail/traits.hpp"
 
 #define ALLOY_RETURN(...) \

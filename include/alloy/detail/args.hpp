@@ -7,10 +7,9 @@
 
 #include "../config.hpp"
 #include "../constant.hpp"
-#include "../external.hpp"
-
 #include "../detail/invoke.hpp"
 #include "../detail/traits.hpp"
+#include "../external/metal/metal.hpp"
 
 namespace alloy::detail {
     template<typename K, typename V = K, typename = valid_t>
@@ -141,7 +140,7 @@ namespace alloy::detail {
 
         template<typename Self, typename F>
         static constexpr decltype(auto) call(Self&& self, F&& f) {
-            return detail::invoke(
+            return invoke(
                 static_cast<F&&>(f),
                 args::at<arg<Ks, Vs>>(static_cast<Self&&>(self))...
             );

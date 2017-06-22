@@ -6,7 +6,6 @@
 #define ALLOY_DETAIL_FOLD_HPP
 
 #include "../config.hpp"
-
 #include "../detail/invoke.hpp"
 
 namespace alloy::detail {
@@ -31,7 +30,7 @@ namespace alloy::detail {
 
         template<typename State>
         friend constexpr decltype(auto) operator >>=(State&& state, folder ref) {
-            return detail::invoke(+ref, static_cast<State&&>(state), *ref);
+            return invoke(+ref, static_cast<State&&>(state), *ref);
         }
 
         friend constexpr decltype(auto) operator <<=(folder ref, nil) noexcept {
@@ -40,7 +39,7 @@ namespace alloy::detail {
 
         template<typename State>
         friend constexpr decltype(auto) operator <<=(folder ref, State&& state) {
-            return detail::invoke(+ref, *ref, static_cast<State&&>(state));
+            return invoke(+ref, *ref, static_cast<State&&>(state));
         }
     };
 
