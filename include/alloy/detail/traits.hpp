@@ -64,19 +64,6 @@ namespace alloy::detail {
     constexpr bool inheritable = std::is_class<X>::value
       && !std::is_polymorphic<X>::value
       && !std::is_final<X>::value;
-
-    template<typename N, typename X>
-    using repeat =
-        metal::transform<metal::always<X>, metal::iota<metal::number<0>, N>>;
-
-    template<typename Outer, typename Inner, typename Xs>
-    using combine = metal::apply<
-        Outer,
-        metal::transform<
-            metal::partial<metal::lambda<metal::apply>, Inner>,
-            metal::apply<metal::lambda<metal::cartesian>, Xs>
-        >
-    >;
 }
 
 #endif

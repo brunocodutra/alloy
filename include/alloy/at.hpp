@@ -43,23 +43,27 @@ namespace alloy::detail {
     constexpr auto at(Is&&... is) noexcept {
         return [&is...](auto&& snk) noexcept {
             return [&is..., &snk](auto&&... args) -> decltype(auto) {
-                using N = metal::number<sizeof...(is)>;
-
-                using R = combine<
+                using R = metal::cascade<
+                    metal::combine<
+                        metal::list<decltype(args)...>,
+                        metal::number<sizeof...(is)>
+                    >,
                     metal::lambda<std::common_type_t>,
-                    metal::partial<metal::lambda<invoke_t>, decltype(snk)>,
-                    repeat<N, metal::list<decltype(args)...>>
+                    metal::partial<metal::lambda<invoke_t>, decltype(snk)>
                 >;
 
-                using Dispatchers = combine<
+                using Dispatchers = metal::cascade<
+                    metal::combine<
+                        metal::indices<metal::list<decltype(args)...>>,
+                        metal::number<sizeof...(is)>
+                    >,
                     metal::lambda<dispatchers>,
-                    metal::lambda<dispatcher>,
-                    repeat<N, metal::indices<metal::list<decltype(args)...>>>
+                    metal::lambda<dispatcher>
                 >;
 
                 return Dispatchers::template dispatch<R>(
-                    foldr([](std::size_t i, std::size_t j) {
-                        return i + sizeof...(args)*j;
+                    foldl([](std::size_t i, std::size_t j) {
+                        return sizeof...(args)*i + j;
                     }, static_cast<Is&&>(is)...),
                     static_cast<decltype(snk)>(snk),
                     static_cast<decltype(args)>(args)...
