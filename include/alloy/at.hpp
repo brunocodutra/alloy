@@ -13,28 +13,12 @@
 
 namespace alloy::detail {
     template<typename... Is>
-    struct dispatcher {
+    struct picker {
         template<typename R, typename F, typename... Args>
         static constexpr R dispatch(F&& snk, Args&&... args) {
             return invoke(
                 static_cast<F&&>(snk),
                 forward(static_cast<Args&&>(args)...)[Is{}]...
-            );
-        }
-    };
-
-    template<typename... Dispatchers>
-    struct dispatchers {
-        template<typename R, typename F, typename... Args>
-        static constexpr R dispatch(std::size_t i, F&& f, Args&&... args) {
-            using Sig = R(F&&, Args&&...);
-            constexpr Sig* dispatchers[] = {
-                &Dispatchers::template dispatch<R, F, Args...>...
-            };
-
-            return dispatchers[i](
-                static_cast<F&&>(f),
-                static_cast<Args&&>(args)...
             );
         }
     };
@@ -52,16 +36,16 @@ namespace alloy::detail {
                     metal::partial<metal::lambda<invoke_t>, decltype(snk)>
                 >;
 
-                using Dispatchers = metal::cascade<
+                using Dispatcher = metal::cascade<
                     metal::combine<
                         metal::indices<metal::list<decltype(args)...>>,
                         metal::number<sizeof...(is)>
                     >,
-                    metal::lambda<dispatchers>,
-                    metal::lambda<dispatcher>
+                    metal::lambda<dispatcher>,
+                    metal::lambda<picker>
                 >;
 
-                return Dispatchers::template dispatch<R>(
+                return Dispatcher::template dispatch<R>(
                     foldl([](std::size_t i, std::size_t j) {
                         return sizeof...(args)*i + j;
                     }, static_cast<Is&&>(is)...),
@@ -84,7 +68,7 @@ namespace alloy::detail {
                     >...
                 >;
 
-                return dispatcher<constant<is>...>::template dispatch<R>(
+                return picker<constant<is>...>::template dispatch<R>(
                     static_cast<decltype(snk)>(snk),
                     static_cast<decltype(args)>(args)...
                 );
