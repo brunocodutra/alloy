@@ -11,38 +11,32 @@
 #include "../source/join.hpp"
 #include "../source/model.hpp"
 
-#include<tuple>
-#include<variant>
+#include <tuple>
+#include <variant>
 
 namespace alloy::detail {
     template<typename Variant,
-        requires<instanceof<Variant, std::variant>> = valid
-    >
+        requires<instanceof <Variant, std::variant>> = valid>
     constexpr auto unpack(Variant&& variant) noexcept {
         return [&variant](auto&& snk) -> decltype(auto) {
-            return std::visit(
-                static_cast<decltype(snk)>(snk),
-                static_cast<Variant&&>(variant)
-            );
+            return std::visit(static_cast<decltype(snk)>(snk),
+                static_cast<Variant&&>(variant));
         };
     }
 
-    template<typename Tuple,
-        requires<instanceof<Tuple, std::tuple>> = valid
-    >
+    template<typename Tuple, requires<instanceof <Tuple, std::tuple>> = valid>
     constexpr auto unpack(Tuple&& tuple) noexcept {
         return [&tuple](auto&& snk) -> decltype(auto) {
             return std::apply(
-                static_cast<decltype(snk)>(snk),
-                static_cast<Tuple&&>(tuple)
-            );
+                static_cast<decltype(snk)>(snk), static_cast<Tuple&&>(tuple));
         };
     }
 }
 
 namespace alloy {
     inline constexpr auto unpack = [](auto&&... xs) {
-        return source{defer(join, detail::unpack(static_cast<decltype(xs)>(xs))...)};
+        return source{
+            defer(join, detail::unpack(static_cast<decltype(xs)>(xs))...)};
     };
 }
 

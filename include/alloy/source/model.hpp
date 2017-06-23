@@ -14,11 +14,11 @@ namespace alloy {
         using base = detail::invocable<S>;
 
         using base::base;
-        using base::operator ();
+        using base::operator();
     };
 
     template<typename S>
-    source(S&&) -> source<S>;
+    source(S &&)->source<S>;
 }
 
 #endif

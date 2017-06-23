@@ -19,30 +19,27 @@ namespace alloy::detail {
         return [&is...](auto&& snk) noexcept {
             return [&is..., &snk](auto&&... args) -> decltype(auto) {
                 using R = metal::cascade<
-                    metal::combine<
-                        metal::list<decltype(args)...>,
-                        metal::number<sizeof...(is)>
-                    >,
+                    metal::combine<metal::list<decltype(args)...>,
+                        metal::number<sizeof...(is)>>,
                     metal::lambda<std::common_type_t>,
-                    metal::partial<metal::lambda<invoke_t>, decltype(snk)>
-                >;
+                    metal::partial<metal::lambda<invoke_t>, decltype(snk)>>;
 
                 using Dispatcher = metal::cascade<
                     metal::combine<
                         metal::indices<metal::list<decltype(args)...>>,
-                        metal::number<sizeof...(is)>
-                    >,
+                        metal::number<sizeof...(is)>>,
                     metal::lambda<dispatcher>,
-                    metal::lambda<picker>
-                >;
+                    metal::lambda<picker>>;
 
                 return Dispatcher::template dispatch<R>(
-                    foldl([](std::size_t i, std::size_t j) {
-                        return sizeof...(args)*i + j;
-                    }, static_cast<Is&&>(is)...),
+                    foldl(
+                        [](std::size_t i, auto&& j) {
+                            return sizeof...(args) * i
+                                + static_cast<decltype(j)>(j);
+                        },
+                        static_cast<Is&&>(is)...),
                     static_cast<decltype(snk)>(snk),
-                    static_cast<decltype(args)>(args)...
-                );
+                    static_cast<decltype(args)>(args)...);
             };
         };
     }
@@ -51,18 +48,13 @@ namespace alloy::detail {
     constexpr auto at(constant<is>...) noexcept {
         return [](auto&& snk) noexcept {
             return [&snk](auto&&... args) -> decltype(auto) {
-                using R = invoke_t<
-                    decltype(snk),
-                    metal::at<
-                        metal::list<decltype(args)...>,
-                        metal::number<is>
-                    >...
-                >;
+                using R = invoke_t<decltype(snk),
+                    metal::at<metal::list<decltype(args)...>,
+                        metal::number<is>>...>;
 
                 return picker<constant<is>...>::template dispatch<R>(
                     static_cast<decltype(snk)>(snk),
-                    static_cast<decltype(args)>(args)...
-                );
+                    static_cast<decltype(args)>(args)...);
             };
         };
     }

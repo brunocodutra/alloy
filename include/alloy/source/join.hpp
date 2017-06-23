@@ -17,15 +17,11 @@ namespace alloy::detail {
         return [&src](auto&& snk) noexcept {
             return [&src, &snk](auto&&... ys) -> decltype(auto) {
                 return invoke(
-                    static_cast<Src&&>(src),
-                    [&snk, &ys...](auto&&... xs) {
-                        return invoke(
-                            static_cast<decltype(snk)>(snk),
+                    static_cast<Src&&>(src), [&snk, &ys...](auto&&... xs) {
+                        return invoke(static_cast<decltype(snk)>(snk),
                             static_cast<decltype(xs)>(xs)...,
-                            static_cast<decltype(ys)>(ys)...
-                        );
-                    }
-                );
+                            static_cast<decltype(ys)>(ys)...);
+                    });
             };
         };
     }
@@ -33,13 +29,13 @@ namespace alloy::detail {
 
 namespace alloy {
     inline constexpr auto join = [](auto&&... srcs) {
-        return source{
-            [&srcs...](auto&& snk) -> decltype(auto) {
-                return (static_cast<decltype(snk)>(snk) << ... <<
-                    stream{detail::buffer(static_cast<decltype(srcs)>(srcs))}
-                ) << forward();
-            }
-        };
+        return source{[&srcs...](auto&& snk) -> decltype(auto) {
+            /* clang-format off */
+            return (static_cast<decltype(snk)>(snk) << ... << stream{
+                detail::buffer(static_cast<decltype(srcs)>(srcs))
+            }) << forward();
+            /* clang-format on */
+        }};
     };
 }
 
