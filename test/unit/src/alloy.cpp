@@ -42,6 +42,8 @@ int main(int /*argc*/, char**) {
 
     static_assert(expect('a', 42, 0.) << alloy::join(alloy::forward('a'), alloy::capture(42), alloy::forward(0.)));
 
+    static_assert(expect() << alloy::unpack());
+
     constexpr auto t1 = std::make_tuple(0.);
     constexpr auto t2 = std::make_tuple('a', 42);
     constexpr auto t3 = std::make_tuple('a', 42, 0.);
@@ -54,7 +56,8 @@ int main(int /*argc*/, char**) {
     constexpr std::variant<char, int, double> v3 = 0.;
 
     static_assert(expect('a', 42, 0.) << alloy::unpack(v1, v2, v3));
-    static_assert(expect('a', 42, 0.) << alloy::unpack(v1, v2, std::make_tuple(0.)));
+
+    static_assert(expect('a', 42, 0., 'a', 42, 0., 'a', 42, 0.) << alloy::unpack(v1, v2, t1, t2, v3, t3));
 
     constexpr auto args = alloy::capture(_0{}, _1{}, _2{}, _3{}, _4{}, _5{}, _6{}, _7{}, _8{});
 
