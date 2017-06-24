@@ -4,8 +4,6 @@
 
 #include <alloy.hpp>
 
-#include <tuple>
-
 template<typename>
 struct base {};
 
@@ -32,7 +30,10 @@ constexpr bool operator ==(base<X> const&, base<Y> const&) {
 int main(int /*argc*/, char**) {
     constexpr auto expect = [](auto&&... expected) {
         return [&expected...](auto&&... args) -> bool {
-            return (... && (static_cast<decltype(expected)>(expected) == static_cast<decltype(args)>(args)));
+            if constexpr(sizeof...(expected) == sizeof...(args) )
+                return (... && (static_cast<decltype(expected)>(expected) == static_cast<decltype(args)>(args)));
+            else
+                return false;
         };
     };
 
@@ -63,6 +64,11 @@ int main(int /*argc*/, char**) {
 
     static_assert(expect(_1{}, _4{}, _7{}) << alloy::at(1, 4, 7) << args);
     static_assert(expect(_1{}, _4{}, _7{}) << alloy::at(std::true_type{}, alloy::constant<4>{}, metal::number<7>{}) << std::move(args));
+
+    static_assert(expect() << alloy::filter([](auto&& x) {return false;}) << alloy::forward('a', 42, 0.));
+    static_assert(expect(42) << alloy::filter([](auto&& x) {return x == 42;}) << alloy::forward('a', 42, 0.));
+    static_assert(expect('a', 0.) << alloy::filter([](auto&& x) {return x != 42;}) << alloy::forward('a', 42, 0.));
+    static_assert(expect('a', 42, 0.) << alloy::filter([](auto&& x) {return true;}) << alloy::forward('a', 42, 0.));
 
     return 0;
 }
