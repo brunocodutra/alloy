@@ -28,8 +28,7 @@ namespace alloy::detail {
                     metal::combine<
                         metal::indices<metal::list<decltype(args)...>>,
                         metal::number<sizeof...(is)>>,
-                    metal::lambda<dispatcher>,
-                    metal::lambda<picker>>;
+                    metal::lambda<dispatcher>, metal::lambda<picker>>;
 
                 return Dispatcher::template dispatch<R>(
                     foldl(

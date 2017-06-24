@@ -77,8 +77,7 @@ namespace alloy::detail {
 
             using Dispatcher = metal::cascade<
                 metal::cartesian<outer<indices, Xs...>, inner<indices, Xs...>>,
-                metal::lambda<dispatcher>,
-                metal::lambda<unpacker>>;
+                metal::lambda<dispatcher>, metal::lambda<unpacker>>;
 
             constexpr std::size_t N = (... + instanceof <Xs, std::variant>);
 
@@ -90,10 +89,8 @@ namespace alloy::detail {
                         else
                             return i;
                     },
-                    0U,
-                    static_cast<Xs&&>(xs)...),
-                static_cast<decltype(snk)>(snk),
-                static_cast<Xs&&>(xs)...);
+                    0U, static_cast<Xs&&>(xs)...),
+                static_cast<decltype(snk)>(snk), static_cast<Xs&&>(xs)...);
         };
     }
 
