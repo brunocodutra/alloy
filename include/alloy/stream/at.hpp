@@ -33,9 +33,8 @@ namespace alloy::detail {
 
                 return Dispatcher::template dispatch<R>(
                     foldl(
-                        [](std::size_t i, auto&& j) {
-                            return sizeof...(args) * i
-                                + static_cast<decltype(j)>(j);
+                        [](std::size_t i, std::size_t j) {
+                            return sizeof...(args) * i + j;
                         },
                         static_cast<Is&&>(is)...),
                     static_cast<decltype(snk)>(snk),
