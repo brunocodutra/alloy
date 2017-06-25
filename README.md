@@ -1,6 +1,8 @@
 # Alloy
 Enjoy (post) modern C++
 
+[![travis.badge]][travis.alloy]
+
 ## Overview
 
 **Alloy** solves the problem of run-time manipulation of heterogeneous values
@@ -221,4 +223,4 @@ Alloy is distributed under the
 
 [boost.license]:    http://boost.org/LICENSE_1_0.txt
 
-[wandbox]:          https://wandbox.org/permlink/4tx6EsfjKQzAy8Wl
+[wandbox]:          http://wandbox.org/permlink/4tx6EsfjKQzAy8Wl
