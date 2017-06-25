@@ -74,6 +74,9 @@ before_install:
   - ALLOY_BUILD_PATH="${TRAVIS_BUILD_DIR}/build"
   - mkdir -p "${ALLOY_BUILD_PATH}"
 
+  - ALLOY_INSTALL_PATH="${TRAVIS_BUILD_DIR}/install"
+  - mkdir -p "${ALLOY_INSTALL_PATH}"
+
   - DEPS_PATH="${TRAVIS_BUILD_DIR}/deps"
   - mkdir -p "${DEPS_PATH}"
 
@@ -116,7 +119,8 @@ install:
     fi
 
 before_script:
-  - CMAKE_ARGS=("${ALLOY_SOURCE_PATH}")
+  - CMAKE_ARGS+=("${ALLOY_SOURCE_PATH}")
+  - CMAKE_ARGS+=("-DCMAKE_INSTALL_PREFIX=${ALLOY_INSTALL_PATH}")
 
   - |
     if [[ "${CHECK_FORMATTING}" == "true" ]]
@@ -139,10 +143,10 @@ script:
   - |
     if [[ "${DEPLOY}" == "true" ]]
     then
-        cmake --build "${ALLOY_BUILD_PATH}" --target deploy && tree "${ALLOY_BUILD_PATH}/dist/" || exit 1
+        cmake --build "${ALLOY_BUILD_PATH}" --target install && tree "${ALLOY_INSTALL_PATH}" || exit 1
         if [[ "${TRAVIS_BRANCH}" == "master" && "${TRAVIS_PULL_REQUEST}" == "false" ]]
         then
-            publish "${ALLOY_BUILD_PATH}/dist/include/" standalone || exit $?
+            publish "${ALLOY_INSTALL_PATH}/include/" standalone || exit $?
         fi
     elif [[ "${CHECK_FORMATTING}" == "true" ]]
     then
