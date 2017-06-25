@@ -3,6 +3,7 @@ Enjoy (post) modern C++
 
 [![version]][semver]
 [![travis.badge]][travis.alloy]
+[![gitter.badge]][gitter.alloy]
 
 ## Overview
 
@@ -224,6 +225,9 @@ Alloy is distributed under the
 
 [travis.alloy]:     http://travis-ci.org/brunocodutra/alloy
 [travis.badge]:     http://travis-ci.org/brunocodutra/alloy.svg?branch=master
+
+[gitter.alloy]:     https://gitter.im/brunocodutra/alloy?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge
+[gitter.badge]:     https://badges.gitter.im/brunocodutra/alloy.svg
 
 [boost.license]:    http://boost.org/LICENSE_1_0.txt
 
