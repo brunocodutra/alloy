@@ -1,6 +1,7 @@
 # Alloy
 Enjoy (post) modern C++
 
+[![version]][semver]
 [![travis.badge]][travis.alloy]
 
 ## Overview
@@ -151,7 +152,7 @@ auto x = filter(std::make_tuple(1, 1.0, '1', "one"), [](auto&&) {
 Heck, the predicate doesn't even depend on the elements themselves, but still we
 are unable to deduce the return type!
 
-Alright, forget about returning values, let's forward results to a callback 
+Alright, forget about returning values, let's forward results to a callback
 function instead.
 
 ```.cpp
@@ -217,6 +218,9 @@ The following compilers are continuously tested on [Travis CI][travis.alloy].
 
 Alloy is distributed under the
 [Boost Software License, Version 1.0][boost.license].
+
+[version]:          http://badge.fury.io/gh/brunocodutra%2Falloy.svg
+[semver]:           http://semver.org
 
 [travis.alloy]:     http://travis-ci.org/brunocodutra/alloy
 [travis.badge]:     http://travis-ci.org/brunocodutra/alloy.svg?branch=master
