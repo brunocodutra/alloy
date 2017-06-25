@@ -151,3 +151,8 @@ script:
         (cd "${ALLOY_BUILD_PATH}" && ctest --output-on-failure -E ^test.format)
     fi
 
+notifications:
+  webhooks:
+    urls: https://webhooks.gitter.im/e/f6f076c43196d662f905
+    on_success: change
+    on_failure: always
