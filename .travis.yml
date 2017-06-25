@@ -11,6 +11,7 @@ git:
 env:
     global:
       - secure: "juqIG3Tfvas+ohx+o2KM6O4YnayNyye+w591fGJsE2uNkjBivIHntyFqZakdVeE8phsRAjChDD7YThYuIHblp8sAz0ydBJf2MOfJ77PH19I+2svg3skXOBNf6UtzQtAB5cvq/t4CXHeAgJjFLfNdYt2irc2nISGw+IpSz8CpS7hxdAluyTFJob/mhbz7AcRzYwZyuj0d3qTELL5TaL2SZ6WMgnTMaxhLdbh0wlhsFD1kkpzQsCajifmIK0z84CYk7tNBOvy5xPdZHIBvwzmXcL56QHAexJrKooyhkPDRu6jzexCTmd5t4PFDTVSHEzSulrOtUKd2PxrZxAjsJ3o75G8p7Mh3/F6UEhcGzcx05MIPWS7T3SDZAVxwLSLpW7PAivQQAMtTzwo5AyVbAU1uHnvN/59oldcI53CNWnviADEscA52n3r5/5UHuyJ02q4viGIzV1kV1dtVcPx7Lp8VIlzLhCPs7IsGw+Vlrt9KLF9GssW7NqnBWZsuQdwGPQMs9fV8CePFB1LJZMxC0ybAeL18+fSuvgGjGSp3lqMbLyBh9sPCrLVdPriYRV+6pvGdtb6mMgs3W9KQEM9wYZGsuzqrBh5bovQ7YMb80SqRCeb4WFCaj7jkMCkvPQBOuQ+obKYtqD1teJzOiYcPP7IwBlhVqK9lxeQGCCa2SHdRjaw="
+      - CLANG_FORMAT=/usr/bin/clang-format-5.0
       - VERSION=7
 
 addons:
@@ -31,6 +32,19 @@ matrix:
                   - *pkgs
                   - tree
                 sources: *srcs
+
+      - os: linux
+        dist: trusty
+        env: CHECK_FORMATTING=true
+        addons:
+            apt:
+                packages:
+                  - *pkgs
+                  - clang-format-5.0
+                sources:
+                  - *srcs
+                  - sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty main'
+                    key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
 
       - os: linux
         dist: trusty
@@ -104,6 +118,12 @@ install:
 before_script:
   - CMAKE_ARGS=("${ALLOY_SOURCE_PATH}")
 
+  - |
+    if [[ "${CHECK_FORMATTING}" == "true" ]]
+    then
+        CMAKE_ARGS+=("-DCLANG_FORMAT=${CLANG_FORMAT}")
+    fi
+
   - (cd "${ALLOY_BUILD_PATH}" && cmake ${CMAKE_ARGS[@]})
 
   - |
@@ -124,7 +144,10 @@ script:
         then
             publish "${ALLOY_BUILD_PATH}/dist/include/" standalone || exit $?
         fi
+    elif [[ "${CHECK_FORMATTING}" == "true" ]]
+    then
+        (cd "${ALLOY_BUILD_PATH}" && ctest --output-on-failure -R ^test.format)
     else
-        (cd "${ALLOY_BUILD_PATH}" && ctest --output-on-failure)
+        (cd "${ALLOY_BUILD_PATH}" && ctest --output-on-failure -E ^test.format)
     fi
 
