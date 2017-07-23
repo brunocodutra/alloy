@@ -31,7 +31,7 @@ namespace alloy {
     inline constexpr auto join = [](auto&&... srcs) {
         return source{[&srcs...](auto&& snk) -> decltype(auto) {
             /* clang-format off */
-            return (static_cast<decltype(snk)>(snk) << ... << stream{
+            return (static_cast<decltype(snk)>(snk) << ... << filter{
                 detail::buffer(static_cast<decltype(srcs)>(srcs))
             }) << forward();
             /* clang-format on */

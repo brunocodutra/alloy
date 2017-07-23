@@ -8,45 +8,45 @@
 #include "config.hpp"
 #include "detail/invoke.hpp"
 #include "detail/traits.hpp"
+#include "filter/model.hpp"
 #include "sink/model.hpp"
 #include "source/model.hpp"
-#include "stream/model.hpp"
 
 namespace alloy::detail {
-    template<typename S,
-        typename T,
-        requires<instanceof <S, stream>> = valid,
-        requires<instanceof <T, stream>> = valid>
-    constexpr decltype(auto) operator<<(S&& s, T&& t) {
-        return stream{[&s, &t](auto&& snk) -> decltype(auto) {
+    template<typename F,
+        typename G,
+        requires<instanceof <F, filter>> = valid,
+        requires<instanceof <G, filter>> = valid>
+    constexpr decltype(auto) operator<<(F&& f, G&& g) {
+        return filter{[&f, &g](auto&& snk) -> decltype(auto) {
             return static_cast<decltype(snk)>(snk)
-                << static_cast<S&&>(s) << static_cast<T&&>(t);
+                << static_cast<F&&>(f) << static_cast<G&&>(g);
         }};
     }
 
-    template<typename Stm,
+    template<typename F,
         typename Src,
-        requires<instanceof <Stm, stream>> = valid,
-        requires<! instanceof <Src, stream>> = valid>
-    constexpr decltype(auto) operator<<(Stm&& stm, Src&& src) {
-        return source{[&stm, &src](auto&& snk) -> decltype(auto) {
+        requires<instanceof <F, filter>> = valid,
+        requires<! instanceof <Src, filter>> = valid>
+    constexpr decltype(auto) operator<<(F&& f, Src&& src) {
+        return source{[&f, &src](auto&& snk) -> decltype(auto) {
             return static_cast<decltype(snk)>(snk)
-                << static_cast<Stm&&>(stm) << static_cast<Src&&>(src);
+                << static_cast<F&&>(f) << static_cast<Src&&>(src);
         }};
     }
 
     template<typename Snk,
-        typename Stm,
-        requires<! instanceof <Snk, stream>> = valid,
-        requires<instanceof <Stm, stream>> = valid>
-    constexpr decltype(auto) operator<<(Snk&& snk, Stm&& stm) {
-        return sink{invoke(static_cast<Stm&&>(stm), static_cast<Snk&&>(snk))};
+        typename F,
+        requires<! instanceof <Snk, filter>> = valid,
+        requires<instanceof <F, filter>> = valid>
+    constexpr decltype(auto) operator<<(Snk&& snk, F&& f) {
+        return sink{invoke(static_cast<F&&>(f), static_cast<Snk&&>(snk))};
     }
 
     template<typename Snk,
         typename Src,
-        requires<! instanceof <Snk, stream>> = valid,
-        requires<! instanceof <Src, stream>> = valid,
+        requires<! instanceof <Snk, filter>> = valid,
+        requires<! instanceof <Src, filter>> = valid,
         requires<instanceof <Snk, sink> || instanceof <Src, source>> = valid>
     constexpr decltype(auto) operator<<(Snk&& snk, Src&& src) {
         return invoke(static_cast<Src&&>(src), static_cast<Snk&&>(snk));

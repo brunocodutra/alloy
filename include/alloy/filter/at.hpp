@@ -2,16 +2,16 @@
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 
-#ifndef ALLOY_STREAM_AT_HPP
-#define ALLOY_STREAM_AT_HPP
+#ifndef ALLOY_FILTER_AT_HPP
+#define ALLOY_FILTER_AT_HPP
 
 #include "../config.hpp"
 #include "../constant.hpp"
 #include "../detail/dispatcher.hpp"
 #include "../detail/invoke.hpp"
 #include "../detail/picker.hpp"
+#include "../filter/model.hpp"
 #include "../source/forward.hpp"
-#include "../stream/model.hpp"
 
 namespace alloy::detail {
     template<typename... Is>
@@ -68,7 +68,7 @@ namespace alloy::detail {
 
 namespace alloy {
     inline constexpr auto at = [](auto&&... is) {
-        return stream{detail::at(static_cast<decltype(is)>(is)...)};
+        return filter{detail::at(static_cast<decltype(is)>(is)...)};
     };
 }
 

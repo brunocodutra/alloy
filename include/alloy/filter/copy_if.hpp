@@ -2,15 +2,15 @@
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 
-#ifndef ALLOY_STREAM_COPY_IF_HPP
-#define ALLOY_STREAM_COPY_IF_HPP
+#ifndef ALLOY_FILTER_COPY_IF_HPP
+#define ALLOY_FILTER_COPY_IF_HPP
 
 #include "../config.hpp"
 #include "../detail/dispatcher.hpp"
 #include "../detail/invoke.hpp"
 #include "../detail/picker.hpp"
 #include "../detail/traits.hpp"
-#include "../stream/model.hpp"
+#include "../filter/model.hpp"
 
 namespace alloy::detail {
     template<typename F>
@@ -45,7 +45,7 @@ namespace alloy::detail {
 
 namespace alloy {
     inline constexpr auto copy_if = [](auto&& f) {
-        return stream{detail::copy_if(static_cast<decltype(f)>(f))};
+        return filter{detail::copy_if(static_cast<decltype(f)>(f))};
     };
 }
 
