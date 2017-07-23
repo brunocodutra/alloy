@@ -7,7 +7,7 @@
 
 #include "stream/append.hpp"
 #include "stream/at.hpp"
-#include "stream/filter.hpp"
+#include "stream/copy_if.hpp"
 #include "stream/model.hpp"
 #include "stream/prepend.hpp"
 

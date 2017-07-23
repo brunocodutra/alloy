@@ -143,9 +143,9 @@ Can you deduce the type of `x` this time?
 
 ```.cpp
 template<typename Tuple, typename Predicate>
-decltype(auto) filter(Tuple&&, Predicate&&);
+decltype(auto) copy_if(Tuple&&, Predicate&&);
 
-auto x = filter(std::make_tuple(1, 1.0, '1', "one"), [](auto&&) {
+auto x = copy_if(std::make_tuple(1, 1.0, '1', "one"), [](auto&&) {
     return std::rand() % 2;
 });
 ```
@@ -158,19 +158,19 @@ function instead.
 
 ```.cpp
 template<typename Tuple, typename Predicate, typename Callback>
-void filter(Tuple&&, Predicate&&, Callback&&);
+void copy_if(Tuple&&, Predicate&&, Callback&&);
 
 auto predicate = [](auto&&) {
     return std::rand() % 2;
 };
 
-auto callback = [](auto&& z) { /* ... */ };
+auto callback = [](auto&&... /*args*/) { /* ... */ };
 
-filter(std::make_tuple(1, 1.0, '1', "one"), predicate, callback);
+copy_if(std::make_tuple(1, 1.0, '1', "one"), predicate, callback);
 ```
 
 That was easy after all... or was it? Let us not forget that we still need to
-implement `filter`.
+implement `copy_if`.
 
 How can the standard library help us get there, you might have asked yourself,
 and the answer is quite simple in fact: _It can't really._
@@ -180,7 +180,7 @@ about all the standard library can do for us, from then on we are on our own.
 
 ```.cpp
 template<typename Tuple, typename Predicate, typename Callback>
-void filter(Tuple&& tuple, Predicate&& predicate, Callback&& callback) {
+void copy_if(Tuple&& tuple, Predicate&& predicate, Callback&& callback) {
     constexpr auto impl = [&predicate, &callback](auto&&... elements) {
         // TODO: do the heavy lifting :(
     };
@@ -199,9 +199,9 @@ auto predicate = [](auto&&) {
     return std::rand() % 2;
 };
 
-auto callback = [](auto&& z) { /* ... */ };
+auto callback = [](auto&&... /*args*/) { /* ... */ };
 
-callback << alloy::filter(predicate) << alloy::unpack(tuple);
+callback << alloy::copy_if(predicate) << alloy::unpack(tuple);
 ```
 
 We need Alloy.

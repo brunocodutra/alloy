@@ -2,8 +2,8 @@
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 
-#ifndef ALLOY_STREAM_FILTER_HPP
-#define ALLOY_STREAM_FILTER_HPP
+#ifndef ALLOY_STREAM_COPY_IF_HPP
+#define ALLOY_STREAM_COPY_IF_HPP
 
 #include "../config.hpp"
 #include "../detail/dispatcher.hpp"
@@ -14,7 +14,7 @@
 
 namespace alloy::detail {
     template<typename F>
-    constexpr auto filter(F&& f) noexcept {
+    constexpr auto copy_if(F&& f) noexcept {
         return [&f](auto&& snk) noexcept {
             return [&f, &snk](auto&&... args) -> decltype(auto) {
                 using Args = metal::list<decltype(args)...>;
@@ -44,8 +44,8 @@ namespace alloy::detail {
 }
 
 namespace alloy {
-    inline constexpr auto filter = [](auto&& f) {
-        return stream{detail::filter(static_cast<decltype(f)>(f))};
+    inline constexpr auto copy_if = [](auto&& f) {
+        return stream{detail::copy_if(static_cast<decltype(f)>(f))};
     };
 }
 
