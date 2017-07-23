@@ -29,22 +29,23 @@ namespace alloy::detail {
         }
     };
 
-    template<typename, typename>
+    template<typename, typename, typename>
     struct _inner_impl {};
 
-    template<typename T, typename... Ts>
-    struct _inner_impl<T, std::tuple<Ts...>> {
-        using type = metal::transpose<metal::list<metal::invoke<T, Ts...>>>;
+    template<typename T, typename... Ts, typename U>
+    struct _inner_impl<T, std::tuple<Ts...>, U> {
+        using type =
+            metal::transpose<metal::list<metal::invoke<T, transfer<U, Ts>...>>>;
     };
 
-    template<typename T, typename... Ts>
-    struct _inner_impl<T, std::variant<Ts...>> {
-        using type = metal::list<metal::invoke<T, Ts...>>;
+    template<typename T, typename... Ts, typename U>
+    struct _inner_impl<T, std::variant<Ts...>, U> {
+        using type = metal::list<metal::invoke<T, transfer<U, Ts>...>>;
     };
 
     template<typename T, typename... Xs>
     using inner = metal::apply<metal::lambda<metal::cartesian>,
-        metal::join<metal::eval<_inner_impl<T, strip<Xs>>>...>>;
+        metal::join<metal::eval<_inner_impl<T, strip<Xs>, Xs&&>>...>>;
 
     template<typename, typename>
     struct _outer_impl {};
