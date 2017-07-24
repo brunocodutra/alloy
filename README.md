@@ -15,11 +15,12 @@ standard library.
 #include "alloy.hpp"
 
 #include <iostream>
+#include <string>
 #include <utility>
 
 int main() {
     // suppose you have some data
-    auto data = alloy::capture("World", ' ', "Hello" , '!');
+    auto data = alloy::capture("Hello", ' ', "World" , '!');
 
     // and means to consume it
     auto print = [](auto&&... data) {
@@ -28,76 +29,71 @@ int main() {
     };
 
     // all you need is to connect the ends
-    print << data; // prints World Hello!
+    data >> print; // Hello World!
 
-    // that's not all, you can add filters in between
-    print << alloy::at(2, 1, 0, 3) << data; // prints Hello World!
+    // and maybe add a filter in between
+    auto predicate = [](auto x) {
+        return std::string{x} != "!";
+    };
 
-    // and also chain several of them
-    print << alloy::append('C', '+', '+', '!')
-          << alloy::append(" (post) modern ")
-          << alloy::at(2)
-          << data; // prints Hello (post) modern C++!
+    data >> alloy::copy_if(predicate) >> print; // Hello World
 
-    // there's more, with Alloy you can kiss `std::apply` goodbye
-    print << alloy::unpack(std::make_tuple(3, '.', 1, 4)); // prints 3.14
+    // with Alloy you can kiss `std::apply` goodbye
+    alloy::unpack(std::make_tuple(3, '.', "14")) >> print; // 3.14
 
-    // ever wanted to iterate through a `std::tuple` in a for-loop?
-    constexpr auto tup = std::make_tuple(0, '1', "two");
+    // you can even iterate through tuples in a for-loop
+    auto tup = std::make_tuple(3, '.', "14");
 
-    // yes you can!
     for(std::size_t i = 0; i < std::tuple_size<decltype(tup)>{}; ++i)
-        print << alloy::prepend(i, ": ") << alloy::at(i) << alloy::unpack(tup);
+        alloy::unpack(tup) >> alloy::at(i) >> alloy::prepend(i, ": ") >> print;
 
-    // prints
-    // 0: 0
-    // 1: 1
-    // 2: two
+    // 0: 3
+    // 1: .
+    // 2: 14
 
     // `std::visit` is also a thing of the past
-    using var = std::variant<int, char, char const*>;
+    using var = std::variant<int, char, std::string>;
 
     var i = 3;
     var c = '.';
-    var s = "1";
+    var s = "14";
 
-    print << alloy::unpack(i, c, s); // prints 3.1
+    alloy::unpack(i, c, s) >> print; // 3.14
 
     // while you are at it, why not mixing tuples and variants together?
-    print << alloy::unpack(i, c, s, std::make_tuple(4, "15")); // prints 3.1415
+    alloy::unpack(std::make_tuple("pi", '='), i, c, s) >> print; // pi=3.14
 
     // tuples and variants are too mainstream?
     // not a problem, you can also provide your very own custom data sources
-    auto produce = [](auto&& consume) {
+    auto produce = [](auto consume) {
         return consume("Hello", ' ', "World");
     };
 
     // the following are all equivalent and print Hello World
-    print << alloy::source{produce};
-    alloy::sink{print} << produce;
-    alloy::sink{print} << alloy::source{produce};
+    alloy::source{produce} >> print;
+    produce >> alloy::sink{print};
+    alloy::source{produce} >> alloy::sink{print};
 
-    // and your very own custom filters too
-    auto process = [](auto&& sink) {
-        return [&sink](auto&& hello, auto&& _, auto&& world) {
+    // and your very own filters too
+    auto process = [](auto const& sink) {
+        return [&sink](auto hello, auto _, auto world) {
             return sink(hello, _, "brave", _, "new", _, world, '!');
         };
     };
 
-    print << alloy::filter{process} << produce; // prints Hello brave new World!
+    produce >> alloy::filter{process} >> print; // Hello brave new World!
 
     // enjoy (post) modern C++
 
-    auto wrap = [](auto&& sink) {
-        return [&sink](auto&& word) {
+    auto wrap = [](auto const& sink) {
+        return [&sink](auto word) {
             return sink('(', word, ')');
         };
     };
 
-    print << alloy::append(' ', "modern C++")
-          << alloy::prepend("enjoy", ' ')
-          << wrap
-          << alloy::forward("post");
+    alloy::forward("post") >> alloy::filter{wrap}
+                           >> alloy::prepend("enjoy", ' ')
+                           >> alloy::append(' ', "modern C++") >> print;
 }
 ```
 
@@ -188,7 +184,7 @@ auto predicate = [](auto&&) {
 
 auto callback = [](auto&&... /*args*/) { /* ... */ };
 
-callback << alloy::copy_if(predicate) << alloy::unpack(tuple);
+alloy::unpack(tuple) >> alloy::copy_if(predicate) >> callback;
 ```
 
 We need Alloy.

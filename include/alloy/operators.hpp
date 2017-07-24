@@ -17,38 +17,38 @@ namespace alloy::detail {
         typename G,
         requires<instanceof <F, filter>> = valid,
         requires<instanceof <G, filter>> = valid>
-    constexpr decltype(auto) operator<<(F&& f, G&& g) {
+    constexpr decltype(auto) operator>>(F&& f, G&& g) noexcept {
         return filter{[&f, &g](auto&& snk) -> decltype(auto) {
-            return static_cast<decltype(snk)>(snk)
-                << static_cast<F&&>(f) << static_cast<G&&>(g);
+            return static_cast<F&&>(f)
+                >> (static_cast<G&&>(g) >> static_cast<decltype(snk)>(snk));
         }};
     }
 
     template<typename F,
         typename Src,
-        requires<instanceof <F, filter>> = valid,
-        requires<! instanceof <Src, filter>> = valid>
-    constexpr decltype(auto) operator<<(F&& f, Src&& src) {
-        return source{[&f, &src](auto&& snk) -> decltype(auto) {
-            return static_cast<decltype(snk)>(snk)
-                << static_cast<F&&>(f) << static_cast<Src&&>(src);
+        requires<! instanceof <Src, filter>> = valid,
+        requires<instanceof <F, filter>> = valid>
+    constexpr decltype(auto) operator>>(Src&& src, F&& f) noexcept {
+        return source{[&src, &f](auto&& snk) -> decltype(auto) {
+            return static_cast<Src&&>(src)
+                >> (static_cast<F&&>(f) >> static_cast<decltype(snk)>(snk));
         }};
     }
 
     template<typename Snk,
         typename F,
-        requires<! instanceof <Snk, filter>> = valid,
-        requires<instanceof <F, filter>> = valid>
-    constexpr decltype(auto) operator<<(Snk&& snk, F&& f) {
+        requires<instanceof <F, filter>> = valid,
+        requires<! instanceof <Snk, filter>> = valid>
+    constexpr decltype(auto) operator>>(F&& f, Snk&& snk) {
         return sink{invoke(static_cast<F&&>(f), static_cast<Snk&&>(snk))};
     }
 
     template<typename Snk,
         typename Src,
-        requires<! instanceof <Snk, filter>> = valid,
         requires<! instanceof <Src, filter>> = valid,
-        requires<instanceof <Snk, sink> || instanceof <Src, source>> = valid>
-    constexpr decltype(auto) operator<<(Snk&& snk, Src&& src) {
+        requires<! instanceof <Snk, filter>> = valid,
+        requires<instanceof <Src, source> || instanceof <Snk, sink>> = valid>
+    constexpr decltype(auto) operator>>(Src&& src, Snk&& snk) {
         return invoke(static_cast<Src&&>(src), static_cast<Snk&&>(snk));
     }
 }
