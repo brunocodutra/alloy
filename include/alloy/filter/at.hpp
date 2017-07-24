@@ -59,8 +59,10 @@ namespace alloy::detail {
 
     constexpr auto at() noexcept {
         return [](auto&& snk) noexcept {
-            return [&snk](auto&&...) -> decltype(auto) {
-                return invoke(static_cast<decltype(snk)>(snk));
+            return [&snk](auto&&... args) -> decltype(auto) {
+                return picker<>::template dispatch<invoke_t<decltype(snk)>>(
+                    static_cast<decltype(snk)>(snk),
+                    static_cast<decltype(args)>(args)...);
             };
         };
     }
