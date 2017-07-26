@@ -13,8 +13,14 @@ namespace alloy::detail {
     template<typename... Is>
     struct picker {
         template<typename R, typename F, typename... Args>
-        static constexpr R dispatch(F&& snk, Args&&... args) {
-            return invoke(static_cast<F&&>(snk),
+        static constexpr R dispatch(F&& f, Args&&... args) {
+            return invoke(static_cast<F&&>(f),
+                forward(static_cast<Args&&>(args)...)[Is{}]...);
+        }
+
+        template<typename F, typename... Args>
+        static constexpr decltype(auto) dispatch(F&& f, Args&&... args) {
+            return invoke(static_cast<F&&>(f),
                 forward(static_cast<Args&&>(args)...)[Is{}]...);
         }
     };

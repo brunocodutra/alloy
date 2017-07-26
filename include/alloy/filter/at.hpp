@@ -35,7 +35,7 @@ namespace alloy::detail {
                         [](std::size_t i, std::size_t j) {
                             return sizeof...(args) * i + j;
                         },
-                        static_cast<Is&&>(is)...),
+                        0U, static_cast<Is&&>(is)...),
                     static_cast<decltype(snk)>(snk),
                     static_cast<decltype(args)>(args)...);
             };
@@ -46,11 +46,7 @@ namespace alloy::detail {
     constexpr auto at(constant<is>...) noexcept {
         return [](auto&& snk) noexcept {
             return [&snk](auto&&... args) -> decltype(auto) {
-                using R = invoke_t<decltype(snk),
-                    metal::at<metal::list<decltype(args)...>,
-                        metal::number<is>>...>;
-
-                return picker<constant<is>...>::template dispatch<R>(
+                return picker<constant<is>...>::template dispatch(
                     static_cast<decltype(snk)>(snk),
                     static_cast<decltype(args)>(args)...);
             };
@@ -60,7 +56,7 @@ namespace alloy::detail {
     constexpr auto at() noexcept {
         return [](auto&& snk) noexcept {
             return [&snk](auto&&... args) -> decltype(auto) {
-                return picker<>::template dispatch<invoke_t<decltype(snk)>>(
+                return picker<>::template dispatch(
                     static_cast<decltype(snk)>(snk),
                     static_cast<decltype(args)>(args)...);
             };
