@@ -6,6 +6,7 @@
 #define ALLOY_FILTER_COPY_IF_HPP
 
 #include "../config.hpp"
+#include "../constant.hpp"
 #include "../detail/dispatcher.hpp"
 #include "../detail/invoke.hpp"
 #include "../detail/picker.hpp"
@@ -13,10 +14,10 @@
 #include "../filter/model.hpp"
 
 namespace alloy::detail {
-    template<typename F>
-    constexpr auto copy_if(F&& f) noexcept {
-        return [&f](auto&& snk) noexcept {
-            return [&f, &snk](auto&&... args) -> decltype(auto) {
+    template<typename... Ns>
+    constexpr auto copy_if_impl(Ns&&... ns) noexcept {
+        return [&ns...](auto&& snk) noexcept {
+            return [&ns..., &snk](auto&&... args) -> decltype(auto) {
                 using Args = metal::list<decltype(args)...>;
 
                 using R = metal::cascade<metal::powerset<Args>,
@@ -28,14 +29,33 @@ namespace alloy::detail {
                         metal::lambda<dispatcher>, metal::lambda<picker>>;
 
                 return Dispatcher::template dispatch<R>(
-                    foldr(
-                        [&f](auto&& arg, std::size_t j) {
-                            bool k = invoke(static_cast<decltype(f)>(f),
-                                static_cast<decltype(arg)>(arg));
+                    foldr([](bool j, std::size_t i) { return 2 * i + j; },
+                        !!static_cast<Ns&&>(ns)..., 0U),
+                    static_cast<decltype(snk)>(snk),
+                    static_cast<decltype(args)>(args)...);
+            };
+        };
+    }
 
-                            return 2 * j + k;
-                        },
-                        static_cast<decltype(args)&&>(args)..., 0U),
+    template<auto... ns>
+    constexpr auto copy_if_impl(constant<ns>...) noexcept {
+        using Is = metal::copy_if<metal::indices<metal::numbers<ns...>>,
+            metal::partial<metal::lambda<metal::at>, metal::numbers<ns...>>>;
+
+        return [](auto&& snk) noexcept {
+            return [&snk](auto&&... args) -> decltype(auto) {
+                using Picker = metal::apply<metal::lambda<picker>, Is>;
+                return Picker::template dispatch(
+                    static_cast<decltype(snk)>(snk),
+                    static_cast<decltype(args)>(args)...);
+            };
+        };
+    }
+
+    constexpr auto copy_if_impl() noexcept {
+        return [](auto&& snk) noexcept {
+            return [&snk](auto&&... args) -> decltype(auto) {
+                return picker<>::template dispatch(
                     static_cast<decltype(snk)>(snk),
                     static_cast<decltype(args)>(args)...);
             };
@@ -43,10 +63,22 @@ namespace alloy::detail {
     }
 }
 
+/* clang-format off */
 namespace alloy {
     inline constexpr auto copy_if = [](auto&& f) {
-        return filter{detail::copy_if(static_cast<decltype(f)>(f))};
+        return filter{
+            [&f](auto&& snk) noexcept {
+                return [&f, &snk](auto&&... args) -> decltype(auto) {
+                    return detail::copy_if_impl(
+                        detail::invoke(static_cast<decltype(f)>(f),
+                            static_cast<decltype(args)>(args))...)(
+                                static_cast<decltype(snk)>(snk))(
+                                    static_cast<decltype(args)>(args)...);
+                };
+            }
+        };
     };
 }
+/* clang-format off */
 
 #endif
