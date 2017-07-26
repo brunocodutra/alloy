@@ -89,7 +89,17 @@ constexpr decltype(auto) qualify(T&& t = static_cast<T&&>(instance<T>)) {
 }
 
 template<auto X>
-struct value_t {};
+struct value_t {
+    template<typename I>
+    constexpr auto operator<(I const& i) const noexcept {
+        using namespace metal;
+        if constexpr(is_invocable<lambda<as_number>, I>{}) {
+            return less<number<X>, as_number<I>>{};
+        } else {
+            return X < i;
+        }
+    }
+};
 
 template<auto X, auto Y, auto Z>
 constexpr decltype(auto) value() {
