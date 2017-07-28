@@ -1,9 +1,5 @@
-# Alloy
+# Alloy [![version]][semver] [![travis.badge]][travis.alloy] [![gitter.badge]][gitter.alloy]
 Enjoy (post) modern C++
-
-[![version]][semver]
-[![travis.badge]][travis.alloy]
-[![gitter.badge]][gitter.alloy]
 
 ## Overview
 
