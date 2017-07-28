@@ -1,4 +1,4 @@
-# Alloy [![version]][semver] [![travis.badge]][travis.alloy] [![gitter.badge]][gitter.alloy]
+# Alloy [![version]][semver] [![travis.badge]][travis.alloy] [![gitter.badge]][gitter.alloy] [![godbolt.badge]][godbolt.alloy]
 Embrace (post) modern C++
 
 ## Overview
@@ -92,8 +92,6 @@ int main() {
                            >> alloy::append(' ', "modern C++") >> print;
 }
 ```
-
-[Try it live on Wandbox][wandbox]
 
 ## Motivation
 
@@ -208,6 +206,7 @@ Alloy is distributed under the
 [gitter.alloy]:     https://gitter.im/brunocodutra/alloy?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge
 [gitter.badge]:     https://badges.gitter.im/brunocodutra/alloy.svg
 
-[boost.license]:    http://boost.org/LICENSE_1_0.txt
+[godbolt.alloy]:    https://godbolt.org/g/vmbXbT
+[godbolt.badge]:    https://img.shields.io/badge/try%20it-on%20godbolt-222266.svg
 
-[wandbox]:          http://wandbox.org/permlink/4tx6EsfjKQzAy8Wl
+[boost.license]:    http://boost.org/LICENSE_1_0.txt
