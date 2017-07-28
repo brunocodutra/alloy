@@ -76,7 +76,7 @@ int main() {
 
     produce >> alloy::filter{process} >> print; // Hello brave new World!
 
-    // enjoy (post) modern C++
+    // embrace (post) modern C++
 
     auto wrap = [](auto const& sink) {
         return [&sink](auto word) {
@@ -85,7 +85,7 @@ int main() {
     };
 
     alloy::forward("post") >> alloy::filter{wrap}
-                           >> alloy::prepend("enjoy", ' ')
+                           >> alloy::prepend("embrace", ' ')
                            >> alloy::append(' ', "modern C++") >> print;
 }
 /// [overview]
