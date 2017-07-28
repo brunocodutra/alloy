@@ -183,6 +183,12 @@ alloy::unpack(tuple) >> alloy::copy_if(predicate) >> callback;
 
 We need Alloy.
 
+## Quick Start
+
+1. Download [alloy.hpp][releases]
+2. `# include </path/to/alloy.hpp>`
+3. Embrace (post) modern C++
+
 ## Portability
 
 The following compilers are continuously tested on [Travis CI][travis.alloy].
@@ -210,3 +216,5 @@ Alloy is distributed under the
 [godbolt.badge]:    https://img.shields.io/badge/try%20it-on%20godbolt-222266.svg
 
 [boost.license]:    http://boost.org/LICENSE_1_0.txt
+
+[releases]:         http://github.com/brunocodutra/alloy/releases
