@@ -224,4 +224,9 @@ constexpr auto expect(Expected&&... expected) {
     };
 }
 
+template<typename T>
+constexpr T const& copy(T const& t) noexcept {
+    return t;
+}
+
 #endif
