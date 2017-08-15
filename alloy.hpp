@@ -14,17 +14,28 @@
 #ifndef ALLOY_CONFIG_VERSION_HPP
 #define ALLOY_CONFIG_VERSION_HPP
 #define ALLOY_MAJOR 0
-#define ALLOY_MINOR 1
+#define ALLOY_MINOR 2
 #define ALLOY_PATCH 0
-#define ALLOY_SEMVER(MAJOR, MINOR, PATCH) (((MAJOR) * 1000000) + ((MINOR) * 10000) + (PATCH))
+#define ALLOY_SEMVER(MAJOR, MINOR, PATCH) (((MAJOR)*1000000) + ((MINOR)*10000) + (PATCH))
 #define ALLOY_VERSION ALLOY_SEMVER(ALLOY_MAJOR, ALLOY_MINOR, ALLOY_PATCH)
 #endif
 #endif
 // Copyright Bruno Dutra 2017
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
-#ifndef ALLOY_APPEND_HPP
-#define ALLOY_APPEND_HPP
+#ifndef ALLOY_CONSTANT_HPP
+#define ALLOY_CONSTANT_HPP
+#include <type_traits>
+namespace alloy {
+    template<auto c>
+    using constant = std::integral_constant<decltype(c), c>;
+}
+#endif
+// Copyright Bruno Dutra 2017
+// Distributed under the Boost Software License, Version 1.0.
+// See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
+#ifndef ALLOY_DEFER_HPP
+#define ALLOY_DEFER_HPP
 // Copyright Bruno Dutra 2017
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
@@ -38,14 +49,13 @@
 // Copyright Bruno Dutra 2017
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
-#ifndef ALLOY_CONSTANT_HPP
-#define ALLOY_CONSTANT_HPP
-#include <type_traits>
-namespace alloy {
-    template<auto c>
-    using constant = std::integral_constant<decltype(c), c>;
-}
-#endif
+#ifndef ALLOY_DETAIL_INVOKE_HPP
+#define ALLOY_DETAIL_INVOKE_HPP
+// Copyright Bruno Dutra 2017
+// Distributed under the Boost Software License, Version 1.0.
+// See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
+#ifndef ALLOY_DETAIL_TRAITS_HPP
+#define ALLOY_DETAIL_TRAITS_HPP
 // Copyright Bruno Dutra 2017
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
@@ -93,7 +103,7 @@ namespace alloy {
 ///
 /// ### See Also
 /// \see [Semantic Versioning](http://semver.org/)
-#define METAL_MINOR 6
+#define METAL_MINOR 7
 /// \ingroup config
 ///
 /// ### Description
@@ -644,75 +654,10 @@ namespace metal {
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LAMBDA_APPLY_HPP
 #define METAL_LAMBDA_APPLY_HPP
-// Copyright Bruno Dutra 2015-2017
-// Distributed under the Boost Software License, Version 1.0.
-// See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
-#ifndef METAL_DETAIL_SFINAE_HPP
-#define METAL_DETAIL_SFINAE_HPP
-// Copyright Bruno Dutra 2015-2017
-// Distributed under the Boost Software License, Version 1.0.
-// See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
-#ifndef METAL_DETAIL_DECLPTR_HPP
-#define METAL_DETAIL_DECLPTR_HPP
 namespace metal {
     /// \cond
     namespace detail {
-        template<typename T>
-        T* declptr();
-    }
-    /// \endcond
-}
-#endif
-#include <type_traits>
-namespace metal {
-    /// \cond
-    namespace detail {
-        template<
-            template<template<typename...> class...> class,
-            template<typename...> class...>
-        struct forwarder;
-        template<
-            template<template<typename...> class...> class tmpl,
-            template<typename...> class... exprs,
-            eval<std::enable_if<is_value<tmpl<exprs...>>::value>>* = nullptr>
-        value<tmpl<exprs...>> sfinae(forwarder<tmpl, exprs...>*);
-        template<template<typename...> class expr, typename... vals>
-        struct caller;
-        template<
-            template<typename...> class expr, typename... vals,
-            eval<std::enable_if<is_value<expr<vals...>>::value>>* = nullptr>
-        value<expr<vals...>> sfinae(caller<expr, vals...>*);
-        value<> sfinae(...);
-        template<
-            template<template<typename...> class...> class tmpl,
-            template<typename...> class... exprs>
-        struct forwarder
-            : decltype(sfinae(declptr<forwarder<tmpl, exprs...>>())) {};
-        template<template<typename...> class expr, typename... vals>
-        struct caller : decltype(sfinae(declptr<caller<expr, vals...>>())) {};
-#if defined(METAL_WORKAROUND)
-        template<
-            template<template<typename...> class...> class tmpl,
-            template<typename...> class... exprs>
-        using forward = typename forwarder<tmpl, exprs...>::type;
-        template<template<typename...> class expr, typename... vals>
-        using call = typename caller<expr, vals...>::type;
-#else
-        template<
-            template<template<typename...> class...> class tmpl,
-            template<typename...> class... exprs>
-        using forward = tmpl<exprs...>;
-        template<template<typename...> class expr, typename... vals>
-        using call = expr<vals...>;
-#endif
-    }
-    /// \endcond
-}
-#endif
-namespace metal {
-    /// \cond
-    namespace detail {
-        template<typename lbd>
+        template<typename lbd, typename seq>
         struct _apply;
     }
     /// \endcond
@@ -740,7 +685,7 @@ namespace metal {
     /// ### See Also
     /// \see lambda, invoke, list
     template<typename lbd, typename seq>
-    using apply = detail::call<detail::_apply<lbd>::template type, seq>;
+    using apply = typename detail::_apply<lbd, seq>::type;
 }
 // Copyright Bruno Dutra 2015-2017
 // Distributed under the Boost Software License, Version 1.0.
@@ -848,28 +793,83 @@ namespace metal {
     /// \endcond
 }
 #endif
+// Copyright Bruno Dutra 2015-2017
+// Distributed under the Boost Software License, Version 1.0.
+// See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
+#ifndef METAL_DETAIL_SFINAE_HPP
+#define METAL_DETAIL_SFINAE_HPP
+// Copyright Bruno Dutra 2015-2017
+// Distributed under the Boost Software License, Version 1.0.
+// See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
+#ifndef METAL_DETAIL_DECLPTR_HPP
+#define METAL_DETAIL_DECLPTR_HPP
 namespace metal {
     /// \cond
     namespace detail {
-        template<typename seq>
-        struct _apply_impl {};
-        template<typename... vals>
-        struct _apply_impl<list<vals...>> {
-            template<template<typename...> class expr>
-            using type =
-#if defined(METAL_WORKAROUND)
-                call<expr, vals...>;
-#else
-                expr<vals...>;
+        template<typename T>
+        T* declptr();
+    }
+    /// \endcond
+}
 #endif
+#include <type_traits>
+namespace metal {
+    /// \cond
+    namespace detail {
+        template<
+            template<template<typename...> class...> class,
+            template<typename...> class...>
+        struct forwarder;
+        template<
+            template<template<typename...> class...> class tmpl,
+            template<typename...> class... exprs,
+            eval<std::enable_if<is_value<tmpl<exprs...>>::value>>* = nullptr>
+        value<tmpl<exprs...>> sfinae(forwarder<tmpl, exprs...>*);
+        template<template<typename...> class expr, typename... vals>
+        struct caller;
+        template<
+            template<typename...> class expr, typename... vals,
+            eval<std::enable_if<is_value<expr<vals...>>::value>>* = nullptr>
+        value<expr<vals...>> sfinae(caller<expr, vals...>*);
+        value<> sfinae(...);
+        template<
+            template<template<typename...> class...> class tmpl,
+            template<typename...> class... exprs>
+        struct forwarder
+            : decltype(sfinae(declptr<forwarder<tmpl, exprs...>>())) {};
+        template<template<typename...> class expr, typename... vals>
+        struct caller : decltype(sfinae(declptr<caller<expr, vals...>>())) {};
+#if defined(METAL_WORKAROUND)
+        template<
+            template<template<typename...> class...> class tmpl,
+            template<typename...> class... exprs>
+        using forward = typename forwarder<tmpl, exprs...>::type;
+        template<template<typename...> class expr, typename... vals>
+        using call = typename caller<expr, vals...>::type;
+#else
+        template<
+            template<template<typename...> class...> class tmpl,
+            template<typename...> class... exprs>
+        using forward = tmpl<exprs...>;
+        template<template<typename...> class expr, typename... vals>
+        using call = expr<vals...>;
+#endif
+    }
+    /// \endcond
+}
+#endif
+namespace metal {
+    /// \cond
+    namespace detail {
+        template<typename lbd, typename seq, typename = true_>
+        struct _apply_impl {};
+        template<template<typename...> class expr, typename... vals>
+        struct _apply_impl<
+            lambda<expr>, list<vals...>, is_value<call<expr, vals...>>> {
+            using type = expr<vals...>;
         };
-        template<typename lbd>
-        struct _apply {};
-        template<template<typename...> class expr>
-        struct _apply<lambda<expr>> {
-            template<typename seq>
-            using type = forward<_apply_impl<seq>::template type, expr>;
-        };
+        template<typename lbd, typename seq>
+        struct _apply : _apply_impl<lbd, seq> {};
     }
     /// \endcond
 }
@@ -1121,11 +1121,11 @@ namespace metal {
             struct impl<number<n>, number<(n >= 0 && n < sizeof...(vals))>> {
                 using type = __type_pack_element<n, vals...>;
             };
-            template<typename num>
-            using type = typename impl<num>::type;
+            template<typename... num>
+            using type = typename impl<num...>::type;
 #else
-            template<typename num>
-            using type = call<_at_impl<num>::template type, vals...>;
+            template<typename... num>
+            using type = call<_at_impl<num...>::template type, vals...>;
 #endif
         };
     }
@@ -1462,23 +1462,12 @@ namespace metal {
 namespace metal {
     /// \cond
     namespace detail {
-        template<typename... vals>
-        struct _partial_impl {
-            template<template<typename...> class expr>
-            using type =
-#if defined(METAL_WORKAROUND)
-                call<expr, vals...>;
-#else
-                expr<vals...>;
-#endif
-        };
         template<typename lbd, typename... leading>
         struct _partial {};
         template<template<typename...> class expr, typename... leading>
         struct _partial<lambda<expr>, leading...> {
             template<typename... trailing>
-            using impl = forward<
-                _partial_impl<leading..., trailing...>::template type, expr>;
+            using impl = invoke<lambda<expr>, leading..., trailing...>;
             using type = lambda<impl>;
         };
         template<typename x>
@@ -1640,7 +1629,7 @@ namespace metal {
     /// \snippet list.cpp iota
     ///
     /// ### See Also
-    /// \see numbers
+    /// \see list, repeat, numbers
     template<typename start, typename size, typename stride = number<1>>
     using iota = typename detail::_iota<start, size, stride>::type;
 }
@@ -2021,17 +2010,8 @@ namespace metal {
         };
         template<typename state>
         struct left_folder_0 {
-#if defined(METAL_WORKAROUND)
             template<template<typename...> class>
-            struct impl {
-                using type = state;
-            };
-            template<template<typename...> class expr>
-            using type = typename impl<expr>::type;
-#else
-            template<template<typename...> class>
-            using type = state;
-#endif
+            using type = identity<state>;
         };
         template<std::size_t n>
         struct _fold_left_impl
@@ -2296,6 +2276,7 @@ namespace metal {
     ///
     /// \returns: \number
     /// \semantics:
+    ///     Equivalent to
     ///     \code
     ///         using result = metal::number<!num{}>;
     ///     \endcode
@@ -2323,6 +2304,7 @@ namespace metal {
     ///
     /// \returns: \number
     /// \semantics:
+    ///     Equivalent to
     ///     \code
     ///         using result = metal::number<num_0{} && ... && num_n-1{}>;
     ///     \endcode
@@ -2396,6 +2378,7 @@ namespace metal {
     ///
     /// \returns: \number
     /// \semantics:
+    ///     Equivalent to
     ///     \code
     ///         using result = metal::number<num_0{} || ... || num_n-1{}>;
     ///     \endcode
@@ -2722,6 +2705,7 @@ namespace metal {
     ///
     /// \returns: \number
     /// \semantics:
+    ///     Equivalent to
     ///     \code
     ///         using result = metal::number<num_0{} - ... - num_n-1{}>;
     ///     \endcode
@@ -2777,6 +2761,7 @@ namespace metal {
     ///
     /// \returns: \number
     /// \semantics:
+    ///     Equivalent to
     ///     \code
     ///         using result = metal::number<num{} - 1>;
     ///     \endcode
@@ -2823,13 +2808,13 @@ namespace metal {
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_CARTESIAN_HPP
 #define METAL_LIST_CARTESIAN_HPP
-#include <cstddef>
 namespace metal {
     /// \cond
     namespace detail {
-        template<std::size_t n>
-        struct cartesianer;
-        struct cartesianer_impl_0;
+        template<typename, typename>
+        struct _product;
+        template<typename seqs, typename seq>
+        using product = typename _product<seqs, seq>::type;
     }
     /// \endcond
     /// \ingroup list
@@ -2860,44 +2845,394 @@ namespace metal {
     /// ### See Also
     /// \see list, transpose
     template<typename... seqs>
-    using cartesian = detail::call<
-        detail::cartesianer<sizeof...(seqs)>::template type,
-        detail::cartesianer_impl_0, seqs...>;
+    using cartesian = fold_left<lambda<detail::product>, list<list<>>, seqs...>;
 }
 namespace metal {
     /// \cond
     namespace detail {
-        struct cartesianer_impl_0 {
-            template<typename... vals>
-            using type = list<list<vals...>>;
+        template<typename, typename>
+        struct _product_impl {};
+        template<typename... xs, typename... ys>
+        struct _product_impl<list<xs...>, list<ys...>> {
+            using type = list<list<xs..., ys>...>;
         };
-        template<typename next, typename seq>
-        struct cartesianer_impl {};
-        template<typename next, typename... vals>
-        struct cartesianer_impl<next, list<vals...>> {
-            template<template<typename...> class expr, typename... _>
-            struct impl {
-                using type = join<expr<vals, _...>...>;
-            };
-            template<typename... _>
-            using type = typename impl<next::template type, _...>::type;
-        };
-        template<std::size_t n>
-        struct cartesianer : cartesianer<(n > 0)> {};
-        template<>
-        struct cartesianer<1> {
-            template<typename next, typename head, typename... tail>
-            using type = call<
-                cartesianer<sizeof...(tail)>::template type,
-                cartesianer_impl<next, head>, tail...>;
-        };
-        template<>
-        struct cartesianer<0> {
-            template<typename next>
-            using type = typename next::template type<>;
+        template<typename seqs, typename seq>
+        using product_impl = typename _product_impl<seqs, seq>::type;
+        template<typename, typename>
+        struct _product {};
+        template<typename... seqs, typename... vals>
+        struct _product<list<seqs...>, list<vals...>> {
+            using type = join<product_impl<seqs, list<vals...>>...>;
         };
     }
     /// \endcond
+}
+#endif
+// Copyright Bruno Dutra 2015-2017
+// Distributed under the Boost Software License, Version 1.0.
+// See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
+#ifndef METAL_LIST_CASCADE_HPP
+#define METAL_LIST_CASCADE_HPP
+// Copyright Bruno Dutra 2015-2017
+// Distributed under the Boost Software License, Version 1.0.
+// See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
+#ifndef METAL_VALUE_FOLD_RIGHT_HPP
+#define METAL_VALUE_FOLD_RIGHT_HPP
+namespace metal {
+    /// \cond
+    namespace detail {
+        template<typename lbd>
+        struct _fold_right;
+    }
+    /// \endcond
+    /// \ingroup value
+    ///
+    /// ### Description
+    /// Computes the recursive invocation of a binary \lambda with the result of
+    /// the previous invocation and each \value, from the last to the first.
+    ///
+    /// ### Usage
+    /// For any \lambda `lbd`, and \values `val_0, ..., val_n-1`
+    /// \code
+    ///     using result = metal::fold_right<lbd, val_0, ..., val_n-1>;
+    /// \endcode
+    ///
+    /// \returns: \value
+    /// \semantics:
+    ///     Equivalent to
+    ///     \code
+    ///         using result =
+    ///             lbd(val_0, ..., lbd(val_n-3, lbd(val_n-2, val_n-1)), ...)
+    ///     \endcode
+    ///     where `lbd(x, y)` stands for `metal::invoke<lbd, x, y>`.
+    ///
+    /// ### Example
+    /// \snippet value.cpp fold_right
+    ///
+    /// ### See Also
+    /// \see fold_right
+    template<typename lbd, typename... vals>
+    using fold_right =
+        detail::call<detail::_fold_right<lbd>::template type, vals...>;
+}
+#include <cstddef>
+namespace metal {
+    /// \cond
+    namespace detail {
+        template<
+            typename state,
+            /* clang-format off */
+            typename _00, typename _01, typename _02, typename _03,
+            typename _04, typename _05, typename _06, typename _07,
+            typename _08, typename _09, typename _10, typename _11,
+            typename _12, typename _13, typename _14, typename _15,
+            typename _16, typename _17, typename _18, typename _19,
+            typename _20, typename _21, typename _22, typename _23,
+            typename _24, typename _25, typename _26, typename _27,
+            typename _28, typename _29, typename _30, typename _31,
+            typename _32, typename _33, typename _34, typename _35,
+            typename _36, typename _37, typename _38, typename _39,
+            typename _40, typename _41, typename _42, typename _43,
+            typename _44, typename _45, typename _46, typename _47,
+            typename _48, typename _49, typename _50, typename _51,
+            typename _52, typename _53, typename _54, typename _55,
+            typename _56, typename _57, typename _58, typename _59,
+            typename _60, typename _61, typename _62, typename _63,
+            typename _64, typename _65, typename _66, typename _67,
+            typename _68, typename _69, typename _70, typename _71,
+            typename _72, typename _73, typename _74, typename _75,
+            typename _76, typename _77, typename _78, typename _79,
+            typename _80, typename _81, typename _82, typename _83,
+            typename _84, typename _85, typename _86, typename _87,
+            typename _88, typename _89, typename _90, typename _91,
+            typename _92, typename _93, typename _94, typename _95,
+            typename _96, typename _97, typename _98, typename _99
+            /* clang-format on */
+            >
+        struct right_folder_100 {
+            template<template<typename...> class expr>
+            using type =
+                /* clang-format off */
+                expr<_00, expr<_01, expr<_02, expr<_03, expr<_04,
+                expr<_05, expr<_06, expr<_07, expr<_08, expr<_09,
+                expr<_10, expr<_11, expr<_12, expr<_13, expr<_14,
+                expr<_15, expr<_16, expr<_17, expr<_18, expr<_19,
+                expr<_20, expr<_21, expr<_22, expr<_23, expr<_24,
+                expr<_25, expr<_26, expr<_27, expr<_28, expr<_29,
+                expr<_30, expr<_31, expr<_32, expr<_33, expr<_34,
+                expr<_35, expr<_36, expr<_37, expr<_38, expr<_39,
+                expr<_40, expr<_41, expr<_42, expr<_43, expr<_44,
+                expr<_45, expr<_46, expr<_47, expr<_48, expr<_49,
+                expr<_50, expr<_51, expr<_52, expr<_53, expr<_54,
+                expr<_55, expr<_56, expr<_57, expr<_58, expr<_59,
+                expr<_60, expr<_61, expr<_62, expr<_63, expr<_64,
+                expr<_65, expr<_66, expr<_67, expr<_68, expr<_69,
+                expr<_70, expr<_71, expr<_72, expr<_73, expr<_74,
+                expr<_75, expr<_76, expr<_77, expr<_78, expr<_79,
+                expr<_80, expr<_81, expr<_82, expr<_83, expr<_84,
+                expr<_85, expr<_86, expr<_87, expr<_88, expr<_89,
+                expr<_90, expr<_91, expr<_92, expr<_93, expr<_94,
+                expr<_95, expr<_96, expr<_97, expr<_98, expr<_99,
+                    forward<state::template type, expr>
+                >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+                >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+                /* clang-format on */
+                ;
+        };
+        template<
+            typename state,
+            /* clang-format off */
+            typename _00, typename _01, typename _02, typename _03,
+            typename _04, typename _05, typename _06, typename _07,
+            typename _08, typename _09
+            /* clang-format on */
+            >
+        struct right_folder_10 {
+            template<template<typename...> class expr>
+            using type =
+                /* clang-format off */
+                expr<_00, expr<_01, expr<_02, expr<_03, expr<_04,
+                expr<_05, expr<_06, expr<_07, expr<_08, expr<_09,
+                    forward<state::template type, expr>
+                >>>>>>>>>>
+                /* clang-format on */
+                ;
+        };
+        template<typename state, typename _00>
+        struct right_folder_1 {
+            template<template<typename...> class expr>
+            using type = expr<_00, forward<state::template type, expr>>;
+        };
+        template<typename state>
+        struct right_folder_0 {
+            template<template<typename...> class>
+            using type = identity<state>;
+        };
+        template<std::size_t n>
+        struct _fold_right_impl
+            : _fold_right_impl<(n > 100) ? 100 : (n > 10) ? 10 : (n > 1)> {};
+        template<>
+        struct _fold_right_impl<100> {
+            template<
+                typename _00, typename _01, typename _02, typename _03,
+                typename _04, typename _05, typename _06, typename _07,
+                typename _08, typename _09, typename _10, typename _11,
+                typename _12, typename _13, typename _14, typename _15,
+                typename _16, typename _17, typename _18, typename _19,
+                typename _20, typename _21, typename _22, typename _23,
+                typename _24, typename _25, typename _26, typename _27,
+                typename _28, typename _29, typename _30, typename _31,
+                typename _32, typename _33, typename _34, typename _35,
+                typename _36, typename _37, typename _38, typename _39,
+                typename _40, typename _41, typename _42, typename _43,
+                typename _44, typename _45, typename _46, typename _47,
+                typename _48, typename _49, typename _50, typename _51,
+                typename _52, typename _53, typename _54, typename _55,
+                typename _56, typename _57, typename _58, typename _59,
+                typename _60, typename _61, typename _62, typename _63,
+                typename _64, typename _65, typename _66, typename _67,
+                typename _68, typename _69, typename _70, typename _71,
+                typename _72, typename _73, typename _74, typename _75,
+                typename _76, typename _77, typename _78, typename _79,
+                typename _80, typename _81, typename _82, typename _83,
+                typename _84, typename _85, typename _86, typename _87,
+                typename _88, typename _89, typename _90, typename _91,
+                typename _92, typename _93, typename _94, typename _95,
+                typename _96, typename _97, typename _98, typename _99,
+                typename... tail>
+            using type = right_folder_100<
+                typename _fold_right_impl<sizeof...(tail) - 1>::template type<
+                    tail...>,
+                /* clang-format off */
+                _00, _01, _02, _03, _04, _05, _06, _07, _08, _09,
+                _10, _11, _12, _13, _14, _15, _16, _17, _18, _19,
+                _20, _21, _22, _23, _24, _25, _26, _27, _28, _29,
+                _30, _31, _32, _33, _34, _35, _36, _37, _38, _39,
+                _40, _41, _42, _43, _44, _45, _46, _47, _48, _49,
+                _50, _51, _52, _53, _54, _55, _56, _57, _58, _59,
+                _60, _61, _62, _63, _64, _65, _66, _67, _68, _69,
+                _70, _71, _72, _73, _74, _75, _76, _77, _78, _79,
+                _80, _81, _82, _83, _84, _85, _86, _87, _88, _89,
+                _90, _91, _92, _93, _94, _95, _96, _97, _98, _99
+                /* clang-format on */
+                >;
+        };
+        template<>
+        struct _fold_right_impl<10> {
+            template<
+                typename _00, typename _01, typename _02, typename _03,
+                typename _04, typename _05, typename _06, typename _07,
+                typename _08, typename _09, typename... tail>
+            using type = right_folder_10<
+                typename _fold_right_impl<sizeof...(tail) - 1>::template type<
+                    tail...>,
+                _00, _01, _02, _03, _04, _05, _06, _07, _08, _09>;
+        };
+        template<>
+        struct _fold_right_impl<1> {
+            template<typename _00, typename... tail>
+            using type = right_folder_1<
+                typename _fold_right_impl<sizeof...(tail) - 1>::template type<
+                    tail...>,
+                _00>;
+        };
+        template<>
+        struct _fold_right_impl<0> {
+            template<typename _00>
+            using type = right_folder_0<_00>;
+        };
+        template<typename state, typename... vals>
+        struct right_folder
+            : _fold_right_impl<sizeof...(vals)>::template type<state, vals...> {
+        };
+        template<typename lbd>
+        struct _fold_right {};
+        template<template<typename...> class expr>
+        struct _fold_right<lambda<expr>> {
+            template<typename... vals>
+            using type = forward<right_folder<vals...>::template type, expr>;
+        };
+    }
+    /// \endcond
+}
+#endif
+namespace metal {
+    /// \cond
+    namespace detail {
+        template<typename outer, typename inner>
+        struct _cascader;
+        template<typename outer, typename inner>
+        using cascader = typename _cascader<outer, inner>::type;
+    }
+    /// \endcond
+    /// \ingroup list
+    ///
+    /// ### Description
+    /// Recursively applies \lambdas to nested \lists of \lists.
+    ///
+    /// ### Usage
+    /// For any \list `l` and \lambdas `lbd_0, ..., lbd_n-1`, where `n > 0`,
+    /// \code
+    ///     using result = metal::cascade<l, lbd_0, ..., lbd_n-1>;
+    /// \endcode
+    ///
+    /// \returns: \value
+    /// \semantics:
+    ///     If `n == 1`, then
+    ///     \code
+    ///         using result = metal::apply<lbd_0, l>;
+    ///     \endcode
+    ///     otherwise, if `l` contains elements `l[0], ..., l[m-1]`, then
+    ///     \code
+    ///         using result = metal::invoke<
+    ///             lbd_0,
+    ///             metal::cascade<l[0], lbd_1, ..., lbd_n-1>>,
+    ///             metal::cascade<l[1], lbd_1, ..., lbd_n-1>>,
+    ///             ...,
+    ///             metal::cascade<l[m-1], lbd_1, ..., lbd_n-1>>
+    ///         >;
+    ///     \endcode
+    ///
+    /// ### Example
+    /// \snippet list.cpp cascade
+    ///
+    /// ### See Also
+    /// \see list, cartesian
+    template<typename seq, typename... lbds>
+    using cascade = apply<fold_right<lambda<detail::cascader>, lbds...>, seq>;
+}
+namespace metal {
+    /// \cond
+    namespace detail {
+        template<typename outer, typename inner>
+        struct _cascader {};
+        template<
+            template<typename...> class outer,
+            template<typename...> class inner>
+        struct _cascader<lambda<outer>, lambda<inner>> {
+            template<typename... seqs>
+            using impl = invoke<lambda<outer>, apply<lambda<inner>, seqs>...>;
+            using type = lambda<impl>;
+        };
+    }
+    /// \endcond
+}
+#endif
+// Copyright Bruno Dutra 2015-2017
+// Distributed under the Boost Software License, Version 1.0.
+// See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
+#ifndef METAL_LIST_COMBINE_HPP
+#define METAL_LIST_COMBINE_HPP
+// Copyright Bruno Dutra 2015-2017
+// Distributed under the Boost Software License, Version 1.0.
+// See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
+#ifndef METAL_LIST_REPEAT_HPP
+#define METAL_LIST_REPEAT_HPP
+namespace metal {
+    /// \ingroup list
+    ///
+    /// ### Description
+    /// Returns a \list that contains a \number of copies of the same \value.
+    ///
+    /// ### Usage
+    /// For any \value `val` and \number `num`
+    /// \code
+    ///     using result = metal::repeat<val, num>;
+    /// \endcode
+    ///
+    /// \returns: \list
+    /// \semantics:
+    ///     If `num` holds the constant `n`, then
+    ///     \code
+    ///         using result = metal::list<val_0, ..., val_n-1>;
+    ///     \endcode
+    ///     where `val_0, ..., val_n-1` are all identical to `val`.
+    ///
+    /// ### Example
+    /// \snippet list.cpp repeat
+    ///
+    /// ### See Also
+    /// \see list, iota
+    template<typename val, typename num>
+    using repeat = metal::transform<
+        metal::always<val>,
+        metal::iota<metal::number<0>, num, metal::number<0>>>;
+}
+#endif
+namespace metal {
+    /// \ingroup list
+    ///
+    /// ### Description
+    /// Computes all possible combinations (with repetition) from the
+    /// elements in a \list.
+    ///
+    /// ### Usage
+    /// For any \list `l` and \number `num`
+    /// \code
+    ///     using result = metal::combine<l, num>;
+    /// \endcode
+    ///
+    /// \returns: \list
+    /// \semantics:
+    ///     If `l` contains elements `l[0], ..., l[m-1]` and `num` holds the
+    ///     constant `n`, then
+    ///     \code
+    ///         using result = metal::list<
+    ///             metal::list<l[x_0], ...[...], l[x_n-1]>,
+    ///         >;
+    ///     \endcode
+    ///     where each `x` in `x_0, ..., x_n-1` varies independently from `0` to
+    ///     `m-1`.
+    ///
+    /// ### Example
+    /// \snippet list.cpp combine
+    ///
+    /// ### See Also
+    /// \see list, powerset, cartesian, cascade
+    template<typename seq, typename num = metal::size<seq>>
+    using combine = metal::apply<
+        metal::lambda<metal::cartesian>,
+        metal::repeat<metal::if_<metal::is_list<seq>, seq>, num>>;
 }
 #endif
 // Copyright Bruno Dutra 2015-2017
@@ -3166,6 +3501,7 @@ namespace metal {
     ///
     /// \returns: \number
     /// \semantics:
+    ///     Equivalent to
     ///     \code
     ///         using result = metal::number<num_0{} + ... + num_n-1{}>;
     ///     \endcode
@@ -3315,6 +3651,7 @@ namespace metal {
     ///
     /// \returns: \number
     /// \semantics:
+    ///     Equivalent to
     ///     \code
     ///         using result = metal::number<(x{} < y{})>;
     ///     \endcode
@@ -3352,6 +3689,7 @@ namespace metal {
     ///
     /// \returns: \number
     /// \semantics:
+    ///     Equivalent to
     ///     \code
     ///         using result = metal::number<(x{} > y{})>;
     ///     \endcode
@@ -4025,6 +4363,7 @@ namespace metal {
     ///
     /// \returns: \number
     /// \semantics:
+    ///     Equivalent to
     ///     \code
     ///         using result = metal::number<num::{} + 1>;
     ///     \endcode
@@ -4515,6 +4854,72 @@ namespace metal {
 // Copyright Bruno Dutra 2015-2017
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
+#ifndef METAL_LIST_POWERSET_HPP
+#define METAL_LIST_POWERSET_HPP
+namespace metal {
+    /// \cond
+    namespace detail {
+        template<typename, typename>
+        struct _power;
+        template<typename seqs, typename val>
+        using power = typename _power<seqs, val>::type;
+    }
+    /// \endcond
+    /// \ingroup list
+    ///
+    /// ### Description
+    /// Computes the powerset of a \list.
+    ///
+    /// ### Usage
+    /// For any \list `l`
+    /// \code
+    ///     using result = metal::powerset<l>;
+    /// \endcode
+    ///
+    /// \returns: \list
+    /// \semantics:
+    ///     If `l` contains elements `l[0], ..., l[m-1]`, then
+    ///     \code
+    ///         using result = metal::list<metal::list<l[2^m]>...>;
+    ///     \endcode
+    ///     where the notation `l[2^m]` stands for the expansion of all elements
+    ///     in `l`, whose indices correspond to _1-bits_ of the number `2^m`
+    ///     written in binary base and `metal::list<l[2^m]>...` stands for the
+    ///     expansion for all numbers in `0...2^m`.
+    ///
+    /// ### Example
+    /// \snippet list.cpp powerset
+    ///
+    /// ### See Also
+    /// \see list, combine, cartesian, cascade
+    template<typename seq>
+    using powerset =
+        accumulate<lambda<detail::power>, list<list<>>, metal::reverse<seq>>;
+}
+namespace metal {
+    /// \cond
+    namespace detail {
+        template<typename, typename>
+        struct _power_impl {};
+        template<typename... xs, typename y>
+        struct _power_impl<list<xs...>, y> {
+            using type = list<list<xs...>, list<y, xs...>>;
+        };
+        template<typename xs, typename y>
+        using power_impl = typename _power_impl<xs, y>::type;
+        template<typename, typename>
+        struct _power {};
+        template<typename... seqs, typename val>
+        struct _power<list<seqs...>, val> {
+            using type = join<power_impl<seqs, val>...>;
+        };
+    }
+    /// \endcond
+}
+#endif
+// Copyright Bruno Dutra 2015-2017
+// Distributed under the Boost Software License, Version 1.0.
+// See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_PREPEND_HPP
 #define METAL_LIST_PREPEND_HPP
 namespace metal {
@@ -4723,27 +5128,33 @@ namespace metal {
         using head = typename cons<seq>::head;
         template<typename seq>
         using tail = typename cons<seq>::tail;
-        template<typename x, typename y, typename... zs>
-        struct _merge {
-            template<template<typename...> class expr>
-            using type = typename if_<
-                expr<head<y>, head<x>>, _merge<x, tail<y>, zs..., head<y>>,
-                _merge<tail<x>, y, zs..., head<x>>>::template type<expr>;
-        };
-        template<typename... xs, typename... zs>
-        struct _merge<list<xs...>, list<>, zs...> {
-            template<template<typename...> class>
+        template<
+            typename, typename, typename, template<typename...> class,
+            typename = true_>
+        struct _merge {};
+        template<
+            typename x, typename y, typename... zs,
+            template<typename...> class e>
+        struct _merge<
+            x, y, list<zs...>, e, if_<call<e, head<y>, head<x>>, true_, false_>>
+            : _merge<x, tail<y>, list<zs..., head<y>>, e> {};
+        template<
+            typename x, typename y, typename... zs,
+            template<typename...> class e>
+        struct _merge<
+            x, y, list<zs...>, e, if_<call<e, head<y>, head<x>>, false_, true_>>
+            : _merge<tail<x>, y, list<zs..., head<x>>, e> {};
+        template<typename... xs, typename... zs, template<typename...> class e>
+        struct _merge<list<xs...>, list<>, list<zs...>, e> {
             using type = list<zs..., xs...>;
         };
-        template<typename... ys, typename... zs>
-        struct _merge<list<>, list<ys...>, zs...> {
-            template<template<typename...> class>
+        template<typename... ys, typename... zs, template<typename...> class e>
+        struct _merge<list<>, list<ys...>, list<zs...>, e> {
             using type = list<zs..., ys...>;
         };
-        template<typename... zs>
-        struct _merge<list<>, list<>, zs...> {
-            template<template<typename...> class>
-            using type = list<zs...>;
+        template<typename z, template<typename...> class e>
+        struct _merge<list<>, list<>, z, e> {
+            using type = z;
         };
         template<typename seq>
         struct _sort_impl {};
@@ -4753,12 +5164,11 @@ namespace metal {
             using beg = number<0>;
             using mid = number<sizeof...(vals) / 2>;
             using end = number<sizeof...(vals)>;
-            using x = _sort_impl<range<seq, beg, mid>>;
-            using y = _sort_impl<range<seq, mid, end>>;
             template<template<typename...> class expr>
             using type = typename _merge<
-                forward<x::template type, expr>,
-                forward<y::template type, expr>>::template type<expr>;
+                forward<_sort_impl<range<seq, beg, mid>>::template type, expr>,
+                forward<_sort_impl<range<seq, mid, end>>::template type, expr>,
+                list<>, expr>::type;
         };
         template<typename x, typename y>
         struct _sort_impl<list<x, y>> {
@@ -4779,8 +5189,8 @@ namespace metal {
         struct _sort {};
         template<template<typename...> class expr>
         struct _sort<lambda<expr>> {
-            template<typename seq>
-            using type = forward<_sort_impl<seq>::template type, expr>;
+            template<typename... seq>
+            using type = forward<_sort_impl<seq...>::template type, expr>;
         };
     }
     /// \endcond
@@ -5384,6 +5794,7 @@ namespace metal {
     ///
     /// \returns: \number
     /// \semantics:
+    ///     Equivalent to
     ///     \code
     ///         using result = metal::number<-num{}>;
     ///     \endcode
@@ -5411,6 +5822,7 @@ namespace metal {
     ///
     /// \returns: \number
     /// \semantics:
+    ///     Equivalent to
     ///     \code
     ///         using result = metal::number<(num{} > 0) ? num{} : -num{}>;
     ///     \endcode
@@ -5597,6 +6009,7 @@ namespace metal {
     ///
     /// \returns: \number
     /// \semantics:
+    ///     Equivalent to
     ///     \code
     ///         using result = metal::number<num_0{} * ... * num_n-1{}>;
     ///     \endcode
@@ -5735,238 +6148,6 @@ namespace metal {
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_VALUE_HPP
 #define METAL_VALUE_HPP
-// Copyright Bruno Dutra 2015-2017
-// Distributed under the Boost Software License, Version 1.0.
-// See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
-#ifndef METAL_VALUE_FOLD_RIGHT_HPP
-#define METAL_VALUE_FOLD_RIGHT_HPP
-namespace metal {
-    /// \cond
-    namespace detail {
-        template<typename lbd>
-        struct _fold_right;
-    }
-    /// \endcond
-    /// \ingroup value
-    ///
-    /// ### Description
-    /// Computes the recursive invocation of a binary \lambda with the result of
-    /// the previous invocation and each \value, from the last to the first.
-    ///
-    /// ### Usage
-    /// For any \lambda `lbd`, and \values `val_0, ..., val_n-1`
-    /// \code
-    ///     using result = metal::fold_right<lbd, val_0, ..., val_n-1>;
-    /// \endcode
-    ///
-    /// \returns: \value
-    /// \semantics:
-    ///     Equivalent to
-    ///     \code
-    ///         using result =
-    ///             lbd(val_0, ..., lbd(val_n-3, lbd(val_n-2, val_n-1)), ...)
-    ///     \endcode
-    ///     where `lbd(x, y)` stands for `metal::invoke<lbd, x, y>`.
-    ///
-    /// ### Example
-    /// \snippet value.cpp fold_right
-    ///
-    /// ### See Also
-    /// \see fold_right
-    template<typename lbd, typename... vals>
-    using fold_right =
-        detail::call<detail::_fold_right<lbd>::template type, vals...>;
-}
-#include <cstddef>
-namespace metal {
-    /// \cond
-    namespace detail {
-        template<
-            typename state,
-            /* clang-format off */
-            typename _00, typename _01, typename _02, typename _03,
-            typename _04, typename _05, typename _06, typename _07,
-            typename _08, typename _09, typename _10, typename _11,
-            typename _12, typename _13, typename _14, typename _15,
-            typename _16, typename _17, typename _18, typename _19,
-            typename _20, typename _21, typename _22, typename _23,
-            typename _24, typename _25, typename _26, typename _27,
-            typename _28, typename _29, typename _30, typename _31,
-            typename _32, typename _33, typename _34, typename _35,
-            typename _36, typename _37, typename _38, typename _39,
-            typename _40, typename _41, typename _42, typename _43,
-            typename _44, typename _45, typename _46, typename _47,
-            typename _48, typename _49, typename _50, typename _51,
-            typename _52, typename _53, typename _54, typename _55,
-            typename _56, typename _57, typename _58, typename _59,
-            typename _60, typename _61, typename _62, typename _63,
-            typename _64, typename _65, typename _66, typename _67,
-            typename _68, typename _69, typename _70, typename _71,
-            typename _72, typename _73, typename _74, typename _75,
-            typename _76, typename _77, typename _78, typename _79,
-            typename _80, typename _81, typename _82, typename _83,
-            typename _84, typename _85, typename _86, typename _87,
-            typename _88, typename _89, typename _90, typename _91,
-            typename _92, typename _93, typename _94, typename _95,
-            typename _96, typename _97, typename _98, typename _99
-            /* clang-format on */
-            >
-        struct right_folder_100 {
-            template<template<typename...> class expr>
-            using type =
-                /* clang-format off */
-                expr<_00, expr<_01, expr<_02, expr<_03, expr<_04,
-                expr<_05, expr<_06, expr<_07, expr<_08, expr<_09,
-                expr<_10, expr<_11, expr<_12, expr<_13, expr<_14,
-                expr<_15, expr<_16, expr<_17, expr<_18, expr<_19,
-                expr<_20, expr<_21, expr<_22, expr<_23, expr<_24,
-                expr<_25, expr<_26, expr<_27, expr<_28, expr<_29,
-                expr<_30, expr<_31, expr<_32, expr<_33, expr<_34,
-                expr<_35, expr<_36, expr<_37, expr<_38, expr<_39,
-                expr<_40, expr<_41, expr<_42, expr<_43, expr<_44,
-                expr<_45, expr<_46, expr<_47, expr<_48, expr<_49,
-                expr<_50, expr<_51, expr<_52, expr<_53, expr<_54,
-                expr<_55, expr<_56, expr<_57, expr<_58, expr<_59,
-                expr<_60, expr<_61, expr<_62, expr<_63, expr<_64,
-                expr<_65, expr<_66, expr<_67, expr<_68, expr<_69,
-                expr<_70, expr<_71, expr<_72, expr<_73, expr<_74,
-                expr<_75, expr<_76, expr<_77, expr<_78, expr<_79,
-                expr<_80, expr<_81, expr<_82, expr<_83, expr<_84,
-                expr<_85, expr<_86, expr<_87, expr<_88, expr<_89,
-                expr<_90, expr<_91, expr<_92, expr<_93, expr<_94,
-                expr<_95, expr<_96, expr<_97, expr<_98, expr<_99,
-                    forward<state::template type, expr>
-                >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-                >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-                /* clang-format on */
-                ;
-        };
-        template<
-            typename state,
-            /* clang-format off */
-            typename _00, typename _01, typename _02, typename _03,
-            typename _04, typename _05, typename _06, typename _07,
-            typename _08, typename _09
-            /* clang-format on */
-            >
-        struct right_folder_10 {
-            template<template<typename...> class expr>
-            using type =
-                /* clang-format off */
-                expr<_00, expr<_01, expr<_02, expr<_03, expr<_04,
-                expr<_05, expr<_06, expr<_07, expr<_08, expr<_09,
-                    forward<state::template type, expr>
-                >>>>>>>>>>
-                /* clang-format on */
-                ;
-        };
-        template<typename state, typename _00>
-        struct right_folder_1 {
-            template<template<typename...> class expr>
-            using type = expr<_00, forward<state::template type, expr>>;
-        };
-        template<typename state>
-        struct right_folder_0 {
-#if defined(METAL_WORKAROUND)
-            template<template<typename...> class>
-            struct impl {
-                using type = state;
-            };
-            template<template<typename...> class expr>
-            using type = typename impl<expr>::type;
-#else
-            template<template<typename...> class>
-            using type = state;
-#endif
-        };
-        template<std::size_t n>
-        struct _fold_right_impl
-            : _fold_right_impl<(n > 100) ? 100 : (n > 10) ? 10 : (n > 1)> {};
-        template<>
-        struct _fold_right_impl<100> {
-            template<
-                typename _00, typename _01, typename _02, typename _03,
-                typename _04, typename _05, typename _06, typename _07,
-                typename _08, typename _09, typename _10, typename _11,
-                typename _12, typename _13, typename _14, typename _15,
-                typename _16, typename _17, typename _18, typename _19,
-                typename _20, typename _21, typename _22, typename _23,
-                typename _24, typename _25, typename _26, typename _27,
-                typename _28, typename _29, typename _30, typename _31,
-                typename _32, typename _33, typename _34, typename _35,
-                typename _36, typename _37, typename _38, typename _39,
-                typename _40, typename _41, typename _42, typename _43,
-                typename _44, typename _45, typename _46, typename _47,
-                typename _48, typename _49, typename _50, typename _51,
-                typename _52, typename _53, typename _54, typename _55,
-                typename _56, typename _57, typename _58, typename _59,
-                typename _60, typename _61, typename _62, typename _63,
-                typename _64, typename _65, typename _66, typename _67,
-                typename _68, typename _69, typename _70, typename _71,
-                typename _72, typename _73, typename _74, typename _75,
-                typename _76, typename _77, typename _78, typename _79,
-                typename _80, typename _81, typename _82, typename _83,
-                typename _84, typename _85, typename _86, typename _87,
-                typename _88, typename _89, typename _90, typename _91,
-                typename _92, typename _93, typename _94, typename _95,
-                typename _96, typename _97, typename _98, typename _99,
-                typename... tail>
-            using type = right_folder_100<
-                typename _fold_right_impl<sizeof...(tail) - 1>::template type<
-                    tail...>,
-                /* clang-format off */
-                _00, _01, _02, _03, _04, _05, _06, _07, _08, _09,
-                _10, _11, _12, _13, _14, _15, _16, _17, _18, _19,
-                _20, _21, _22, _23, _24, _25, _26, _27, _28, _29,
-                _30, _31, _32, _33, _34, _35, _36, _37, _38, _39,
-                _40, _41, _42, _43, _44, _45, _46, _47, _48, _49,
-                _50, _51, _52, _53, _54, _55, _56, _57, _58, _59,
-                _60, _61, _62, _63, _64, _65, _66, _67, _68, _69,
-                _70, _71, _72, _73, _74, _75, _76, _77, _78, _79,
-                _80, _81, _82, _83, _84, _85, _86, _87, _88, _89,
-                _90, _91, _92, _93, _94, _95, _96, _97, _98, _99
-                /* clang-format on */
-                >;
-        };
-        template<>
-        struct _fold_right_impl<10> {
-            template<
-                typename _00, typename _01, typename _02, typename _03,
-                typename _04, typename _05, typename _06, typename _07,
-                typename _08, typename _09, typename... tail>
-            using type = right_folder_10<
-                typename _fold_right_impl<sizeof...(tail) - 1>::template type<
-                    tail...>,
-                _00, _01, _02, _03, _04, _05, _06, _07, _08, _09>;
-        };
-        template<>
-        struct _fold_right_impl<1> {
-            template<typename _00, typename... tail>
-            using type = right_folder_1<
-                typename _fold_right_impl<sizeof...(tail) - 1>::template type<
-                    tail...>,
-                _00>;
-        };
-        template<>
-        struct _fold_right_impl<0> {
-            template<typename _00>
-            using type = right_folder_0<_00>;
-        };
-        template<typename state, typename... vals>
-        struct right_folder
-            : _fold_right_impl<sizeof...(vals)>::template type<state, vals...> {
-        };
-        template<typename lbd>
-        struct _fold_right {};
-        template<template<typename...> class expr>
-        struct _fold_right<lambda<expr>> {
-            template<typename... vals>
-            using type = forward<right_folder<vals...>::template type, expr>;
-        };
-    }
-    /// \endcond
-}
-#endif
 /// \defgroup value Value
 /// \ingroup metal
 #endif
@@ -5975,20 +6156,10 @@ namespace metal {
 /// \brief Metaprogramming algorithms.
 #endif
 #endif
-#if METAL_VERSION < METAL_SEMVER(0, 6, 0)
+#if METAL_VERSION < METAL_SEMVER(0, 7, 0)
 #error Unsuported Metal version
 #endif
 #endif
-// Copyright Bruno Dutra 2017
-// Distributed under the Boost Software License, Version 1.0.
-// See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
-#ifndef ALLOY_DETAIL_INVOKE_HPP
-#define ALLOY_DETAIL_INVOKE_HPP
-// Copyright Bruno Dutra 2017
-// Distributed under the Boost Software License, Version 1.0.
-// See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
-#ifndef ALLOY_DETAIL_TRAITS_HPP
-#define ALLOY_DETAIL_TRAITS_HPP
 #include <type_traits>
 namespace alloy::detail {
     inline constexpr enum class valid_t {} valid = {};
@@ -5997,91 +6168,87 @@ namespace alloy::detail {
     template<typename T>
     using strip = std::remove_cv_t<std::remove_reference_t<T>>;
     template<typename T, typename U>
-    struct _transfer_ref {using type = U;};
+    struct _transfer_ref {
+        using type = U;
+    };
     template<typename T, typename U>
-    struct _transfer_ref<T&, U> {using type = U&;};
+    struct _transfer_ref<T&, U> {
+        using type = U&;
+    };
     template<typename T, typename U>
-    struct _transfer_ref<T&&, U> {using type = U&&;};
+    struct _transfer_ref<T&&, U> {
+        using type = U&&;
+    };
     template<typename T, typename U>
     using transfer_ref = typename _transfer_ref<T, U>::type;
     template<typename T, typename U>
-    struct _transfer_cv {using type = U;};
+    struct _transfer_cv {
+        using type = U;
+    };
     template<typename T, typename U>
-    struct _transfer_cv<T const, U> : _transfer_ref<U, std::remove_reference_t<U> const> {};
+    struct _transfer_cv<T const, U>
+        : _transfer_ref<U, std::remove_reference_t<U> const> {};
     template<typename T, typename U>
-    struct _transfer_cv<T volatile, U> : _transfer_ref<U, std::remove_reference_t<U> volatile> {};
+    struct _transfer_cv<T volatile, U>
+        : _transfer_ref<U, std::remove_reference_t<U> volatile> {};
     template<typename T, typename U>
-    struct _transfer_cv<T const volatile, U> : _transfer_ref<U, std::remove_reference_t<U> const volatile> {};
+    struct _transfer_cv<T const volatile, U>
+        : _transfer_ref<U, std::remove_reference_t<U> const volatile> {};
     template<typename T, typename U>
-    using transfer_cv = typename _transfer_cv<std::remove_reference_t<T>, U>::type;
+    using transfer_cv =
+        typename _transfer_cv<std::remove_reference_t<T>, U>::type;
     template<typename T, typename U>
     using transfer = transfer_ref<T, transfer_cv<T, U>>;
     template<typename, template<typename...> class, typename = valid_t>
     struct _instanceof : std::false_type {};
-    template<typename... Xs, template<typename...> class X, template<typename...> class Y>
+    template<typename... Xs,
+        template<typename...> class X,
+        template<typename...> class Y>
     struct _instanceof<X<Xs...>, Y, requires<metal::is_value<Y<Xs...>>::value>>
-        : std::is_same<X<Xs...>, Y<Xs...>>
-    {};
+        : std::is_same<X<Xs...>, Y<Xs...>> {};
     template<typename X, template<typename...> class Tmpl>
     constexpr bool instanceof = _instanceof<strip<X>, Tmpl>::value;
     template<typename X>
     constexpr bool inheritable = std::is_class<X>::value
-      && !std::is_polymorphic<X>::value
-      && !std::is_final<X>::value;
-    template<typename N, typename X>
-    using repeat =
-        metal::transform<metal::always<X>, metal::iota<metal::number<0>, N>>;
-    template<typename Outer, typename Inner, typename Xs>
-    using combine = metal::apply<
-        Outer,
-        metal::transform<
-            metal::partial<metal::lambda<metal::apply>, Inner>,
-            metal::apply<metal::lambda<metal::cartesian>, Xs>
-        >
-    >;
+        && !std::is_polymorphic<X>::value && !std::is_final<X>::value;
 }
 #endif
-#define ALLOY_RETURN(...) -> decltype(__VA_ARGS__) { return __VA_ARGS__; } /**/
+#define ALLOY_RETURN(...) ->decltype(__VA_ARGS__) { return __VA_ARGS__; }
 namespace alloy::detail {
+    /* clang-format off */
     template<typename Base, typename F, typename Ref, typename... Args,
         requires<std::is_function<F>::value> = valid,
         requires<std::is_base_of<Base, strip<Ref>>::value> = valid
     >
-    constexpr auto _invoke(F Base::* pmf, Ref&& ref, Args&&... args) ALLOY_RETURN(
-        (static_cast<Ref&&>(ref).*pmf)(static_cast<Args&&>(args)...)
-    )
+    constexpr auto _invoke(F Base::* pmf, Ref&& ref, Args&&... args)
+    ALLOY_RETURN((static_cast<Ref&&>(ref).*pmf)(static_cast<Args&&>(args)...))
     template<typename Base, typename F, typename Ptr, typename... Args,
         requires<std::is_function<F>::value> = valid,
         requires<!std::is_base_of<Base, strip<Ptr>>::value> = valid
     >
-    constexpr auto _invoke(F Base::* pmf, Ptr&& ptr, Args&&... args) ALLOY_RETURN(
-        ((*static_cast<Ptr&&>(ptr)).*pmf)(static_cast<Args&&>(args)...)
-    )
+    constexpr auto _invoke(F Base::* pmf, Ptr&& ptr, Args&&... args)
+    ALLOY_RETURN((*static_cast<Ptr&&>(ptr)).*pmf(static_cast<Args&&>(args)...))
     template<typename Base, typename D, typename Ref,
         requires<!std::is_function<D>::value> = valid,
         requires<std::is_base_of<Base, strip<Ref>>::value> = valid
     >
-    constexpr auto _invoke(D Base::* pmd, Ref&& ref) noexcept ALLOY_RETURN(
-        static_cast<Ref&&>(ref).*pmd
-    )
+    constexpr auto _invoke(D Base::* pmd, Ref&& ref) noexcept
+    ALLOY_RETURN(static_cast<Ref&&>(ref).*pmd)
     template<typename Base, typename D, typename Ptr,
         requires<!std::is_function<D>::value> = valid,
         requires<!std::is_base_of<Base, strip<Ptr>>::value> = valid
     >
-    constexpr auto _invoke(D Base::* pmd, Ptr&& ptr) noexcept ALLOY_RETURN(
-        (*static_cast<Ptr&&>(ptr)).*pmd
-    )
+    constexpr auto _invoke(D Base::* pmd, Ptr&& ptr) noexcept
+    ALLOY_RETURN((*static_cast<Ptr&&>(ptr)).*pmd)
     template<typename F, typename... Args>
-    constexpr auto _invoke(F&& f, Args&&... args) ALLOY_RETURN(
-        static_cast<F&&>(f)(static_cast<Args&&>(args)...)
-    )
+    constexpr auto _invoke(F&& f, Args&&... args)
+    ALLOY_RETURN(static_cast<F&&>(f)(static_cast<Args&&>(args)...))
     template<typename F, typename... Args>
-    using invoke_t = decltype(_invoke(std::declval<F>(), std::declval<Args>()...));
-    inline constexpr auto invoke = [](auto&& f, auto&&... args) -> decltype(auto) {
-        return detail::_invoke(
-            static_cast<decltype(f)>(f),
-            static_cast<decltype(args)>(args)...
-        );
+    using invoke_t =
+        decltype(_invoke(std::declval<F>(), std::declval<Args>()...));
+    /* clang-format on */
+    inline constexpr auto invoke = [](auto&&... args) -> decltype(auto) {
+        return detail::_invoke(static_cast<decltype(args)>(args)...);
     };
 }
 #undef ALLOY_RETURN
@@ -6094,19 +6261,18 @@ namespace alloy::detail {
         constexpr arg() = delete;
         constexpr arg(arg&&) = default;
         constexpr arg(arg const&) = default;
-        constexpr arg(V&& v)
-            : v{static_cast<V&&>(v)}
-        {}
+        constexpr arg(V&& v) : v{static_cast<V&&>(v)} {
+        }
         constexpr operator transfer<arg&, V>() & noexcept {
             return static_cast<transfer<arg&, V>>(v);
         }
-        constexpr operator transfer<arg const&, V>() const& noexcept {
+        constexpr operator transfer<arg const&, V>() const & noexcept {
             return static_cast<transfer<arg const&, V>>(v);
         }
         constexpr operator transfer<arg&&, V>() && noexcept {
             return static_cast<transfer<arg&&, V>>(v);
         }
-        constexpr operator transfer<arg const&&, V>() const&& noexcept {
+        constexpr operator transfer<arg const&&, V>() const && noexcept {
             return static_cast<transfer<arg const&&, V>>(v);
         }
     };
@@ -6116,9 +6282,8 @@ namespace alloy::detail {
         constexpr arg() = delete;
         constexpr arg(arg&&) = default;
         constexpr arg(arg const&) = default;
-        constexpr arg(V&& v)
-            : V{static_cast<V&&>(v)}
-        {}
+        constexpr arg(V&& v) : V{static_cast<V&&>(v)} {
+        }
     };
     template<typename...>
     struct args;
@@ -6126,9 +6291,9 @@ namespace alloy::detail {
     struct args<arg<Ks, Vs>...> : arg<Ks, Vs>... {
         constexpr args(args&&) = default;
         constexpr args(args const&) = default;
-        constexpr args(Vs&&... vs)
-            : arg<Ks, Vs>{static_cast<Vs&&>(vs)}...
-        {}
+        constexpr args(Vs&&... vs) : arg<Ks, Vs>{static_cast<Vs&&>(vs)}... {
+        }
+        /* clang-format off */
         template<auto i,
             typename Arg = metal::at<metal::as_list<args>, metal::number<i>>
         >
@@ -6153,60 +6318,60 @@ namespace alloy::detail {
         constexpr decltype(auto) operator [](constant<i>) const&& noexcept {
             return args::at<Arg>(static_cast<args const&&>(*this));
         }
+        /* clang-format on */
         template<typename F>
-        constexpr decltype(auto) operator ()(F&& f) & {
-            return args::call(
-                static_cast<args&>(*this),
-                static_cast<F&&>(f)
-            );
+        constexpr decltype(auto) operator()(F&& f) & {
+            return args::call(static_cast<args&>(*this), static_cast<F&&>(f));
         }
         template<typename F>
-        constexpr decltype(auto) operator ()(F&& f) const& {
+        constexpr decltype(auto) operator()(F&& f) const & {
             return args::call(
-                static_cast<args const&>(*this),
-                static_cast<F&&>(f)
-            );
+                static_cast<args const&>(*this), static_cast<F&&>(f));
         }
         template<typename F>
-        constexpr decltype(auto) operator ()(F&& f) && {
-            return args::call(
-                static_cast<args&&>(*this),
-                static_cast<F&&>(f)
-            );
+        constexpr decltype(auto) operator()(F&& f) && {
+            return args::call(static_cast<args&&>(*this), static_cast<F&&>(f));
         }
         template<typename F>
-        constexpr decltype(auto) operator ()(F&& f) const&& {
+        constexpr decltype(auto) operator()(F&& f) const && {
             return args::call(
-                static_cast<args const&&>(*this),
-                static_cast<F&&>(f)
-            );
+                static_cast<args const&&>(*this), static_cast<F&&>(f));
         }
     private:
         template<typename Arg, typename Self>
         static constexpr decltype(auto) at(Self&& self) noexcept {
             return static_cast<transfer<Self&&, typename Arg::type>>(
-                static_cast<transfer<Self&&, Arg>>(
-                    static_cast<Self&&>(self)
-                )
-            );
+                static_cast<transfer<Self&&, Arg>>(static_cast<Self&&>(self)));
         }
         template<typename Self, typename F>
         static constexpr decltype(auto) call(Self&& self, F&& f) {
-            return detail::invoke(
-                static_cast<F&&>(f),
-                args::at<arg<Ks, Vs>>(static_cast<Self&&>(self))...
-            );
+            return invoke(static_cast<F&&>(f),
+                args::at<arg<Ks, Vs>>(static_cast<Self&&>(self))...);
         }
     };
     template<typename... Vs>
-    using args_t = metal::apply<
-        metal::lambda<args>,
-        metal::transform<
-            metal::lambda<arg>,
+    using args_t = metal::apply<metal::lambda<args>,
+        metal::transform<metal::lambda<arg>,
             metal::indices<metal::list<Vs...>>,
-            metal::list<Vs...>
-        >
-    >;
+            metal::list<Vs...>>>;
+}
+#endif
+// Copyright Bruno Dutra 2017
+// Distributed under the Boost Software License, Version 1.0.
+// See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
+#ifndef ALLOY_DETAIL_DISPATCHER_HPP
+#define ALLOY_DETAIL_DISPATCHER_HPP
+#include <cstddef>
+namespace alloy::detail {
+    template<typename... Targets>
+    struct dispatcher {
+        template<typename R, typename... Args>
+        static constexpr R dispatch(std::size_t i, Args&&... args) {
+            constexpr R (*targets[])(Args && ...) = {
+                &Targets::template dispatch<R, Args...>...};
+            return targets[i](static_cast<Args&&>(args)...);
+        }
+    };
 }
 #endif
 // Copyright Bruno Dutra 2017
@@ -6220,27 +6385,28 @@ namespace alloy::detail {
     struct folder {
         F&& f;
         Arg&& arg;
-        constexpr F&& operator +() noexcept {
+        constexpr F&& operator+() noexcept {
             return static_cast<F&&>(f);
         }
-        constexpr Arg&& operator *() noexcept {
+        constexpr Arg&& operator*() noexcept {
             return static_cast<Arg&&>(arg);
         }
-        friend constexpr decltype(auto) operator >>=(nil, folder ref) noexcept {
+        friend constexpr decltype(auto) operator>>=(nil, folder ref) noexcept {
             return *ref;
         }
         template<typename State>
-        friend constexpr decltype(auto) operator >>=(State&& state, folder ref) {
-            return detail::invoke(+ref, static_cast<State&&>(state), *ref);
+        friend constexpr decltype(auto) operator>>=(State&& state, folder ref) {
+            return invoke(+ref, static_cast<State&&>(state), *ref);
         }
-        friend constexpr decltype(auto) operator <<=(folder ref, nil) noexcept {
+        friend constexpr decltype(auto) operator<<=(folder ref, nil) noexcept {
             return *ref;
         }
         template<typename State>
-        friend constexpr decltype(auto) operator <<=(folder ref, State&& state) {
-            return detail::invoke(+ref, *ref, static_cast<State&&>(state));
+        friend constexpr decltype(auto) operator<<=(folder ref, State&& state) {
+            return invoke(+ref, *ref, static_cast<State&&>(state));
         }
     };
+    /* clang-format off */
     template<typename F, typename... Args>
     constexpr decltype(auto) foldl(F&& f, Args&&... args) {
         return (nil{} >>= ... >>= folder<F, Args>{
@@ -6255,14 +6421,14 @@ namespace alloy::detail {
             static_cast<Args&&>(args)
         } <<= ... <<= nil{});
     }
+    /* clang-format on */
 }
-#endif
 #endif
 // Copyright Bruno Dutra 2017
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
-#ifndef ALLOY_MODEL_HPP
-#define ALLOY_MODEL_HPP
+#ifndef ALLOY_DETAIL_INVOCABLE_HPP
+#define ALLOY_DETAIL_INVOCABLE_HPP
 namespace alloy::detail {
     template<typename F, typename = valid_t>
     struct invocable {
@@ -6270,132 +6436,146 @@ namespace alloy::detail {
         constexpr invocable() = delete;
         constexpr invocable(invocable&&) = default;
         constexpr invocable(invocable const&) = default;
-        constexpr invocable(F&& f)
-            : f{static_cast<F&&>(f)}
-        {}
+        constexpr invocable(F&& f) : f{static_cast<F&&>(f)} {
+        }
         template<typename... Args>
-        constexpr decltype(auto) operator ()(Args&&... args) & {
+        constexpr decltype(auto) operator()(Args&&... args) & {
             return invoke(static_cast<F&>(f), static_cast<Args&&>(args)...);
         }
         template<typename... Args>
-        constexpr decltype(auto) operator ()(Args&&... args) const& {
-            return invoke(static_cast<F const&>(f), static_cast<Args&&>(args)...);
+        constexpr decltype(auto) operator()(Args&&... args) const & {
+            return invoke(
+                static_cast<F const&>(f), static_cast<Args&&>(args)...);
         }
         template<typename... Args>
-        constexpr decltype(auto) operator ()(Args&&... args) && {
+        constexpr decltype(auto) operator()(Args&&... args) && {
             return invoke(static_cast<F&&>(f), static_cast<Args&&>(args)...);
         }
         template<typename... Args>
-        constexpr decltype(auto) operator ()(Args&&... args) const&& {
-            return invoke(static_cast<F const&&>(f), static_cast<Args&&>(args)...);
+        constexpr decltype(auto) operator()(Args&&... args) const && {
+            return invoke(
+                static_cast<F const&&>(f), static_cast<Args&&>(args)...);
         }
     };
     template<typename F>
     struct invocable<F, requires<inheritable<F>>> : F {
         using base = F;
         using base::base;
-        constexpr invocable(F&& f)
-            : base{static_cast<F&&>(f)}
-        {}
+        constexpr invocable(F&& f) : base{static_cast<F&&>(f)} {
+        }
     };
-    template<typename S>
-    struct source : invocable<S> {
-        using base = invocable<S>;
-        using base::base;
-        using base::operator ();
-    };
-    template<typename S>
-    source(S&&) -> source<S>;
-    template<typename S>
-    struct sink : invocable<S> {
-        using base = invocable<S>;
-        using base::base;
-        using base::operator ();
-    };
-    template<typename S>
-    sink(S&&) -> sink<S>;
-    template<typename S>
-    struct stream : invocable<S> {
-        using base = invocable<S>;
-        using base::base;
-        using base::operator ();
-    };
-    template<typename S>
-    stream(S&&) -> stream<S>;
-    template<typename S, typename T,
-        requires<instanceof<S, stream>> = valid,
-        requires<instanceof<T, stream>> = valid
-    >
-    constexpr decltype(auto) operator <<(S&& s, T&& t) {
-        return stream{
-            [&s, &t](auto&& snk) -> decltype(auto) {
-                return static_cast<decltype(snk)>(snk)
-                    << static_cast<S&&>(s)
-                    << static_cast<T&&>(t);
-            }
-        };
-    }
-    template<typename Stm, typename Src,
-        requires<instanceof<Stm, stream>> = valid,
-        requires<!instanceof<Src, stream>> = valid
-    >
-    constexpr decltype(auto) operator <<(Stm&& stm, Src&& src) {
-        return source{
-            [&stm, &src](auto&& snk) -> decltype(auto) {
-                return static_cast<decltype(snk)>(snk)
-                    << static_cast<Stm&&>(stm)
-                    << static_cast<Src&&>(src);
-            }
-        };
-    }
-    template<typename Snk, typename Stm,
-        requires<!instanceof<Snk, stream>> = valid,
-        requires<instanceof<Stm, stream>> = valid
-    >
-    constexpr decltype(auto) operator <<(Snk&& snk, Stm&& stm) {
-        return sink{invoke(static_cast<Stm&&>(stm), static_cast<Snk&&>(snk))};
-    }
-    template<typename Snk, typename Src,
-        requires<!instanceof<Snk, stream>> = valid,
-        requires<!instanceof<Src, stream>> = valid,
-        requires<instanceof<Snk, sink> || instanceof<Src, source>> = valid
-    >
-    constexpr decltype(auto) operator <<(Snk&& snk, Src&& src) {
-        return invoke(static_cast<Src&&>(src), static_cast<Snk&&>(snk));
-    }
-}
-namespace alloy {
-    using detail::source;
-    using detail::sink;
-    using detail::stream;
 }
 #endif
+#endif
+namespace alloy::detail {
+    template<typename F, typename... Xs>
+    struct deferred : args_t<F, Xs...> {
+        using base = args_t<F, Xs...>;
+        using base::base;
+        template<typename... Args>
+        constexpr decltype(auto) operator()(Args&&... args) & {
+            return invoke(static_cast<base&>(*this)(invoke),
+                static_cast<Args&&>(args)...);
+        }
+        template<typename... Args>
+        constexpr decltype(auto) operator()(Args&&... args) const & {
+            return invoke(static_cast<base const&>(*this)(invoke),
+                static_cast<Args&&>(args)...);
+        }
+        template<typename... Args>
+        constexpr decltype(auto) operator()(Args&&... args) && {
+            return invoke(static_cast<base&&>(*this)(invoke),
+                static_cast<Args&&>(args)...);
+        }
+        template<typename... Args>
+        constexpr decltype(auto) operator()(Args&&... args) const && {
+            return invoke(static_cast<base const&&>(*this)(invoke),
+                static_cast<Args&&>(args)...);
+        }
+    };
+    template<typename F, typename... Xs>
+    deferred(F&&, Xs&&...)->deferred<F, Xs...>;
+}
+namespace alloy {
+    inline constexpr auto defer = [](auto&& f, auto&&... xs) {
+        return detail::deferred{
+            static_cast<decltype(f)>(f), static_cast<decltype(xs)>(xs)...};
+    };
+}
+#endif
+// Copyright Bruno Dutra 2017
+// Distributed under the Boost Software License, Version 1.0.
+// See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
+#ifndef ALLOY_FILTER_HPP
+#define ALLOY_FILTER_HPP
+// Copyright Bruno Dutra 2017
+// Distributed under the Boost Software License, Version 1.0.
+// See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
+#ifndef ALLOY_FILTER_APPEND_HPP
+#define ALLOY_FILTER_APPEND_HPP
+// Copyright Bruno Dutra 2017
+// Distributed under the Boost Software License, Version 1.0.
+// See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
+#ifndef ALLOY_FILTER_MODEL_HPP
+#define ALLOY_FILTER_MODEL_HPP
+namespace alloy {
+    template<typename S>
+    struct filter : detail::invocable<S> {
+        using base = detail::invocable<S>;
+        using base::base;
+        using base::operator();
+    };
+    template<typename S>
+    filter(S &&)->filter<S>;
+}
+#endif
+/* clang-format off */
 namespace alloy {
     inline constexpr auto append = [](auto&&... ys) noexcept {
-        return stream{
+        return filter{
             [&ys...](auto&& snk) noexcept {
                 return [&ys..., &snk](auto&&... xs) -> decltype(auto) {
-                    return detail::invoke(
-                        static_cast<decltype(snk)>(snk),
+                    return detail::invoke(static_cast<decltype(snk)>(snk),
                         static_cast<decltype(xs)>(xs)...,
-                        static_cast<decltype(ys)>(ys)...
-                    );
+                        static_cast<decltype(ys)>(ys)...);
                 };
             }
         };
     };
 }
+/* clang-format on */
 #endif
 // Copyright Bruno Dutra 2017
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
-#ifndef ALLOY_AT_HPP
-#define ALLOY_AT_HPP
+#ifndef ALLOY_FILTER_AT_HPP
+#define ALLOY_FILTER_AT_HPP
 // Copyright Bruno Dutra 2017
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
-#ifndef ALLOY_FORWARD_HPP
-#define ALLOY_FORWARD_HPP
+#ifndef ALLOY_DETAIL_PICKER_HPP
+#define ALLOY_DETAIL_PICKER_HPP
+// Copyright Bruno Dutra 2017
+// Distributed under the Boost Software License, Version 1.0.
+// See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
+#ifndef ALLOY_SOURCE_FORWARD_HPP
+#define ALLOY_SOURCE_FORWARD_HPP
+// Copyright Bruno Dutra 2017
+// Distributed under the Boost Software License, Version 1.0.
+// See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
+#ifndef ALLOY_SOURCE_MODEL_HPP
+#define ALLOY_SOURCE_MODEL_HPP
+namespace alloy {
+    template<typename S>
+    struct source : detail::invocable<S> {
+        using base = detail::invocable<S>;
+        using base::base;
+        using base::operator();
+    };
+    template<typename S>
+    source(S &&)->source<S>;
+}
+#endif
 namespace alloy::detail {
     template<typename... Vs>
     constexpr decltype(auto) forward(Vs&&... vs) noexcept {
@@ -6410,51 +6590,43 @@ namespace alloy {
 #endif
 namespace alloy::detail {
     template<typename... Is>
-    struct dispatcher {
+    struct picker {
         template<typename R, typename F, typename... Args>
-        static constexpr R dispatch(F&& snk, Args&&... args) {
-            return invoke(
-                static_cast<F&&>(snk),
-                forward(static_cast<Args&&>(args)...)[Is{}]...
-            );
+        static constexpr R dispatch(F&& f, Args&&... args) {
+            return invoke(static_cast<F&&>(f),
+                forward(static_cast<Args&&>(args)...)[Is{}]...);
+        }
+        template<typename F, typename... Args>
+        static constexpr decltype(auto) dispatch(F&& f, Args&&... args) {
+            return invoke(static_cast<F&&>(f),
+                forward(static_cast<Args&&>(args)...)[Is{}]...);
         }
     };
-    template<typename... Dispatchers>
-    struct dispatchers {
-        template<typename R, typename F, typename... Args>
-        static constexpr R dispatch(std::size_t i, F&& f, Args&&... args) {
-            using Sig = R(F&&, Args&&...);
-            constexpr Sig* dispatchers[] = {
-                &Dispatchers::template dispatch<R, F, Args...>...
-            };
-            return dispatchers[i](
-                static_cast<F&&>(f),
-                static_cast<Args&&>(args)...
-            );
-        }
-    };
+}
+#endif
+namespace alloy::detail {
     template<typename... Is>
     constexpr auto at(Is&&... is) noexcept {
         return [&is...](auto&& snk) noexcept {
             return [&is..., &snk](auto&&... args) -> decltype(auto) {
-                using N = metal::number<sizeof...(is)>;
-                using R = combine<
+                using R = metal::cascade<
+                    metal::combine<metal::list<decltype(args)...>,
+                        metal::number<sizeof...(is)>>,
                     metal::lambda<std::common_type_t>,
-                    metal::partial<metal::lambda<invoke_t>, decltype(snk)>,
-                    repeat<N, metal::list<decltype(args)...>>
-                >;
-                using Dispatchers = combine<
-                    metal::lambda<dispatchers>,
-                    metal::lambda<dispatcher>,
-                    repeat<N, metal::indices<metal::list<decltype(args)...>>>
-                >;
-                return Dispatchers::template dispatch<R>(
-                    foldr([](std::size_t i, std::size_t j) {
-                        return i + sizeof...(args)*j;
-                    }, static_cast<Is&&>(is)...),
+                    metal::partial<metal::lambda<invoke_t>, decltype(snk)>>;
+                using Dispatcher = metal::cascade<
+                    metal::combine<
+                        metal::indices<metal::list<decltype(args)...>>,
+                        metal::number<sizeof...(is)>>,
+                    metal::lambda<dispatcher>, metal::lambda<picker>>;
+                return Dispatcher::template dispatch<R>(
+                    foldl(
+                        [](std::size_t i, std::size_t j) {
+                            return sizeof...(args) * i + j;
+                        },
+                        0U, static_cast<Is&&>(is)...),
                     static_cast<decltype(snk)>(snk),
-                    static_cast<decltype(args)>(args)...
-                );
+                    static_cast<decltype(args)>(args)...);
             };
         };
     }
@@ -6462,39 +6634,191 @@ namespace alloy::detail {
     constexpr auto at(constant<is>...) noexcept {
         return [](auto&& snk) noexcept {
             return [&snk](auto&&... args) -> decltype(auto) {
-                using R = invoke_t<
-                    decltype(snk),
-                    metal::at<
-                        metal::list<decltype(args)...>,
-                        metal::number<is>
-                    >...
-                >;
-                return dispatcher<constant<is>...>::template dispatch<R>(
+                return picker<constant<is>...>::template dispatch(
                     static_cast<decltype(snk)>(snk),
-                    static_cast<decltype(args)>(args)...
-                );
+                    static_cast<decltype(args)>(args)...);
             };
         };
     }
     constexpr auto at() noexcept {
         return [](auto&& snk) noexcept {
-            return [&snk](auto&&...) -> decltype(auto) {
-                return invoke(static_cast<decltype(snk)>(snk));
+            return [&snk](auto&&... args) -> decltype(auto) {
+                return picker<>::template dispatch(
+                    static_cast<decltype(snk)>(snk),
+                    static_cast<decltype(args)>(args)...);
             };
         };
     }
 }
 namespace alloy {
     inline constexpr auto at = [](auto&&... is) {
-        return stream{detail::at(static_cast<decltype(is)>(is)...)};
+        return filter{detail::at(static_cast<decltype(is)>(is)...)};
     };
 }
 #endif
 // Copyright Bruno Dutra 2017
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
-#ifndef ALLOY_CAPTURE_HPP
-#define ALLOY_CAPTURE_HPP
+#ifndef ALLOY_FILTER_COPY_IF_HPP
+#define ALLOY_FILTER_COPY_IF_HPP
+namespace alloy::detail {
+    template<typename... Ns>
+    constexpr auto copy_if_impl(Ns&&... ns) noexcept {
+        return [&ns...](auto&& snk) noexcept {
+            return [&ns..., &snk](auto&&... args) -> decltype(auto) {
+                using Args = metal::list<decltype(args)...>;
+                using R = metal::cascade<metal::powerset<Args>,
+                    metal::lambda<std::common_type_t>,
+                    metal::partial<metal::lambda<invoke_t>, decltype(snk)>>;
+                using Dispatcher =
+                    metal::cascade<metal::powerset<metal::indices<Args>>,
+                        metal::lambda<dispatcher>, metal::lambda<picker>>;
+                return Dispatcher::template dispatch<R>(
+                    foldr([](bool j, std::size_t i) { return 2 * i + j; },
+                        !!static_cast<Ns&&>(ns)..., 0U),
+                    static_cast<decltype(snk)>(snk),
+                    static_cast<decltype(args)>(args)...);
+            };
+        };
+    }
+    template<auto... ns>
+    constexpr auto copy_if_impl(constant<ns>...) noexcept {
+        using Is = metal::copy_if<metal::indices<metal::numbers<ns...>>,
+            metal::partial<metal::lambda<metal::at>, metal::numbers<ns...>>>;
+        return [](auto&& snk) noexcept {
+            return [&snk](auto&&... args) -> decltype(auto) {
+                using Picker = metal::apply<metal::lambda<picker>, Is>;
+                return Picker::template dispatch(
+                    static_cast<decltype(snk)>(snk),
+                    static_cast<decltype(args)>(args)...);
+            };
+        };
+    }
+    constexpr auto copy_if_impl() noexcept {
+        return [](auto&& snk) noexcept {
+            return [&snk](auto&&... args) -> decltype(auto) {
+                return picker<>::template dispatch(
+                    static_cast<decltype(snk)>(snk),
+                    static_cast<decltype(args)>(args)...);
+            };
+        };
+    }
+}
+/* clang-format off */
+namespace alloy {
+    inline constexpr auto copy_if = [](auto&& f) {
+        return filter{
+            [&f](auto&& snk) noexcept {
+                return [&f, &snk](auto&&... args) -> decltype(auto) {
+                    return detail::copy_if_impl(
+                        detail::invoke(static_cast<decltype(f)>(f),
+                            static_cast<decltype(args)>(args))...)(
+                                static_cast<decltype(snk)>(snk))(
+                                    static_cast<decltype(args)>(args)...);
+                };
+            }
+        };
+    };
+}
+/* clang-format off */
+#endif
+// Copyright Bruno Dutra 2017
+// Distributed under the Boost Software License, Version 1.0.
+// See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
+#ifndef ALLOY_FILTER_PREPEND_HPP
+#define ALLOY_FILTER_PREPEND_HPP
+/* clang-format off */
+namespace alloy {
+    inline constexpr auto prepend = [](auto&&... xs) noexcept {
+        return filter{
+            [&xs...](auto&& snk) noexcept {
+                return [&xs..., &snk](auto&&... ys) -> decltype(auto) {
+                    return detail::invoke(static_cast<decltype(snk)>(snk),
+                        static_cast<decltype(xs)>(xs)...,
+                        static_cast<decltype(ys)>(ys)...);
+                };
+            }
+        };
+    };
+}
+/* clang-format off */
+#endif
+#endif
+// Copyright Bruno Dutra 2017
+// Distributed under the Boost Software License, Version 1.0.
+// See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
+#ifndef ALLOY_OPERATORS_HPP
+#define ALLOY_OPERATORS_HPP
+// Copyright Bruno Dutra 2017
+// Distributed under the Boost Software License, Version 1.0.
+// See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
+#ifndef ALLOY_SINK_MODEL_HPP
+#define ALLOY_SINK_MODEL_HPP
+namespace alloy {
+    template<typename S>
+    struct sink : detail::invocable<S> {
+        using base = detail::invocable<S>;
+        using base::base;
+        using base::operator();
+    };
+    template<typename S>
+    sink(S &&)->sink<S>;
+}
+#endif
+namespace alloy::detail {
+    template<typename F,
+        typename G,
+        requires<instanceof <F, filter>> = valid,
+        requires<instanceof <G, filter>> = valid>
+    constexpr decltype(auto) operator>>(F&& f, G&& g) noexcept {
+        return filter{[&f, &g](auto&& snk) -> decltype(auto) {
+            return static_cast<F&&>(f)
+                >> (static_cast<G&&>(g) >> static_cast<decltype(snk)>(snk));
+        }};
+    }
+    template<typename F,
+        typename Src,
+        requires<! instanceof <Src, filter>> = valid,
+        requires<instanceof <F, filter>> = valid>
+    constexpr decltype(auto) operator>>(Src&& src, F&& f) noexcept {
+        return source{[&src, &f](auto&& snk) -> decltype(auto) {
+            return static_cast<Src&&>(src)
+                >> (static_cast<F&&>(f) >> static_cast<decltype(snk)>(snk));
+        }};
+    }
+    template<typename Snk,
+        typename F,
+        requires<instanceof <F, filter>> = valid,
+        requires<! instanceof <Snk, filter>> = valid>
+    constexpr decltype(auto) operator>>(F&& f, Snk&& snk) {
+        return sink{invoke(static_cast<F&&>(f), static_cast<Snk&&>(snk))};
+    }
+    template<typename Snk,
+        typename Src,
+        requires<! instanceof <Src, filter>> = valid,
+        requires<! instanceof <Snk, filter>> = valid,
+        requires<instanceof <Src, source> || instanceof <Snk, sink>> = valid>
+    constexpr decltype(auto) operator>>(Src&& src, Snk&& snk) {
+        return invoke(static_cast<Src&&>(src), static_cast<Snk&&>(snk));
+    }
+}
+#endif
+// Copyright Bruno Dutra 2017
+// Distributed under the Boost Software License, Version 1.0.
+// See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
+#ifndef ALLOY_SINK_HPP
+#define ALLOY_SINK_HPP
+#endif
+// Copyright Bruno Dutra 2017
+// Distributed under the Boost Software License, Version 1.0.
+// See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
+#ifndef ALLOY_SOURCE_HPP
+#define ALLOY_SOURCE_HPP
+// Copyright Bruno Dutra 2017
+// Distributed under the Boost Software License, Version 1.0.
+// See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
+#ifndef ALLOY_SOURCE_CAPTURE_HPP
+#define ALLOY_SOURCE_CAPTURE_HPP
 namespace alloy::detail {
     template<typename... Vs>
     constexpr decltype(auto) capture(Vs&&... vs) {
@@ -6510,146 +6834,116 @@ namespace alloy {
 // Copyright Bruno Dutra 2017
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
-#ifndef ALLOY_DEFER_HPP
-#define ALLOY_DEFER_HPP
-namespace alloy::detail {
-    template<typename F, typename... Xs>
-    struct deferred : args_t<F, Xs...> {
-        using base = args_t<F, Xs...>;
-        using base::base;
-        template<typename... Args>
-        constexpr decltype(auto) operator ()(Args&&... args) & {
-            return invoke(
-                static_cast<base&>(*this)(invoke),
-                static_cast<Args&&>(args)...
-            );
-        }
-        template<typename... Args>
-        constexpr decltype(auto) operator ()(Args&&... args) const& {
-            return invoke(
-                static_cast<base const&>(*this)(invoke),
-                static_cast<Args&&>(args)...
-            );
-        }
-        template<typename... Args>
-        constexpr decltype(auto) operator ()(Args&&... args) && {
-            return invoke(
-                static_cast<base&&>(*this)(invoke),
-                static_cast<Args&&>(args)...
-            );
-        }
-        template<typename... Args>
-        constexpr decltype(auto) operator ()(Args&&... args) const&& {
-            return invoke(
-                static_cast<base const&&>(*this)(invoke),
-                static_cast<Args&&>(args)...
-            );
-        }
-    };
-    template<typename F, typename... Xs>
-    deferred(F&&, Xs&&...) -> deferred<F, Xs...>;
-}
-namespace alloy {
-    inline constexpr auto defer = [](auto&& f, auto&&... xs) {
-        return detail::deferred{
-            static_cast<decltype(f)>(f),
-            static_cast<decltype(xs)>(xs)...
-        };
-    };
-}
-#endif
-// Copyright Bruno Dutra 2017
-// Distributed under the Boost Software License, Version 1.0.
-// See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
-#ifndef ALLOY_JOIN_HPP
-#define ALLOY_JOIN_HPP
+#ifndef ALLOY_SOURCE_JOIN_HPP
+#define ALLOY_SOURCE_JOIN_HPP
 namespace alloy::detail {
     template<typename Src>
     constexpr auto buffer(Src&& src) noexcept {
         return [&src](auto&& snk) noexcept {
-            return [&src, &snk](auto&&... ys) -> decltype(auto) {
-                return detail::invoke(
-                    static_cast<Src&&>(src),
-                    [&snk, &ys...](auto&&... xs) {
-                        return detail::invoke(
-                            static_cast<decltype(snk)>(snk),
+            return [&src, &snk](auto&&... xs) -> decltype(auto) {
+                return invoke(
+                    static_cast<Src&&>(src), [&snk, &xs...](auto&&... ys) {
+                        return invoke(static_cast<decltype(snk)>(snk),
                             static_cast<decltype(xs)>(xs)...,
-                            static_cast<decltype(ys)>(ys)...
-                        );
-                    }
-                );
+                            static_cast<decltype(ys)>(ys)...);
+                    });
             };
         };
     }
 }
 namespace alloy {
     inline constexpr auto join = [](auto&&... srcs) {
-        return source{
-            [&srcs...](auto&& snk) -> decltype(auto) {
-                return (static_cast<decltype(snk)>(snk) << ... <<
-                    stream{detail::buffer(static_cast<decltype(srcs)>(srcs))}
-                ) << forward();
-            }
-        };
+        return source{[&srcs...](auto&& snk) -> decltype(auto) {
+            return detail::foldr(detail::invoke, forward(),
+                detail::buffer(static_cast<decltype(srcs)>(srcs))...,
+                static_cast<decltype(snk)>(snk));
+        }};
     };
 }
 #endif
 // Copyright Bruno Dutra 2017
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
-#ifndef ALLOY_PREPEND_HPP
-#define ALLOY_PREPEND_HPP
-namespace alloy {
-    inline constexpr auto prepend = [](auto&&... xs) noexcept {
-        return stream{
-            [&xs...](auto&& snk) noexcept {
-                return [&xs..., &snk](auto&&... ys) -> decltype(auto) {
-                    return detail::invoke(
-                        static_cast<decltype(snk)>(snk),
-                        static_cast<decltype(xs)>(xs)...,
-                        static_cast<decltype(ys)>(ys)...
-                    );
-                };
-            }
-        };
-    };
-}
-#endif
-// Copyright Bruno Dutra 2017
-// Distributed under the Boost Software License, Version 1.0.
-// See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
-#ifndef ALLOY_UNPACK_HPP
-#define ALLOY_UNPACK_HPP
-#include<tuple>
-#include<variant>
+#ifndef ALLOY_SOURCE_UNPACK_HPP
+#define ALLOY_SOURCE_UNPACK_HPP
+#include <tuple>
+#include <variant>
 namespace alloy::detail {
-    template<typename Variant,
-        requires<instanceof<Variant, std::variant>> = valid
-    >
-    constexpr auto unpack(Variant&& variant) noexcept {
-        return [&variant](auto&& snk) -> decltype(auto) {
-            return std::visit(
-                static_cast<decltype(snk)>(snk),
-                static_cast<Variant&&>(variant)
-            );
+    template<typename, typename>
+    struct unpacker {};
+    template<typename... Is, typename... Js>
+    struct unpacker<metal::list<Is...>, metal::list<Js...>> {
+        template<typename R, typename F, typename... Args>
+        static constexpr R dispatch(F&& snk, Args&&... args) {
+            return invoke(static_cast<F&&>(snk),
+                std::get<Js::value>(
+                    forward(static_cast<Args&&>(args)...)[Is{}])...);
+        }
+    };
+    template<typename, typename, typename>
+    struct _inner_impl {};
+    template<typename T, typename... Ts, typename U>
+    struct _inner_impl<T, std::tuple<Ts...>, U> {
+        using type =
+            metal::transpose<metal::list<metal::invoke<T, transfer<U, Ts>...>>>;
+    };
+    template<typename T, typename... Ts, typename U>
+    struct _inner_impl<T, std::variant<Ts...>, U> {
+        using type = metal::list<metal::invoke<T, transfer<U, Ts>...>>;
+    };
+    template<typename T, typename... Xs>
+    using inner = metal::apply<metal::lambda<metal::cartesian>,
+        metal::join<metal::eval<_inner_impl<T, strip<Xs>, Xs&&>>...>>;
+    template<typename, typename>
+    struct _outer_impl {};
+    template<typename N, typename... Ts>
+    struct _outer_impl<N, std::tuple<Ts...>> {
+        using type = metal::repeat<N, metal::size<metal::list<Ts...>>>;
+    };
+    template<typename N, typename... Ts>
+    struct _outer_impl<N, std::variant<Ts...>> {
+        using type = metal::list<N>;
+    };
+    template<typename T, typename... Xs>
+    using outer = metal::list<metal::apply<metal::lambda<metal::join>,
+        metal::transform<metal::lazy<_outer_impl>,
+            metal::invoke<T, Xs...>,
+            metal::list<strip<Xs>...>>>>;
+    template<typename... Xs>
+    constexpr auto unpack(Xs&&... xs) noexcept {
+        return [&xs...](auto&& snk) -> decltype(auto) {
+            using R = metal::cascade<inner<metal::lambda<metal::list>, Xs...>,
+                metal::lambda<std::common_type_t>,
+                metal::partial<metal::lambda<invoke_t>, decltype(snk)>>;
+            using indices = metal::bind<metal::lambda<metal::indices>,
+                metal::lambda<metal::list>>;
+            using Dispatcher = metal::cascade<
+                metal::cartesian<outer<indices, Xs...>, inner<indices, Xs...>>,
+                metal::lambda<dispatcher>, metal::lambda<unpacker>>;
+            constexpr std::size_t N = (... + instanceof <Xs, std::variant>);
+            return Dispatcher::template dispatch<R>(
+                foldl(
+                    [](std::size_t i, auto&& x) {
+                        if constexpr(instanceof <decltype(x), std::variant>)
+                            return N * i + static_cast<decltype(x)>(x).index();
+                        else
+                            return i;
+                    },
+                    0U, static_cast<Xs&&>(xs)...),
+                static_cast<decltype(snk)>(snk), static_cast<Xs&&>(xs)...);
         };
     }
-    template<typename Tuple,
-        requires<instanceof<Tuple, std::tuple>> = valid
-    >
-    constexpr auto unpack(Tuple&& tuple) noexcept {
-        return [&tuple](auto&& snk) -> decltype(auto) {
-            return std::apply(
-                static_cast<decltype(snk)>(snk),
-                static_cast<Tuple&&>(tuple)
-            );
+    constexpr auto unpack() noexcept {
+        return [](auto&& snk) noexcept {
+            return invoke(static_cast<decltype(snk)>(snk));
         };
     }
 }
 namespace alloy {
     inline constexpr auto unpack = [](auto&&... xs) {
-        return source{defer(join, detail::unpack(static_cast<decltype(xs)>(xs))...)};
+        return source{detail::unpack(static_cast<decltype(xs)>(xs)...)};
     };
 }
+#endif
 #endif
 #endif
