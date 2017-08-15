@@ -1,5 +1,5 @@
-# Alloy
-Enjoy (post) modern C++
+# Alloy [![version]][semver] [![travis.badge]][travis.alloy] [![gitter.badge]][gitter.alloy] [![godbolt.badge]][godbolt.alloy]
+Embrace (post) modern C++
 
 ## Overview
 
@@ -11,106 +11,87 @@ standard library.
 #include "alloy.hpp"
 
 #include <iostream>
+#include <string>
 #include <utility>
 
 int main() {
-    // suppose you have a data consumer
-    constexpr auto print = [](auto&&... data) {
-        // just print to the standard output
+    // suppose you have some data
+    auto data = alloy::capture("Hello", ' ', "World" , '!');
+
+    // and means to consume it
+    auto print = [](auto&&... data) {
+        // we'll simply print to the standard output in this example
         (std::cout << ... << std::forward<decltype(data)>(data)) << std::endl;
     };
 
-    // the next thing you'll need is, well, data
-    constexpr auto answer = alloy::capture("The answer is", ' ', 42);
+    // all you need is to connect the ends
+    data >> print; // Hello World!
 
-    // and you are ready to roll
-    answer(print); // prints The answer is 42
+    // and maybe add a filter in between
+    auto predicate = [](auto x) {
+        return std::string{x} != "!";
+    };
 
-    // that's cool and all, but kind of feels backwards, doesn't it?
-    // fear not, for Alloy got you covered!
+    data >> alloy::copy_if(predicate) >> print; // Hello World
 
-    // you can use `operator <<` to spell the exact same thing
-    print << answer; // prints The answer is 42
+    // with Alloy you can kiss `std::apply` goodbye
+    alloy::unpack(std::make_tuple(3, '.', "14")) >> print; // 3.14
 
-    // that's not all, using `operator <<` you can easily chain algorithms
+    // you can even iterate through tuples in a for-loop
+    auto tup = std::make_tuple(3, '.', "14");
 
-    // but first we need more data
-    constexpr auto data = alloy::capture("World", ' ', "Hello" , '!');
-
-    // now you can for example cherry-pick individual elements
-    print << alloy::at(2, 1, 0, 3) << data; // prints Hello World!
-
-    // that's right, you can index heterogeneous datasets at runtime!!
-
-    // you can also feed more data on the fly
-    print << alloy::append('C', '+', '+', '!')
-          << alloy::prepend("Say")
-          << alloy::append(" to (post) modern ")
-          << alloy::at(1, 2)
-          << data; // prints Say Hello to (post) modern C++!
-
-    // wait, there's more, with Alloy you can kiss `std::apply` goodbye
-    print << alloy::unpack(std::make_tuple(3, '.', 1, 4)); // prints 3.14
-
-    // ever wanted to iterate through a `std::tuple` in a for-loop?
-    constexpr auto tup = std::make_tuple(0, '1', "two");
-
-    // now you can!
     for(std::size_t i = 0; i < std::tuple_size<decltype(tup)>{}; ++i)
-        print << alloy::prepend(i, ": ") << alloy::at(i) << alloy::unpack(tup);
+        alloy::unpack(tup) >> alloy::at(i) >> alloy::prepend(i, ": ") >> print;
 
-    // prints
-    // 0: 0
-    // 1: 1
-    // 2: two
+    // 0: 3
+    // 1: .
+    // 2: 14
 
     // `std::visit` is also a thing of the past
-    constexpr std::variant<int, char, char const*> i = 3;
-    constexpr std::variant<int, char, char const*> c = '.';
-    constexpr std::variant<int, char, char const*> s = "1";
+    using var = std::variant<int, char, std::string>;
 
-    print << alloy::unpack(i, c, s); // prints 3.1
+    var i = 3;
+    var c = '.';
+    var s = "14";
+
+    alloy::unpack(i, c, s) >> print; // 3.14
 
     // while you are at it, why not mixing tuples and variants together?
-    print << alloy::unpack(i, c, s, std::make_tuple(4, "15")); // prints 3.1415
+    alloy::unpack(std::make_tuple("pi", '='), i, c, s) >> print; // pi=3.14
 
-    // do you think tuples and variants are too mainstream?
+    // tuples and variants are too mainstream?
     // not a problem, you can also provide your very own custom data sources
-    constexpr auto produce = [](auto&& consume) {
+    auto produce = [](auto consume) {
         return consume("Hello", ' ', "World");
     };
 
     // the following are all equivalent and print Hello World
-    print << alloy::source{produce};
-    alloy::sink{print} << produce;
-    alloy::sink{print} << alloy::source{produce};
+    alloy::source{produce} >> print;
+    produce >> alloy::sink{print};
+    alloy::source{produce} >> alloy::sink{print};
 
-    // you can provide your very own custom data transformers as well
-    constexpr auto process = [](auto&& sink) {
-        return [&sink](auto&& hello, auto&& _, auto&& world) {
+    // and your very own filters too
+    auto process = [](auto const& sink) {
+        return [&sink](auto hello, auto _, auto world) {
             return sink(hello, _, "brave", _, "new", _, world, '!');
         };
     };
 
-    print << alloy::stream{process} << produce; // prints Hello brave new World!
+    produce >> alloy::filter{process} >> print; // Hello brave new World!
 
-    // you are only bounded by your imagination
-    // enjoy (post) modern C++
+    // embrace (post) modern C++
 
-    constexpr auto wrap = [](auto&& sink) {
-        return [&sink](auto&& word) {
+    auto wrap = [](auto const& sink) {
+        return [&sink](auto word) {
             return sink('(', word, ')');
         };
     };
 
-    print << alloy::append(' ', "modern C++")
-          << alloy::prepend("enjoy", ' ')
-          << wrap
-          << alloy::forward("post");
+    alloy::forward("post") >> alloy::filter{wrap}
+                           >> alloy::prepend("embrace", ' ')
+                           >> alloy::append(' ', "modern C++") >> print;
 }
 ```
-
-[Try it live on Wandbox][wandbox]
 
 ## Motivation
 
@@ -139,9 +120,9 @@ Can you deduce the type of `x` this time?
 
 ```.cpp
 template<typename Tuple, typename Predicate>
-decltype(auto) filter(Tuple&&, Predicate&&);
+decltype(auto) copy_if(Tuple&&, Predicate&&);
 
-auto x = filter(std::make_tuple(1, 1.0, '1', "one"), [](auto&&) {
+auto x = copy_if(std::make_tuple(1, 1.0, '1', "one"), [](auto&&) {
     return std::rand() % 2;
 });
 ```
@@ -149,24 +130,24 @@ auto x = filter(std::make_tuple(1, 1.0, '1', "one"), [](auto&&) {
 Heck, the predicate doesn't even depend on the elements themselves, but still we
 are unable to deduce the return type!
 
-Alright, forget about returning values, let's forward results to a callback 
+Alright, forget about returning values, let's forward results to a callback
 function instead.
 
 ```.cpp
 template<typename Tuple, typename Predicate, typename Callback>
-void filter(Tuple&&, Predicate&&, Callback&&);
+void copy_if(Tuple&&, Predicate&&, Callback&&);
 
 auto predicate = [](auto&&) {
     return std::rand() % 2;
 };
 
-auto callback = [](auto&& z) { /* ... */ };
+auto callback = [](auto&&... /*args*/) { /* ... */ };
 
-filter(std::make_tuple(1, 1.0, '1', "one"), predicate, callback);
+copy_if(std::make_tuple(1, 1.0, '1', "one"), predicate, callback);
 ```
 
 That was easy after all... or was it? Let us not forget that we still need to
-implement `filter`.
+implement `copy_if`.
 
 How can the standard library help us get there, you might have asked yourself,
 and the answer is quite simple in fact: _It can't really._
@@ -176,7 +157,7 @@ about all the standard library can do for us, from then on we are on our own.
 
 ```.cpp
 template<typename Tuple, typename Predicate, typename Callback>
-void filter(Tuple&& tuple, Predicate&& predicate, Callback&& callback) {
+void copy_if(Tuple&& tuple, Predicate&& predicate, Callback&& callback) {
     constexpr auto impl = [&predicate, &callback](auto&&... elements) {
         // TODO: do the heavy lifting :(
     };
@@ -195,12 +176,18 @@ auto predicate = [](auto&&) {
     return std::rand() % 2;
 };
 
-auto callback = [](auto&& z) { /* ... */ };
+auto callback = [](auto&&... /*args*/) { /* ... */ };
 
-callback << alloy::filter(predicate) << alloy::unpack(tuple);
+alloy::unpack(tuple) >> alloy::copy_if(predicate) >> callback;
 ```
 
 We need Alloy.
+
+## Quick Start
+
+1. Download [alloy.hpp][releases]
+2. `# include </path/to/alloy.hpp>`
+3. Embrace (post) modern C++
 
 ## Portability
 
@@ -216,9 +203,18 @@ The following compilers are continuously tested on [Travis CI][travis.alloy].
 Alloy is distributed under the
 [Boost Software License, Version 1.0][boost.license].
 
+[version]:          http://badge.fury.io/gh/brunocodutra%2Falloy.svg
+[semver]:           http://semver.org
+
 [travis.alloy]:     http://travis-ci.org/brunocodutra/alloy
 [travis.badge]:     http://travis-ci.org/brunocodutra/alloy.svg?branch=master
 
+[gitter.alloy]:     https://gitter.im/brunocodutra/alloy?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge
+[gitter.badge]:     https://badges.gitter.im/brunocodutra/alloy.svg
+
+[godbolt.alloy]:    https://godbolt.org/g/vmbXbT
+[godbolt.badge]:    https://img.shields.io/badge/try%20it-on%20godbolt-222266.svg
+
 [boost.license]:    http://boost.org/LICENSE_1_0.txt
 
-[wandbox]:          https://wandbox.org/permlink/4tx6EsfjKQzAy8Wl
+[releases]:         http://github.com/brunocodutra/alloy/releases

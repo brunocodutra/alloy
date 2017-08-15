@@ -7,10 +7,9 @@
 
 #include "../config.hpp"
 #include "../constant.hpp"
-#include "../external.hpp"
-
 #include "../detail/invoke.hpp"
 #include "../detail/traits.hpp"
+#include "../external/metal/metal.hpp"
 
 namespace alloy::detail {
     template<typename K, typename V = K, typename = valid_t>
@@ -23,15 +22,14 @@ namespace alloy::detail {
         constexpr arg(arg&&) = default;
         constexpr arg(arg const&) = default;
 
-        constexpr arg(V&& v)
-            : v{static_cast<V&&>(v)}
-        {}
+        constexpr arg(V&& v) : v{static_cast<V&&>(v)} {
+        }
 
         constexpr operator transfer<arg&, V>() & noexcept {
             return static_cast<transfer<arg&, V>>(v);
         }
 
-        constexpr operator transfer<arg const&, V>() const& noexcept {
+        constexpr operator transfer<arg const&, V>() const & noexcept {
             return static_cast<transfer<arg const&, V>>(v);
         }
 
@@ -39,7 +37,7 @@ namespace alloy::detail {
             return static_cast<transfer<arg&&, V>>(v);
         }
 
-        constexpr operator transfer<arg const&&, V>() const&& noexcept {
+        constexpr operator transfer<arg const&&, V>() const && noexcept {
             return static_cast<transfer<arg const&&, V>>(v);
         }
     };
@@ -52,9 +50,8 @@ namespace alloy::detail {
         constexpr arg(arg&&) = default;
         constexpr arg(arg const&) = default;
 
-        constexpr arg(V&& v)
-            : V{static_cast<V&&>(v)}
-        {}
+        constexpr arg(V&& v) : V{static_cast<V&&>(v)} {
+        }
     };
 
     template<typename...>
@@ -65,9 +62,10 @@ namespace alloy::detail {
         constexpr args(args&&) = default;
         constexpr args(args const&) = default;
 
-        constexpr args(Vs&&... vs)
-            : arg<Ks, Vs>{static_cast<Vs&&>(vs)}...
-        {}
+        constexpr args(Vs&&... vs) : arg<Ks, Vs>{static_cast<Vs&&>(vs)}... {
+        }
+
+        /* clang-format off */
 
         template<auto i,
             typename Arg = metal::at<metal::as_list<args>, metal::number<i>>
@@ -97,66 +95,49 @@ namespace alloy::detail {
             return args::at<Arg>(static_cast<args const&&>(*this));
         }
 
+        /* clang-format on */
+
         template<typename F>
-        constexpr decltype(auto) operator ()(F&& f) & {
-            return args::call(
-                static_cast<args&>(*this),
-                static_cast<F&&>(f)
-            );
+        constexpr decltype(auto) operator()(F&& f) & {
+            return args::call(static_cast<args&>(*this), static_cast<F&&>(f));
         }
 
         template<typename F>
-        constexpr decltype(auto) operator ()(F&& f) const& {
+        constexpr decltype(auto) operator()(F&& f) const & {
             return args::call(
-                static_cast<args const&>(*this),
-                static_cast<F&&>(f)
-            );
+                static_cast<args const&>(*this), static_cast<F&&>(f));
         }
 
         template<typename F>
-        constexpr decltype(auto) operator ()(F&& f) && {
-            return args::call(
-                static_cast<args&&>(*this),
-                static_cast<F&&>(f)
-            );
+        constexpr decltype(auto) operator()(F&& f) && {
+            return args::call(static_cast<args&&>(*this), static_cast<F&&>(f));
         }
 
         template<typename F>
-        constexpr decltype(auto) operator ()(F&& f) const&& {
+        constexpr decltype(auto) operator()(F&& f) const && {
             return args::call(
-                static_cast<args const&&>(*this),
-                static_cast<F&&>(f)
-            );
+                static_cast<args const&&>(*this), static_cast<F&&>(f));
         }
 
     private:
         template<typename Arg, typename Self>
         static constexpr decltype(auto) at(Self&& self) noexcept {
             return static_cast<transfer<Self&&, typename Arg::type>>(
-                static_cast<transfer<Self&&, Arg>>(
-                    static_cast<Self&&>(self)
-                )
-            );
+                static_cast<transfer<Self&&, Arg>>(static_cast<Self&&>(self)));
         }
 
         template<typename Self, typename F>
         static constexpr decltype(auto) call(Self&& self, F&& f) {
-            return detail::invoke(
-                static_cast<F&&>(f),
-                args::at<arg<Ks, Vs>>(static_cast<Self&&>(self))...
-            );
+            return invoke(static_cast<F&&>(f),
+                args::at<arg<Ks, Vs>>(static_cast<Self&&>(self))...);
         }
     };
 
     template<typename... Vs>
-    using args_t = metal::apply<
-        metal::lambda<args>,
-        metal::transform<
-            metal::lambda<arg>,
+    using args_t = metal::apply<metal::lambda<args>,
+        metal::transform<metal::lambda<arg>,
             metal::indices<metal::list<Vs...>>,
-            metal::list<Vs...>
-        >
-    >;
+            metal::list<Vs...>>>;
 }
 
 #endif

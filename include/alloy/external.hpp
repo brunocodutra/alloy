@@ -9,7 +9,7 @@
 #include "external/metal/metal.hpp"
 #endif
 
-#if METAL_VERSION < METAL_SEMVER(0, 6, 0)
+#if METAL_VERSION < METAL_SEMVER(0, 7, 0)
 #error Unsuported Metal version
 #endif
 
