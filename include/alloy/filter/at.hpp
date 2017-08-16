@@ -18,17 +18,16 @@ namespace alloy::detail {
     constexpr auto at(Is&&... is) noexcept {
         return [&is...](auto&& snk) noexcept {
             return [&is..., &snk](auto&&... args) -> decltype(auto) {
-                using R = metal::cascade<
-                    metal::combine<metal::list<decltype(args)...>,
-                        metal::number<sizeof...(is)>>,
-                    metal::lambda<std::common_type_t>,
-                    metal::partial<metal::lambda<invoke_t>, decltype(snk)>>;
+                using namespace metal;
 
-                using Dispatcher = metal::cascade<
-                    metal::combine<
-                        metal::indices<metal::list<decltype(args)...>>,
-                        metal::number<sizeof...(is)>>,
-                    metal::lambda<dispatcher>, metal::lambda<picker>>;
+                using N = number<sizeof...(is)>;
+                using Args = list<decltype(args)...>;
+
+                using R = cascade<combine<Args, N>, lambda<std::common_type_t>,
+                    partial<lambda<invoke_t>, decltype(snk)>>;
+
+                using Dispatcher = cascade<combine<indices<Args>, N>,
+                    lambda<dispatcher>, lambda<picker>>;
 
                 return Dispatcher::template dispatch<R>(
                     foldl(

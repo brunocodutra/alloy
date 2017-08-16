@@ -69,16 +69,17 @@ namespace alloy::detail {
     template<typename... Xs>
     constexpr auto unpack(Xs&&... xs) noexcept {
         return [&xs...](auto&& snk) -> decltype(auto) {
-            using R = metal::cascade<inner<metal::lambda<metal::list>, Xs...>,
-                metal::lambda<std::common_type_t>,
-                metal::partial<metal::lambda<invoke_t>, decltype(snk)>>;
+            using namespace metal;
 
-            using indices = metal::bind<metal::lambda<metal::indices>,
-                metal::lambda<metal::list>>;
+            using R =
+                cascade<inner<lambda<list>, Xs...>, lambda<std::common_type_t>,
+                    partial<lambda<invoke_t>, decltype(snk)>>;
 
-            using Dispatcher = metal::cascade<
-                metal::cartesian<outer<indices, Xs...>, inner<indices, Xs...>>,
-                metal::lambda<dispatcher>, metal::lambda<unpacker>>;
+            using indices = bind<lambda<indices>, lambda<list>>;
+
+            using Dispatcher =
+                cascade<cartesian<outer<indices, Xs...>, inner<indices, Xs...>>,
+                    lambda<dispatcher>, lambda<unpacker>>;
 
             constexpr std::size_t N = (... + instanceof <Xs, std::variant>);
 
