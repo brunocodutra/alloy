@@ -8,6 +8,7 @@
 #include "filter/append.hpp"
 #include "filter/at.hpp"
 #include "filter/copy_if.hpp"
+#include "filter/drop.hpp"
 #include "filter/model.hpp"
 #include "filter/prepend.hpp"
 

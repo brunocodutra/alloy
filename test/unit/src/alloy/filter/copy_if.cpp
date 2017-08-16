@@ -18,10 +18,11 @@ struct matrix {
             return FWD(x) < X;
         };
 
+        constexpr auto given = cat(values<X, Y, Z>(), values<Z, X, Y>());
         constexpr auto expected = expect(values<X, Y, std::min(Z, X)>(), values<Z, X, std::min(Y, X)>());
 
-        static_assert(cat(values<X, Y, Z>(), values<Z, X, Y>()) >> alloy::copy_if(qualify<Z>(callable<Z>(f))) >> expected);
-        static_assert(cat(values<X, Y, Z>(), values<Z, X, Y>()) >> alloy::copy_if(qualify<Z>(callable<Z>(F))) >> expected);
+        static_assert(given >> alloy::copy_if(qualify<Z>(callable<Z>(f))) >> expected);
+        static_assert(given >> alloy::copy_if(qualify<Z>(callable<Z>(F))) >> expected);
     }
 };
 
