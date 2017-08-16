@@ -6,8 +6,7 @@
 #define ALLOY_SOURCE_JOIN_HPP
 
 #include "../config.hpp"
-#include "../detail/fold.hpp"
-#include "../detail/invoke.hpp"
+#include "../detail.hpp"
 #include "../source/forward.hpp"
 #include "../source/model.hpp"
 

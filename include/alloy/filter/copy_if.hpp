@@ -7,10 +7,7 @@
 
 #include "../config.hpp"
 #include "../constant.hpp"
-#include "../detail/dispatcher.hpp"
-#include "../detail/invoke.hpp"
-#include "../detail/picker.hpp"
-#include "../detail/traits.hpp"
+#include "../detail.hpp"
 #include "../filter/model.hpp"
 
 namespace alloy::detail {

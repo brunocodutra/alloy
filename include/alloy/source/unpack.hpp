@@ -6,9 +6,7 @@
 #define ALLOY_SOURCE_UNPACK_HPP
 
 #include "../config.hpp"
-#include "../detail/dispatcher.hpp"
-#include "../detail/invoke.hpp"
-#include "../detail/traits.hpp"
+#include "../detail.hpp"
 #include "../source/forward.hpp"
 #include "../source/model.hpp"
 

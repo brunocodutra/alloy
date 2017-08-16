@@ -6,7 +6,7 @@
 #define ALLOY_FILTER_PREPEND_HPP
 
 #include "../config.hpp"
-#include "../detail/invoke.hpp"
+#include "../detail.hpp"
 #include "../filter/model.hpp"
 
 /* clang-format off */

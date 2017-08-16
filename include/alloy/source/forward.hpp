@@ -6,7 +6,7 @@
 #define ALLOY_SOURCE_FORWARD_HPP
 
 #include "../config.hpp"
-#include "../detail/args.hpp"
+#include "../detail.hpp"
 #include "../source/model.hpp"
 
 namespace alloy::detail {

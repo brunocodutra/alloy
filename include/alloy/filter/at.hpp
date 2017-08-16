@@ -7,11 +7,8 @@
 
 #include "../config.hpp"
 #include "../constant.hpp"
-#include "../detail/dispatcher.hpp"
-#include "../detail/invoke.hpp"
-#include "../detail/picker.hpp"
+#include "../detail.hpp"
 #include "../filter/model.hpp"
-#include "../source/forward.hpp"
 
 namespace alloy::detail {
     template<typename... Is>

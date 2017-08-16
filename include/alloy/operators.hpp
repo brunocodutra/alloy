@@ -6,8 +6,7 @@
 #define ALLOY_OPERATORS_HPP
 
 #include "config.hpp"
-#include "detail/invoke.hpp"
-#include "detail/traits.hpp"
+#include "detail.hpp"
 #include "filter/model.hpp"
 #include "sink/model.hpp"
 #include "source/model.hpp"

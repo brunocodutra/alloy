@@ -9,7 +9,6 @@
 #include "../constant.hpp"
 #include "../detail/invoke.hpp"
 #include "../detail/traits.hpp"
-#include "../external/metal/metal.hpp"
 
 namespace alloy::detail {
     template<typename K, typename V = K, typename = valid_t>

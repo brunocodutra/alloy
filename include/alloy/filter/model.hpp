@@ -6,7 +6,7 @@
 #define ALLOY_FILTER_MODEL_HPP
 
 #include "../config.hpp"
-#include "../detail/invocable.hpp"
+#include "../detail.hpp"
 
 namespace alloy {
     template<typename S>
