@@ -4,16 +4,10 @@
 
 cmake_minimum_required(VERSION 3.8)
 
-if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE "Debug" CACHE STRING "")
-endif()
+include(cmake/Test.cmake)
+include(cmake/Deploy.cmake)
 
 project(Alloy CXX)
-
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
-
-include(Test)
-include(Deploy)
 
 set(ALLOY_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include/")
 
