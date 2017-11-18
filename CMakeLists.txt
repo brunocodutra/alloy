@@ -42,12 +42,6 @@ set_target_properties(Alloy PROPERTIES
 
 deploy_header_library(Alloy)
 
-
-target_compile_flags(Alloy INTERFACE -W)
-target_compile_flags(Alloy INTERFACE -Wall)
-target_compile_flags(Alloy INTERFACE -Wextra)
-target_compile_flags(Alloy INTERFACE -pedantic)
-
 target_compile_flags(Alloy INTERFACE -stdlib=libc++ LIBS c++ c++abi)
 
 target_compile_flags(Alloy INTERFACE -fsanitize=address,leak,undefined
