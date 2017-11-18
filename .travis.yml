@@ -49,12 +49,12 @@ matrix:
       - os: linux
         dist: trusty
         compiler: g++
-        env: VERSION=7
+        env: VERSION=7 CXXFLAGS="-fsanitize=address,leak,undefined -fuse-ld=gold"
 
       - os: linux
         dist: trusty
         compiler: clang++
-        env: VERSION=5.0
+        env: VERSION=5.0 CXXFLAGS=-fsanitize=address,leak,undefined
         addons:
             apt:
                 packages:
@@ -111,11 +111,11 @@ install:
         git clone --depth 1 http://llvm.org/git/llvm.git "${DEPS_PATH}/llvm" || exit 1
         git clone --depth 1 http://llvm.org/git/libcxx.git "${DEPS_PATH}/llvm/projects/libcxx" || exit 2
         git clone --depth 1 http://llvm.org/git/libcxxabi.git "${DEPS_PATH}/llvm/projects/libcxxabi" || exit 3
-        (mkdir "${DEPS_PATH}/llvm/build" && cd "${DEPS_PATH}/llvm/build" && cmake ..) || exit 4
+        (mkdir "${DEPS_PATH}/llvm/build" && cd "${DEPS_PATH}/llvm/build" && CXXFLAGS="" cmake .. -DLLVM_USE_SANITIZER="Undefined;Address") || exit 4
         (cd "${DEPS_PATH}/llvm/build" && sudo make -j install-cxx install-cxxabi) || exit 5
-        export CXXFLAGS="-nostdinc++ -isystem /usr/local/include/c++/v1"
+        export CXXFLAGS="${CXXFLAGS} -stdlib=libc++ -nostdinc++ -isystem /usr/local/include/c++/v1"
         export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/usr/local/lib"
-        export LDFLAGS="-L/usr/local/lib"
+        export LDFLAGS="${LDFLAGS} -L/usr/local/lib"
     fi
 
 before_script:

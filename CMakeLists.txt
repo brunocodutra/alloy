@@ -12,7 +12,6 @@ project(Alloy CXX)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
-include(Configure)
 include(Test)
 include(Deploy)
 
@@ -41,13 +40,6 @@ set_target_properties(Alloy PROPERTIES
 )
 
 deploy_header_library(Alloy)
-
-target_compile_flags(Alloy INTERFACE -stdlib=libc++ LIBS c++ c++abi)
-
-target_compile_flags(Alloy INTERFACE -fsanitize=address,leak,undefined
-    LIBS -fsanitize=address,leak,undefined
-    CONFIGS Debug RelWithDebInfo
-)
 
 add_subdirectory(test)
 add_subdirectory(example)
