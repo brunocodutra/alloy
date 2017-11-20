@@ -4,22 +4,63 @@
 
 enable_testing()
 
-function(test _target)
-    get_target_property(target_type ${_target} TYPE)
-    if(target_type STREQUAL "EXECUTABLE")
-        add_custom_target(${_target}.driver
-            COMMAND ${CMAKE_COMMAND} --build . --target ${_target} --config ${CMAKE_BUILD_TYPE}
-            COMMAND "$<TARGET_FILE:${_target}>"
-            WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
-        )
-    else()
-        add_custom_target(${_target}.driver
-            COMMAND ${CMAKE_COMMAND} --build . --target ${_target} --config ${CMAKE_BUILD_TYPE}
-            WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
-        )
+find_program(CLANG_TIDY NAMES clang-tidy)
+if(CLANG_TIDY)
+    message(STATUS "which clang-tidy: ${CLANG_TIDY}")
+endif()
+
+find_program(CLANG_FORMAT NAMES clang-format)
+if(CLANG_FORMAT)
+    message(STATUS "which clang-format: ${CLANG_FORMAT}")
+endif()
+
+include(CheckCXXCompilerFlag)
+function(target_weak_compile_options _target _visibility _flag)
+    set(result "has${_flag}")
+    string(REGEX REPLACE "[ ]" "" result "${result}")
+    string(REGEX REPLACE "[+]" "x" result "${result}")
+    string(REGEX REPLACE "[^a-zA-Z0-9_]" "_" result "${result}")
+
+    check_cxx_compiler_flag(${_flag} ${result})
+    if(${result})
+        target_compile_options(${_target} ${_visibility} ${_flag})
     endif()
+endfunction()
+
+function(test _target)
+
+    get_target_property(target_type ${_target} TYPE)
+
+    if(target_type STREQUAL "EXECUTABLE"
+    OR target_type STREQUAL "STATIC_LIBRARY"
+    OR target_type STREQUAL "SHARED_LIBRARY")
+        target_weak_compile_options(${_target} PRIVATE -W)
+        target_weak_compile_options(${_target} PRIVATE -Wextra)
+        target_weak_compile_options(${_target} PRIVATE -Wpedantic)
+
+        if(NOT MSVC)
+            target_weak_compile_options(${_target} PRIVATE -Wall)
+        endif()
+
+        if(CLANG_TIDY)
+            set_target_properties(${_target} PROPERTIES
+                CXX_CLANG_TIDY "${CLANG_TIDY};-checks=-clang-diagnostic-unused-command-line-argument"
+            )
+        endif()
+    endif()
+
+    set(driver ${_target})
+    if(target_type STREQUAL "EXECUTABLE")
+        add_custom_target(${_target}.run
+            COMMAND ${_target}
+            WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
+        )
+        add_dependencies(${_target}.run ${_target})
+        set(driver ${_target}.run)
+    endif()
+
     add_test(NAME ${_target}
-        COMMAND ${CMAKE_COMMAND} --build . --target ${_target}.driver
+        COMMAND ${CMAKE_COMMAND} --build . --config $<CONFIG> --target ${driver}
         WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
     )
 endfunction()
@@ -70,7 +111,7 @@ function(test_units _root _lib _prefix)
         set(node "${_prefix}/${node}")
         if(EXISTS "${node}.cpp")
             add_executable(${target} EXCLUDE_FROM_ALL "${node}.cpp")
-            target_link_libraries(${target} ${_lib})
+            target_link_libraries(${target} PRIVATE ${_lib})
         endif()
 
         if(IS_DIRECTORY ${node})
@@ -121,7 +162,7 @@ function(test_headers _root _lib _prefix)
             set(src "${CMAKE_CURRENT_BINARY_DIR}/${target}.cpp")
             file(WRITE ${src} "#include \"${node}.hpp\"")
             add_library(${target} STATIC EXCLUDE_FROM_ALL ${src})
-            target_link_libraries(${target} ${_lib})
+            target_link_libraries(${target} PRIVATE ${_lib})
         endif()
 
         if(IS_DIRECTORY ${node})
@@ -176,7 +217,7 @@ function(test_linking _root _lib _prefix)
             file(WRITE ${src_b} "#include \"${node}.hpp\"")
 
             add_library(${target} SHARED EXCLUDE_FROM_ALL ${src_a} ${src_b})
-            target_link_libraries(${target} ${_lib})
+            target_link_libraries(${target} PRIVATE ${_lib})
         endif()
 
         if(IS_DIRECTORY ${node})
@@ -191,7 +232,6 @@ function(test_linking _root _lib _prefix)
     endforeach()
 endfunction()
 
-find_program(CLANG_FORMAT NAMES clang-format)
 function(test_formatting _root _lib _prefix)
     set(options)
     set(one_value_args)
@@ -260,7 +300,7 @@ cmake_minimum_required(VERSION ${CMAKE_VERSION})
 project(dependent CXX)
 find_package(${_lib} ${_version} EXACT REQUIRED)
 add_executable(dependent main.cpp)
-target_link_libraries(dependent ${_lib})
+target_link_libraries(dependent PRIVATE ${_lib})
 "
     )
 
