@@ -37,12 +37,12 @@ matrix:
       - os: linux
         dist: trusty
         compiler: g++
-        env: VERSION=7 CXXFLAGS="-fsanitize=address,leak,undefined -fuse-ld=gold"
+        env: VERSION=7
 
       - os: linux
         dist: trusty
         compiler: clang++
-        env: VERSION=5.0 CXXFLAGS="-fsanitize=address,leak,undefined"
+        env: VERSION=5.0
 
 before_install:
   - git config --global user.name "Travis Bot"
@@ -61,6 +61,14 @@ before_install:
 
   - GITHUB_PATH="${TRAVIS_BUILD_DIR}/github"
   - mkdir -p "${GITHUB_PATH}"
+
+  - export CXXFLAGS="${CXXFLAGS} -fsanitize=address,leak,undefined"
+
+  - |
+    if [[ "${CXX}" == "g++" ]]
+    then
+        export CXXFLAGS="${CXXFLAGS} -fuse-ld=gold"
+    fi
 
   - |
     if [[ -n "${VERSION}" ]]
@@ -81,7 +89,7 @@ before_install:
 install:
   # libc++
   - |
-    if [[ ${CC} == clang* ]] && [[ ${CXX} == clang++* ]]
+    if [[ ${CC} == clang* && ${CXX} == clang++* ]]
     then
         git clone --depth 1 http://llvm.org/git/llvm.git "${DEPS_PATH}/llvm" || exit $?
         git clone --depth 1 http://llvm.org/git/libcxx.git "${DEPS_PATH}/llvm/projects/libcxx" || exit $?
@@ -92,7 +100,7 @@ install:
         LLVM_CMAKE_ARGS+=(-DCMAKE_INSTALL_PREFIX="${DEPS_PATH}/llvm/install")
         LLVM_CMAKE_ARGS+=(-DLLVM_USE_SANITIZER="Undefined;Address")
 
-        CXXFLAGS="" LDFLAGS="" cmake ${LLVM_CMAKE_ARGS[@]} || exit $?
+        CFLAGS="" CXXFLAGS="" LDFLAGS="" cmake ${LLVM_CMAKE_ARGS[@]} || exit $?
         make -C "${DEPS_PATH}/llvm/build" -j install-cxx install-cxxabi || exit $?
 
         export CXXFLAGS="${CXXFLAGS} -stdlib=libc++ -nostdinc++ -isystem ${DEPS_PATH}/llvm/install/include/c++/v1"
