@@ -62,7 +62,7 @@ before_install:
   - GITHUB_PATH="${TRAVIS_BUILD_DIR}/github"
   - mkdir -p "${GITHUB_PATH}"
 
-  - export CXXFLAGS="${CXXFLAGS} -fsanitize=address,leak,undefined"
+  - export CXXFLAGS="${CXXFLAGS} -fsanitize=address,undefined"
 
   - |
     if [[ "${CXX}" == "g++" ]]
