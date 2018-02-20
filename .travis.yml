@@ -24,30 +24,41 @@ addons:
           - ubuntu-toolchain-r-test
           - llvm-toolchain-trusty-5.0
 
-matrix:
+jobs:
     include:
       - os: linux
         dist: trusty
-        env: DEPLOY=true
-
-      - os: linux
-        dist: trusty
-        env: CHECK_FORMATTING=/usr/bin/clang-format-5.0
-
-      - os: linux
-        dist: trusty
+        stage: test
         compiler: g++
         env: VERSION=7
 
       - os: linux
         dist: trusty
+        stage: test
         compiler: clang++
         env: VERSION=5.0
 
-before_install:
-  - git config --global user.name "Travis Bot"
-  - git config --global user.email "\<\>"
+      - os: linux
+        dist: trusty
+        stage: test
+        env: CHECK_FORMATTING=true
 
+      - os: linux
+        dist: trusty
+        stage: deploy
+        script: cmake --build "${BUILD_PATH}" --target install && tree "${INSTALL_PATH}"
+        deploy:
+            provider: pages
+            target-branch: standalone
+            github-token: $GITHUB_TOKEN
+            skip-cleanup: true
+            keep-history: true
+            allow-empty-commit: true
+            local-dir: install/include
+            on:
+                branch: master
+
+before_install:
   - SOURCE_PATH="${TRAVIS_BUILD_DIR}"
 
   - BUILD_PATH="${TRAVIS_BUILD_DIR}/build"
@@ -77,15 +88,6 @@ before_install:
         export CXX="${CXX}-${VERSION}"
     fi
 
-  - |
-    function publish {
-        git clone https://brunocodutra:${GITHUB_TOKEN}@github.com/brunocodutra/alloy -q --depth 1 --branch=$2 "${GITHUB_PATH}/$2" &> /dev/null || return 1
-        cp -r "${GITHUB_PATH}/$2/.git/" $1                                                                                        &> /dev/null || return 2
-        git -C $1 add --all .                                                                                                     &> /dev/null || return 3
-        git -C $1 commit --allow-empty -m "update to $(git -C ${SOURCE_PATH} rev-parse --short HEAD)"                             &> /dev/null || return 4
-        git -C $1 push origin $2                                                                                                  &> /dev/null || return 5
-    }
-
 install:
   # libc++
   - |
@@ -114,24 +116,16 @@ before_script:
   - CMAKE_ARGS+=("-DCMAKE_INSTALL_PREFIX=${INSTALL_PATH}")
 
   - |
-    if [[ -n "${CHECK_FORMATTING}" ]]
+    if [[ "${CHECK_FORMATTING}" == "true" ]]
     then
-        CMAKE_ARGS+=("-DCLANG_FORMAT=${CHECK_FORMATTING}")
+        CMAKE_ARGS+=("-DCLANG_FORMAT=/usr/bin/clang-format-5.0")
     fi
 
   - cmake ${CMAKE_ARGS[@]}
 
 script:
   - |
-    if [[ "${DEPLOY}" == "true" ]]
-    then
-        cmake --build "${BUILD_PATH}" --target install || exit $?
-        tree "${INSTALL_PATH}" || exit $?
-        if [[ "${TRAVIS_BRANCH}" == "master" && "${TRAVIS_PULL_REQUEST}" == "false" ]]
-        then
-            publish "${INSTALL_PATH}/include/" standalone || exit $?
-        fi
-    elif [[ -n "${CHECK_FORMATTING}" ]]
+    if [[ "${CHECK_FORMATTING}" == "true" ]]
     then
         (cd "${BUILD_PATH}" && ctest --output-on-failure -R ^test.format)
     else
