@@ -1,14 +1,14 @@
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_HPP
 #define METAL_HPP
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_CONFIG_HPP
 #define METAL_CONFIG_HPP
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_CONFIG_CONFIG_HPP
@@ -19,7 +19,7 @@
 #endif
 #endif
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_CONFIG_VERSION_HPP
@@ -31,7 +31,7 @@
 ///
 /// ### See Also
 /// \see [Semantic Versioning](http://semver.org/)
-#define METAL_MAJOR 0
+#define METAL_MAJOR 1
 /// \ingroup config
 ///
 /// ### Description
@@ -39,7 +39,7 @@
 ///
 /// ### See Also
 /// \see [Semantic Versioning](http://semver.org/)
-#define METAL_MINOR 7
+#define METAL_MINOR 0
 /// \ingroup config
 ///
 /// ### Description
@@ -47,7 +47,7 @@
 ///
 /// ### See Also
 /// \see [Semantic Versioning](http://semver.org/)
-#define METAL_PATCH 0
+#define METAL_PATCH 2
 /// \ingroup config
 /// \hideinitializer
 ///
@@ -69,12 +69,12 @@
 /// \defgroup config Config
 /// \ingroup metal
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LAMBDA_HPP
 #define METAL_LAMBDA_HPP
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LAMBDA_ALWAYS_HPP
@@ -118,7 +118,7 @@ namespace metal {
     template<typename val>
     using always = typename detail::_always<val>::type;
 }
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LAMBDA_LAMBDA_HPP
@@ -207,7 +207,7 @@ namespace metal {
     };
 #endif
 }
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_NUMBER_NUMBER_HPP
@@ -377,12 +377,12 @@ namespace metal {
     /// \endcond
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_VALUE_IDENTITY_HPP
 #define METAL_VALUE_IDENTITY_HPP
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_VALUE_EVAL_HPP
@@ -415,7 +415,7 @@ namespace metal {
     using eval = typename val::type;
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_VALUE_VALUE_HPP
@@ -585,7 +585,7 @@ namespace metal {
     /// \endcond
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LAMBDA_APPLY_HPP
@@ -623,7 +623,7 @@ namespace metal {
     template<typename lbd, typename seq>
     using apply = typename detail::_apply<lbd, seq>::type;
 }
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_LIST_HPP
@@ -729,12 +729,12 @@ namespace metal {
     /// \endcond
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_DETAIL_SFINAE_HPP
 #define METAL_DETAIL_SFINAE_HPP
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_DETAIL_DECLPTR_HPP
@@ -810,7 +810,7 @@ namespace metal {
     /// \endcond
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LAMBDA_ARG_HPP
@@ -851,7 +851,7 @@ namespace metal {
     template<std::size_t n>
     using arg = typename detail::_arg<n>::type;
 }
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_AT_HPP
@@ -901,8 +901,9 @@ namespace metal {
     namespace detail {
         template<typename... vals>
         struct prepender {
-            template<template<typename...> class expr, typename... _>
-            using type = expr<_..., vals...>;
+            template<typename... _>
+            using prepend = prepender<_..., vals...>;
+            using type = list<vals...>;
         };
         template<std::size_t n>
         struct grouper : grouper<(n > 100) ? 100 : (n > 10) ? 10 : (n > 1)> {};
@@ -936,8 +937,7 @@ namespace metal {
                 typename _96, typename _97, typename _98, typename _99,
                 typename... tail>
             using type = typename grouper<sizeof...(tail)>::
-                template type<tail...>::template type<
-                    prepender,
+                template type<tail...>::template prepend<
                     /* clang-format off */
                     _at<list<_00, _01, _02, _03, _04, _05, _06, _07, _08, _09>>,
                     _at<list<_10, _11, _12, _13, _14, _15, _16, _17, _18, _19>>,
@@ -959,10 +959,8 @@ namespace metal {
                 typename _04, typename _05, typename _06, typename _07,
                 typename _08, typename _09, typename... tail>
             using type = typename grouper<sizeof...(tail)>::
-                template type<tail...>::template type<
-                    prepender,
-                    _at<list<
-                        _00, _01, _02, _03, _04, _05, _06, _07, _08, _09>>>;
+                template type<tail...>::template prepend<_at<
+                    list<_00, _01, _02, _03, _04, _05, _06, _07, _08, _09>>>;
         };
         template<>
         struct grouper<1> {
@@ -974,15 +972,18 @@ namespace metal {
             template<typename...>
             using type = prepender<>;
         };
+        template<typename... vals>
+        using group =
+            typename grouper<sizeof...(vals)>::template type<vals...>::type;
+        template<typename groups, typename m, typename n>
+        using select = typename _at<groups>::template type<m>::template type<n>;
         template<typename num, typename = true_>
         struct _at_impl {};
         template<int_ n>
         struct _at_impl<number<n>, number<(n > 9)>> {
             template<typename... vals>
             using type =
-                typename grouper<sizeof...(vals)>::template type<vals...>::
-                    template type<_at_impl<number<n / 10>>::template type>::
-                        template type<number<n % 10>>;
+                select<call<group, vals...>, number<n / 10>, number<n % 10>>;
         };
         template<>
         struct _at_impl<number<9>> {
@@ -1098,7 +1099,7 @@ namespace metal {
     /// \}
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LAMBDA_BIND_HPP
@@ -1174,7 +1175,7 @@ namespace metal {
     /// \endcond
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LAMBDA_INVOKE_HPP
@@ -1207,12 +1208,12 @@ namespace metal {
     using invoke = metal::apply<lbd, metal::list<vals...>>;
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LAMBDA_IS_INVOCABLE_HPP
 #define METAL_LAMBDA_IS_INVOCABLE_HPP
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_VALUE_SAME_HPP
@@ -1313,7 +1314,7 @@ namespace metal {
             value<>, detail::caller<invoke, lbd, vals...>>::type>;
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LAMBDA_LAZY_HPP
@@ -1352,7 +1353,7 @@ namespace metal {
     using lazy = metal::bind<metal::lambda<metal::eval>, metal::lambda<expr>>;
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LAMBDA_PARTIAL_HPP
@@ -1420,7 +1421,7 @@ namespace metal {
     /// \endcond
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LAMBDA_TRAIT_HPP
@@ -1464,16 +1465,128 @@ namespace metal {
 /// \defgroup lambda Lambda
 /// \ingroup metal
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_HPP
 #define METAL_LIST_HPP
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_ACCUMULATE_HPP
 #define METAL_LIST_ACCUMULATE_HPP
+// Copyright Bruno Dutra 2015-2018
+// Distributed under the Boost Software License, Version 1.0.
+// See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
+#ifndef METAL_LIST_SIZE_HPP
+#define METAL_LIST_SIZE_HPP
+namespace metal {
+    /// \cond
+    namespace detail {
+        template<typename seq>
+        struct _size;
+    }
+    /// \endcond
+    /// \ingroup list
+    ///
+    /// ### Description
+    /// Returns the number of elements in a \list.
+    ///
+    /// ### Usage
+    /// For any \list `l`
+    /// \code
+    ///     using result = metal::size<l>;
+    /// \endcode
+    ///
+    /// \returns: \number
+    /// \semantics:
+    ///     If `l` contains elements `l[0], ..., l[m-1]`, then
+    ///     \code
+    ///         using result = metal::number<m>;
+    ///     \endcode
+    ///
+    /// ### Example
+    /// \snippet list.cpp size
+    ///
+    /// ### See Also
+    /// \see list, empty
+    template<typename seq>
+    using size = typename detail::_size<seq>::type;
+}
+namespace metal {
+    /// \cond
+    namespace detail {
+        template<typename seq>
+        struct _size {};
+        template<typename... vals>
+        struct _size<list<vals...>> : number<sizeof...(vals)> {};
+    }
+    /// \endcond
+}
+#endif
+// Copyright Bruno Dutra 2015-2018
+// Distributed under the Boost Software License, Version 1.0.
+// See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
+#ifndef METAL_NUMBER_IF_HPP
+#define METAL_NUMBER_IF_HPP
+namespace metal {
+    /// \cond
+    namespace detail {
+        template<typename cond>
+        struct _if_;
+    }
+    /// \endcond
+    /// \ingroup number
+    ///
+    /// ### Description
+    /// A conditional expression.
+    ///
+    /// ### Usage
+    /// For any \number `num` and \values `x, y`
+    /// \code
+    ///     using result = metal::if<num, x, y>;
+    /// \endcode
+    ///
+    /// \returns: \value
+    /// \semantics:
+    ///     If `num{} != false`, then
+    ///     \code
+    ///         using result = x;
+    ///     \endcode
+    ///     otherwise
+    ///     \code
+    ///         using result = y;
+    ///     \endcode
+    ///
+    /// \tip{If `num{} != false`, `y` may be omitted.}
+    ///
+    /// ### Example
+    /// \snippet number.cpp if_
+    ///
+    /// ### See Also
+    /// \see number
+    template<typename cond, typename... then>
+    using if_ = detail::call<detail::_if_<cond>::template type, then...>;
+}
+namespace metal {
+    /// \cond
+    namespace detail {
+        template<typename>
+        struct _if_ {};
+        template<int_ v>
+        struct _if_<number<v>> {
+            template<typename val, typename = void>
+            using type = val;
+        };
+        template<>
+        struct _if_<false_> {
+            template<typename, typename val>
+            using type = val;
+        };
+    }
+    /// \endcond
+}
+#endif
 namespace metal {
     /// \cond
     namespace detail {
@@ -1511,15 +1624,16 @@ namespace metal {
     /// ### See Also
     /// \see list, transform, fold_left
     template<typename lbd, typename state, typename... seqs>
-    using accumulate =
-        detail::call<detail::_accumulate<lbd>::template type, state, seqs...>;
+    using accumulate = detail::call<
+        if_<same<size<seqs>...>, detail::_accumulate<lbd>>::template type,
+        state, seqs...>;
 }
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_INDICES_HPP
 #define METAL_LIST_INDICES_HPP
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_NUMBER_IOTA_HPP
@@ -1569,73 +1683,7 @@ namespace metal {
     template<typename start, typename size, typename stride = number<1>>
     using iota = typename detail::_iota<start, size, stride>::type;
 }
-// Copyright Bruno Dutra 2015-2017
-// Distributed under the Boost Software License, Version 1.0.
-// See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
-#ifndef METAL_NUMBER_IF_HPP
-#define METAL_NUMBER_IF_HPP
-namespace metal {
-    /// \cond
-    namespace detail {
-        template<typename...>
-        struct _if_;
-    }
-    /// \endcond
-    /// \ingroup number
-    ///
-    /// ### Description
-    /// A multi-clause conditional expression.
-    ///
-    /// ### Usage
-    /// For any \numbers `num_0, ..., num_n-1` and \values `val_0, ..., val_n`
-    /// \code
-    ///     using result = metal::if<
-    ///         num_0, val_0,
-    ///         ...,
-    ///         num_n-1, val_n-1,
-    ///         val_n
-    ///     >;
-    /// \endcode
-    ///
-    /// \returns: \value
-    /// \semantics:
-    ///     If `num_i{} != false` and `num_j{} == false` for all `j < i`, then
-    ///     \code
-    ///         using result = val_i;
-    ///     \endcode
-    ///     otherwise, if `num_i{} == false` for all `i` in `[0, n-1]`, then
-    ///     \code
-    ///         using result = val_n;
-    ///     \endcode
-    ///
-    /// ### Example
-    /// \snippet number.cpp if_
-    ///
-    /// ### See Also
-    /// \see number
-    template<typename cond, typename then_, typename... else_>
-    using if_ = typename detail::_if_<cond, then_, else_...>::type;
-}
-namespace metal {
-    /// \cond
-    namespace detail {
-        template<typename...>
-        struct _if_ {};
-        template<typename then_, typename... else_>
-        struct _if_<false_, then_, else_...> : _if_<else_...> {};
-        template<typename then_, typename else_>
-        struct _if_<false_, then_, else_> {
-            using type = else_;
-        };
-        template<int_ v, typename then_, typename... else_>
-        struct _if_<number<v>, then_, else_...> {
-            using type = then_;
-        };
-    }
-    /// \endcond
-}
-#endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_NUMBER_NUMBERS_HPP
@@ -1679,22 +1727,11 @@ namespace metal {
     /// \endcond
 }
 #endif
-#if defined(__has_builtin)
-#if __has_builtin(__make_integer_seq)
-#define METAL_USE_BUILTIN_MAKE_INTEGER_SEQ
-#endif
-#endif
 namespace metal {
     /// \cond
     namespace detail {
         template<int_... ns>
         struct enumeration {};
-#if defined(METAL_USE_BUILTIN_MAKE_INTEGER_SEQ)
-        template<typename int_, int_... ns>
-        using enumerator = enumeration<ns...>;
-        template<int_ n>
-        using enumerate = __make_integer_seq<enumerator, int_, n>;
-#else
         template<typename ns>
         struct _even {};
         template<int_... ns>
@@ -1720,7 +1757,6 @@ namespace metal {
         struct _enumerate<0> {
             using type = enumeration<>;
         };
-#endif
         template<typename, int_ a, int_ b>
         struct _iota_impl {};
         template<int_... vs, int_ a, int_ b>
@@ -1734,55 +1770,6 @@ namespace metal {
             : _iota_impl<
                   enumerate<(sz < 0) ? (0 - sz) : sz>, (sz < 0) ? (0 - sd) : sd,
                   st> {};
-    }
-    /// \endcond
-}
-#endif
-// Copyright Bruno Dutra 2015-2017
-// Distributed under the Boost Software License, Version 1.0.
-// See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
-#ifndef METAL_LIST_SIZE_HPP
-#define METAL_LIST_SIZE_HPP
-namespace metal {
-    /// \cond
-    namespace detail {
-        template<typename seq>
-        struct _size;
-    }
-    /// \endcond
-    /// \ingroup list
-    ///
-    /// ### Description
-    /// Returns the number of elements in a \list.
-    ///
-    /// ### Usage
-    /// For any \list `l`
-    /// \code
-    ///     using result = metal::size<l>;
-    /// \endcode
-    ///
-    /// \returns: \number
-    /// \semantics:
-    ///     If `l` contains elements `l[0], ..., l[m-1]`, then
-    ///     \code
-    ///         using result = metal::number<m>;
-    ///     \endcode
-    ///
-    /// ### Example
-    /// \snippet list.cpp size
-    ///
-    /// ### See Also
-    /// \see list, empty
-    template<typename seq>
-    using size = typename detail::_size<seq>::type;
-}
-namespace metal {
-    /// \cond
-    namespace detail {
-        template<typename seq>
-        struct _size {};
-        template<typename... vals>
-        struct _size<list<vals...>> : number<sizeof...(vals)> {};
     }
     /// \endcond
 }
@@ -1817,7 +1804,7 @@ namespace metal {
     using indices = metal::iota<metal::number<0>, metal::size<seq>>;
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_VALUE_FOLD_LEFT_HPP
@@ -2077,21 +2064,19 @@ namespace metal {
         template<template<typename...> class expr>
         struct _accumulate<lambda<expr>> {
             template<typename state, typename... seqs>
-            using type = forward<
-                if_<same<size<seqs>...>,
-                    _accumulate_impl<state, seqs...>>::template type,
-                expr>;
+            using type =
+                forward<_accumulate_impl<state, seqs...>::template type, expr>;
         };
     }
     /// \endcond
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_ALL_OF_HPP
 #define METAL_LIST_ALL_OF_HPP
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_TRANSFORM_HPP
@@ -2135,8 +2120,9 @@ namespace metal {
     /// ### See Also
     /// \see list, accumulate
     template<typename lbd, typename... seqs>
-    using transform =
-        detail::call<detail::_transform<lbd>::template type, seqs...>;
+    using transform = detail::call<
+        if_<same<size<seqs>...>, detail::_transform<lbd>>::template type,
+        seqs...>;
 }
 namespace metal {
     /// \cond
@@ -2179,21 +2165,18 @@ namespace metal {
         template<template<typename...> class expr>
         struct _transform<lambda<expr>> {
             template<typename... seqs>
-            using type = forward<
-                if_<same<size<seqs>...>,
-                    _transform_impl<seqs...>>::template type,
-                expr>;
+            using type = forward<_transform_impl<seqs...>::template type, expr>;
         };
     }
     /// \endcond
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_NUMBER_AND_HPP
 #define METAL_NUMBER_AND_HPP
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_NUMBER_NOT_HPP
@@ -2290,12 +2273,12 @@ namespace metal {
         metal::apply<metal::lambda<metal::and_>, metal::transform<lbd, seq>>;
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_ANY_OF_HPP
 #define METAL_LIST_ANY_OF_HPP
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_NUMBER_OR_HPP
@@ -2364,12 +2347,12 @@ namespace metal {
         metal::apply<metal::lambda<metal::or_>, metal::transform<lbd, seq>>;
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_APPEND_HPP
 #define METAL_LIST_APPEND_HPP
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_JOIN_HPP
@@ -2606,17 +2589,17 @@ namespace metal {
     using append = metal::join<seq, metal::list<vals...>>;
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_BACK_HPP
 #define METAL_LIST_BACK_HPP
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_NUMBER_DEC_HPP
 #define METAL_NUMBER_DEC_HPP
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_NUMBER_SUB_HPP
@@ -2624,8 +2607,10 @@ namespace metal {
 namespace metal {
     /// \cond
     namespace detail {
-        template<typename... nums>
+        template<typename x, typename y>
         struct _sub;
+        template<typename x, typename y>
+        using sub = typename _sub<x, y>::type;
     }
     /// \endcond
     /// \ingroup number
@@ -2652,33 +2637,15 @@ namespace metal {
     /// ### See Also
     /// \see number, abs, inc, dec, neg, add, mul, div, mod, pow
     template<typename... nums>
-    using sub = detail::call<detail::_sub<nums...>::template type>;
-}
-#include <initializer_list>
-namespace metal {
+    using sub = fold_left<lambda<detail::sub>, nums..., number<0>>;
     /// \cond
     namespace detail {
-        template<typename... nums>
-        struct _sub {};
-#if defined(METAL_WORKAROUND)
         template<typename x, typename y>
-        using sub_impl = number<x::value - y::value>;
-        template<int_... ns>
-        struct _sub<number<ns>...> {
-            template<typename... _>
-            using type = fold_left<lambda<sub_impl>, number<ns>..., _...>;
+        struct _sub {};
+        template<int_ x, int_ y>
+        struct _sub<number<x>, number<y>> {
+            using type = number<x - y>;
         };
-#else
-        template<typename... _>
-        constexpr int_ sub_impl(int_ head, _... tail) {
-            return void(std::initializer_list<int_>{(head -= tail)...}), head;
-        }
-        template<int_... ns>
-        struct _sub<number<ns>...> {
-            template<typename... _>
-            using type = number<sub_impl((void(sizeof...(_)), ns)...)>;
-        };
-#endif
     }
     /// \endcond
 }
@@ -2739,7 +2706,7 @@ namespace metal {
     using back = metal::at<seq, metal::dec<metal::size<seq>>>;
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_CARTESIAN_HPP
@@ -2804,12 +2771,12 @@ namespace metal {
     /// \endcond
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_CASCADE_HPP
 #define METAL_LIST_CASCADE_HPP
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_VALUE_FOLD_RIGHT_HPP
@@ -3094,12 +3061,12 @@ namespace metal {
     /// \endcond
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_COMBINE_HPP
 #define METAL_LIST_COMBINE_HPP
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_REPEAT_HPP
@@ -3171,7 +3138,7 @@ namespace metal {
         metal::repeat<metal::if_<metal::is_list<seq>, seq>, num>>;
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_CONTAINS_HPP
@@ -3209,22 +3176,22 @@ namespace metal {
         metal::any_of<seq, metal::partial<metal::lambda<metal::same>, val>>;
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_COPY_HPP
 #define METAL_LIST_COPY_HPP
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_COPY_IF_HPP
 #define METAL_LIST_COPY_IF_HPP
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_REMOVE_IF_HPP
 #define METAL_LIST_REMOVE_IF_HPP
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_REPLACE_IF_HPP
@@ -3402,17 +3369,17 @@ namespace metal {
         metal::copy_if<seq, metal::partial<metal::lambda<metal::same>, val>>;
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_COUNT_HPP
 #define METAL_LIST_COUNT_HPP
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_COUNT_IF_HPP
 #define METAL_LIST_COUNT_IF_HPP
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_NUMBER_ADD_HPP
@@ -3420,8 +3387,10 @@ namespace metal {
 namespace metal {
     /// \cond
     namespace detail {
-        template<typename... nums>
+        template<typename x, typename y>
         struct _add;
+        template<typename x, typename y>
+        using add = typename _add<x, y>::type;
     }
     /// \endcond
     /// \ingroup number
@@ -3448,37 +3417,14 @@ namespace metal {
     /// ### See Also
     /// \see number, abs, inc, dec, neg, sub, mul, div, mod, pow
     template<typename... nums>
-    using add = detail::call<detail::_add<nums...>::template type>;
-}
-#include <initializer_list>
-namespace metal {
+    using add = fold_left<lambda<detail::add>, nums..., number<0>>;
     /// \cond
     namespace detail {
-        template<typename... nums>
-        struct _add {};
-#if defined(METAL_WORKAROUND)
         template<typename x, typename y>
-        using add_impl = number<x::value + y::value>;
-        template<int_... ns>
-        struct _add<number<ns>...> {
-            template<typename... _>
-            using type = fold_left<lambda<add_impl>, number<ns>..., _...>;
-        };
-#else
-        template<typename... _>
-        constexpr int_ add_impl(int_ head, _... tail) {
-            return void(std::initializer_list<int_>{(head += tail)...}), head;
-        }
-        template<int_... ns>
-        struct _add<number<ns>...> {
-            template<typename... _>
-            using type = number<add_impl((void(sizeof...(_)), ns)...)>;
-        };
-#endif
-        template<>
-        struct _add<> {
-            template<typename...>
-            using type = number<0>;
+        struct _add {};
+        template<int_ x, int_ y>
+        struct _add<number<x>, number<y>> {
+            using type = number<x + y>;
         };
     }
     /// \endcond
@@ -3547,22 +3493,22 @@ namespace metal {
         metal::count_if<seq, metal::partial<metal::lambda<metal::same>, val>>;
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_DROP_HPP
 #define METAL_LIST_DROP_HPP
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_RANGE_HPP
 #define METAL_LIST_RANGE_HPP
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_NUMBER_GREATER_HPP
 #define METAL_NUMBER_GREATER_HPP
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_NUMBER_LESS_HPP
@@ -3684,7 +3630,7 @@ namespace metal {
         if_<not_<or_<greater<number<0>, beg>, greater<beg, size<seq>>>>, beg>,
         if_<not_<or_<greater<number<0>, end>, greater<end, size<seq>>>>, end>>;
 }
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_REVERSE_HPP
@@ -3717,7 +3663,7 @@ namespace metal {
     using reverse = metal::range<seq, metal::size<seq>, metal::number<0>>;
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_ROTATE_HPP
@@ -3852,7 +3798,7 @@ namespace metal {
     /// \endcond
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_NUMBER_MAX_HPP
@@ -3860,8 +3806,8 @@ namespace metal {
 namespace metal {
     /// \cond
     namespace detail {
-        template<typename... nums>
-        struct _max;
+        template<typename x, typename y>
+        using max = if_<greater<x, y>, x, y>;
     }
     /// \endcond
     /// \ingroup number
@@ -3889,39 +3835,10 @@ namespace metal {
     /// ### See Also
     /// \see number, greater, less, min
     template<typename... nums>
-    using max = detail::call<detail::_max<nums...>::template type>;
-}
-#include <initializer_list>
-namespace metal {
-    /// \cond
-    namespace detail {
-        template<typename... nums>
-        struct _max {};
-#if defined(METAL_WORKAROUND)
-        template<typename x, typename y>
-        using max_impl = if_<greater<x, y>, x, y>;
-        template<int_... ns>
-        struct _max<number<ns>...> {
-            template<typename... _>
-            using type = fold_left<lambda<max_impl>, number<ns>..., _...>;
-        };
-#else
-        template<typename... _>
-        constexpr int_ max_impl(int_ head, _... tail) {
-            using expand = std::initializer_list<int_>;
-            return void(expand{(head = (tail > head) ? tail : head)...}), head;
-        }
-        template<int_... ns>
-        struct _max<number<ns>...> {
-            template<typename... _>
-            using type = number<max_impl((void(sizeof...(_)), ns)...)>;
-        };
-#endif
-    }
-    /// \endcond
+    using max = fold_left<lambda<detail::max>, if_<is_number<nums>, nums>...>;
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_NUMBER_MIN_HPP
@@ -3929,8 +3846,8 @@ namespace metal {
 namespace metal {
     /// \cond
     namespace detail {
-        template<typename... nums>
-        struct _min;
+        template<typename x, typename y>
+        using min = if_<less<x, y>, x, y>;
     }
     /// \endcond
     /// \ingroup number
@@ -3958,36 +3875,7 @@ namespace metal {
     /// ### See Also
     /// \see number, greater, less, max
     template<typename... nums>
-    using min = detail::call<detail::_min<nums...>::template type>;
-}
-#include <initializer_list>
-namespace metal {
-    /// \cond
-    namespace detail {
-        template<typename... nums>
-        struct _min {};
-#if defined(METAL_WORKAROUND)
-        template<typename x, typename y>
-        using min_impl = if_<less<x, y>, x, y>;
-        template<int_... ns>
-        struct _min<number<ns>...> {
-            template<typename... _>
-            using type = fold_left<lambda<min_impl>, number<ns>..., _...>;
-        };
-#else
-        template<typename... _>
-        constexpr int_ min_impl(int_ head, _... tail) {
-            using expand = std::initializer_list<int_>;
-            return void(expand{(head = (tail < head) ? tail : head)...}), head;
-        }
-        template<int_... ns>
-        struct _min<number<ns>...> {
-            template<typename... _>
-            using type = number<min_impl((void(sizeof...(_)), ns)...)>;
-        };
-#endif
-    }
-    /// \endcond
+    using min = fold_left<lambda<detail::min>, if_<is_number<nums>, nums>...>;
 }
 #endif
 #include <cstddef>
@@ -3996,8 +3884,9 @@ namespace metal {
     namespace detail {
         template<typename... vals>
         struct appender {
-            template<template<typename...> class expr, typename... _>
-            using type = expr<vals..., _...>;
+            template<typename... _>
+            using append = appender<vals..., _...>;
+            using type = list<vals...>;
         };
         template<std::size_t n>
         struct reverser
@@ -4032,8 +3921,7 @@ namespace metal {
                 typename _96, typename _97, typename _98, typename _99,
                 typename... tail>
             using type = typename reverser<sizeof...(tail)>::
-                template type<tail...>::template type<
-                    appender,
+                template type<tail...>::template append<
                     /* clang-format off */
                     _99, _98, _97, _96, _95, _94, _93, _92, _91, _90,
                     _89, _88, _87, _86, _85, _84, _83, _82, _81, _80,
@@ -4055,14 +3943,14 @@ namespace metal {
                 typename _04, typename _05, typename _06, typename _07,
                 typename _08, typename _09, typename... tail>
             using type = typename reverser<sizeof...(tail)>::
-                template type<tail...>::template type<
-                    appender, _09, _08, _07, _06, _05, _04, _03, _02, _01, _00>;
+                template type<tail...>::template append<
+                    _09, _08, _07, _06, _05, _04, _03, _02, _01, _00>;
         };
         template<>
         struct reverser<1> {
             template<typename _00, typename... tail>
             using type = typename reverser<sizeof...(
-                tail)>::template type<tail...>::template type<appender, _00>;
+                tail)>::template type<tail...>::template append<_00>;
         };
         template<>
         struct reverser<0> {
@@ -4074,7 +3962,7 @@ namespace metal {
         template<typename... vals>
         struct _reverse<list<vals...>> {
             using type = typename reverser<sizeof...(
-                vals)>::template type<vals...>::template type<list>;
+                vals)>::template type<vals...>::type;
         };
         template<typename seq>
         using reverse = typename _reverse<seq>::type;
@@ -4203,7 +4091,7 @@ namespace metal {
     using drop = metal::range<seq, n, metal::size<seq>>;
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_EMPTY_HPP
@@ -4240,12 +4128,12 @@ namespace metal {
     using empty = metal::not_<metal::size<seq>>;
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_ERASE_HPP
 #define METAL_LIST_ERASE_HPP
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_TAKE_HPP
@@ -4280,7 +4168,7 @@ namespace metal {
     using take = metal::range<seq, metal::number<0>, n>;
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_NUMBER_INC_HPP
@@ -4349,12 +4237,12 @@ namespace metal {
         metal::drop<seq, metal::max<beg, end>>>;
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_FIND_HPP
 #define METAL_LIST_FIND_HPP
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_FIND_IF_HPP
@@ -4400,7 +4288,7 @@ namespace metal {
     template<typename seq, typename lbd>
     using find_if = typename detail::_find_if<transform<lbd, seq>>::type;
 }
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_FRONT_HPP
@@ -4433,39 +4321,22 @@ namespace metal {
     using front = metal::at<seq, metal::number<0>>;
 }
 #endif
-#include <initializer_list>
 namespace metal {
     /// \cond
     namespace detail {
-        template<typename seq>
-        struct _find_if {};
-        template<>
-        struct _find_if<list<>> : number<0> {};
-#if defined(METAL_WORKAROUND)
         template<typename seq, typename = indices<seq>>
         struct _find_index {};
         template<int_... vs, typename... is>
         struct _find_index<list<number<vs>...>, list<is...>> {
             using type = front<join<if_<number<vs>, list<is>, list<>>...>>;
         };
+        template<typename seq>
+        struct _find_if {};
+        template<>
+        struct _find_if<list<>> : number<0> {};
         template<int_... vs>
         struct _find_if<list<number<vs>...>>
             : _find_index<list<number<vs>..., true_>> {};
-#else
-        template<typename... _>
-        constexpr int_ find_index(_... vs) {
-            int_ ret = 0;
-            for(int_ x : std::initializer_list<int_>{vs...}) {
-                if(x)
-                    break;
-                else
-                    ++ret;
-            }
-            return ret;
-        }
-        template<int_... vs>
-        struct _find_if<list<number<vs>...>> : number<find_index(vs...)> {};
-#endif
     }
     /// \endcond
 }
@@ -4504,7 +4375,7 @@ namespace metal {
         metal::find_if<seq, metal::partial<metal::lambda<metal::same>, val>>;
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_FLATTEN_HPP
@@ -4540,12 +4411,12 @@ namespace metal {
     using flatten = metal::apply<metal::lambda<metal::join>, seq>;
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_INSERT_HPP
 #define METAL_LIST_INSERT_HPP
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_SPLICE_HPP
@@ -4615,7 +4486,7 @@ namespace metal {
     using insert = metal::splice<seq, num, metal::list<vals...>>;
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_NONE_OF_HPP
@@ -4655,12 +4526,12 @@ namespace metal {
     using none_of = metal::not_<metal::any_of<seq, lbd>>;
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_PARTITION_HPP
 #define METAL_LIST_PARTITION_HPP
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_PAIR_PAIR_HPP
@@ -4787,7 +4658,7 @@ namespace metal {
         metal::pair<metal::copy_if<seq, lbd>, metal::remove_if<seq, lbd>>;
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_POWERSET_HPP
@@ -4853,7 +4724,7 @@ namespace metal {
     /// \endcond
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_PREPEND_HPP
@@ -4888,7 +4759,7 @@ namespace metal {
     using prepend = metal::join<metal::list<vals...>, seq>;
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_REMOVE_HPP
@@ -4924,7 +4795,7 @@ namespace metal {
         metal::remove_if<seq, metal::partial<metal::lambda<metal::same>, val>>;
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_REPLACE_HPP
@@ -4961,7 +4832,7 @@ namespace metal {
         seq, metal::partial<metal::lambda<metal::same>, val>, vals...>;
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_SLICE_HPP
@@ -5003,7 +4874,7 @@ namespace metal {
         metal::iota<start, size, stride>>;
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_SORT_HPP
@@ -5132,7 +5003,7 @@ namespace metal {
     /// \endcond
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_LIST_TRANSPOSE_HPP
@@ -5177,12 +5048,12 @@ namespace metal {
 /// \defgroup list List
 /// \ingroup metal
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_MAP_HPP
 #define METAL_MAP_HPP
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_MAP_AT_KEY_HPP
@@ -5221,7 +5092,7 @@ namespace metal {
     template<typename seq, typename key>
     using at_key = typename detail::_at_key<seq, key>::type;
 }
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_VALUE_DISTINCT_HPP
@@ -5312,22 +5183,22 @@ namespace metal {
     /// \endcond
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_MAP_ERASE_KEY_HPP
 #define METAL_MAP_ERASE_KEY_HPP
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_MAP_ORDER_HPP
 #define METAL_MAP_ORDER_HPP
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_MAP_KEYS_HPP
 #define METAL_MAP_KEYS_HPP
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_MAP_MAP_HPP
@@ -5426,7 +5297,7 @@ namespace metal {
     /// \endcond
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_PAIR_FIRST_HPP
@@ -5550,7 +5421,7 @@ namespace metal {
     using erase_key = metal::erase<seq, metal::order<seq, key>>;
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_MAP_HAS_KEY_HPP
@@ -5587,7 +5458,7 @@ namespace metal {
     using has_key = metal::contains<metal::keys<seq>, key>;
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_MAP_INSERT_KEY_HPP
@@ -5629,12 +5500,12 @@ namespace metal {
         metal::append<seq, metal::pair<key, val>>>;
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_MAP_VALUES_HPP
 #define METAL_MAP_VALUES_HPP
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_PAIR_SECOND_HPP
@@ -5701,17 +5572,17 @@ namespace metal {
 /// \defgroup map Map
 /// \ingroup metal
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_NUMBER_HPP
 #define METAL_NUMBER_HPP
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_NUMBER_ABS_HPP
 #define METAL_NUMBER_ABS_HPP
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_NUMBER_NEG_HPP
@@ -5772,7 +5643,7 @@ namespace metal {
     using abs = metal::max<num, metal::neg<num>>;
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_NUMBER_DIV_HPP
@@ -5780,8 +5651,10 @@ namespace metal {
 namespace metal {
     /// \cond
     namespace detail {
-        template<typename... nums>
+        template<typename x, typename y>
         struct _div;
+        template<typename x, typename y>
+        using div = typename _div<x, y>::type;
     }
     /// \endcond
     /// \ingroup number
@@ -5809,44 +5682,22 @@ namespace metal {
     /// ### See Also
     /// \see number, abs, inc, dec, neg, add, sub, mul, mod, pow
     template<typename... nums>
-    using div = detail::call<detail::_div<nums...>::template type>;
-}
-#include <initializer_list>
-namespace metal {
+    using div = fold_left<lambda<detail::div>, nums..., number<1>>;
     /// \cond
     namespace detail {
-        template<typename... nums>
+        template<typename x, typename y>
         struct _div {};
-#if defined(METAL_WORKAROUND)
-        template<typename x, typename y>
-        struct _div_impl {};
-        template<int_ x, int_ y>
-        struct _div_impl<number<x>, number<y>> : number<x / y> {};
         template<int_ x>
-        struct _div_impl<number<x>, number<0>> {};
-        template<typename x, typename y>
-        using div_impl = typename _div_impl<x, y>::type;
-        template<int_... ns>
-        struct _div<number<ns>...> {
-            template<typename... _>
-            using type = fold_left<lambda<div_impl>, number<ns>..., _...>;
+        struct _div<number<x>, number<0>> {};
+        template<int_ x, int_ y>
+        struct _div<number<x>, number<y>> {
+            using type = number<x / y>;
         };
-#else
-        template<typename... _>
-        constexpr int_ div_impl(int_ head, _... tail) {
-            return void(std::initializer_list<int_>{(head /= tail)...}), head;
-        }
-        template<int_... ns>
-        struct _div<number<ns>...> {
-            template<typename... _>
-            using type = number<div_impl((void(sizeof...(_)), ns)...)>;
-        };
-#endif
     }
     /// \endcond
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_NUMBER_MOD_HPP
@@ -5854,8 +5705,10 @@ namespace metal {
 namespace metal {
     /// \cond
     namespace detail {
-        template<typename... mod>
+        template<typename x, typename y>
         struct _mod;
+        template<typename x, typename y>
+        using mod = typename _mod<x, y>::type;
     }
     /// \endcond
     /// \ingroup number
@@ -5883,44 +5736,22 @@ namespace metal {
     /// ### See Also
     /// \see number, abs, inc, dec, neg, add, sub, mul, div, pow
     template<typename... nums>
-    using mod = detail::call<detail::_mod<nums...>::template type>;
-}
-#include <initializer_list>
-namespace metal {
+    using mod = fold_left<lambda<detail::mod>, if_<is_number<nums>, nums>...>;
     /// \cond
     namespace detail {
-        template<typename... nums>
+        template<typename x, typename y>
         struct _mod {};
-#if defined(METAL_WORKAROUND)
-        template<typename x, typename y>
-        struct _mod_impl {};
-        template<int_ x, int_ y>
-        struct _mod_impl<number<x>, number<y>> : number<x % y> {};
         template<int_ x>
-        struct _mod_impl<number<x>, number<0>> {};
-        template<typename x, typename y>
-        using mod_impl = typename _mod_impl<x, y>::type;
-        template<int_... ns>
-        struct _mod<number<ns>...> {
-            template<typename... _>
-            using type = fold_left<lambda<mod_impl>, number<ns>..., _...>;
+        struct _mod<number<x>, number<0>> {};
+        template<int_ x, int_ y>
+        struct _mod<number<x>, number<y>> {
+            using type = number<x % y>;
         };
-#else
-        template<typename... _>
-        constexpr int_ mod_impl(int_ head, _... tail) {
-            return void(std::initializer_list<int_>{(head %= tail)...}), head;
-        }
-        template<int_... ns>
-        struct _mod<number<ns>...> {
-            template<typename... _>
-            using type = number<mod_impl((void(sizeof...(_)), ns)...)>;
-        };
-#endif
     }
     /// \endcond
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_NUMBER_MUL_HPP
@@ -5928,8 +5759,10 @@ namespace metal {
 namespace metal {
     /// \cond
     namespace detail {
-        template<typename... nums>
+        template<typename x, typename y>
         struct _mul;
+        template<typename x, typename y>
+        using mul = typename _mul<x, y>::type;
     }
     /// \endcond
     /// \ingroup number
@@ -5956,43 +5789,20 @@ namespace metal {
     /// ### See Also
     /// \see number, abs, inc, dec, neg, add, sub, div, mod, pow
     template<typename... nums>
-    using mul = detail::call<detail::_mul<nums...>::template type>;
-}
-#include <initializer_list>
-namespace metal {
+    using mul = fold_left<lambda<detail::mul>, nums..., number<1>>;
     /// \cond
     namespace detail {
-        template<typename... nums>
-        struct _mul {};
-#if defined(METAL_WORKAROUND)
         template<typename x, typename y>
-        using mul_impl = number<x::value * y::value>;
-        template<int_... ns>
-        struct _mul<number<ns>...> {
-            template<typename... _>
-            using type = fold_left<lambda<mul_impl>, number<ns>..., _...>;
-        };
-#else
-        template<typename... _>
-        constexpr int_ mul_impl(int_ head, _... tail) {
-            return void(std::initializer_list<int_>{(head *= tail)...}), head;
-        }
-        template<int_... ns>
-        struct _mul<number<ns>...> {
-            template<typename... _>
-            using type = number<mul_impl((void(sizeof...(_)), ns)...)>;
-        };
-#endif
-        template<>
-        struct _mul<> {
-            template<typename...>
-            using type = number<1>;
+        struct _mul {};
+        template<int_ x, int_ y>
+        struct _mul<number<x>, number<y>> {
+            using type = number<x * y>;
         };
     }
     /// \endcond
 }
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_NUMBER_POW_HPP
@@ -6000,8 +5810,10 @@ namespace metal {
 namespace metal {
     /// \cond
     namespace detail {
-        template<typename... nums>
+        template<typename base, typename exp, typename ret = number<1>>
         struct _pow;
+        template<typename base, typename exp>
+        using pow = typename _pow<base, exp>::type;
     }
     /// \endcond
     /// \ingroup number
@@ -6035,35 +5847,23 @@ namespace metal {
     /// ### See Also
     /// \see number, abs, inc, dec, neg, add, sub, mul, div, mod
     template<typename... nums>
-    using pow = detail::call<detail::_pow<nums...>::template type>;
-}
-namespace metal {
+    using pow = fold_left<lambda<detail::pow>, nums..., number<1>>;
     /// \cond
     namespace detail {
-        template<typename base, typename exp, typename ret = number<1>>
-        struct _pow_impl {};
-        template<int_ b, int_ e, int_ r>
-        struct _pow_impl<number<b>, number<e>, number<r>>
-            : _pow_impl<
-                  number<b * b>, number<e / 2>, number<(e % 2 ? b * r : r)>> {};
-        template<int_ b, int_ r>
-        struct _pow_impl<number<b>, number<0>, number<r>> : number<1> {};
-        template<int_ b, int_ r>
-        struct _pow_impl<number<b>, number<1>, number<r>> : number<b * r> {};
-        template<int_ b, int_ r>
-        struct _pow_impl<number<b>, number<-1>, number<r>>
-            : number<1 / (b * r)> {};
-        template<int_ r>
-        struct _pow_impl<number<0>, number<-1>, number<r>> {};
-        template<typename x, typename y>
-        using pow_impl = typename _pow_impl<x, y>::type;
-        template<typename... nums>
+        template<typename base, typename exp, typename ret>
         struct _pow {};
-        template<int_... ns>
-        struct _pow<number<ns>...> {
-            template<typename... _>
-            using type = fold_left<lambda<pow_impl>, number<ns>..., _...>;
+        template<int_ b, int_ e, int_ r>
+        struct _pow<number<b>, number<e>, number<r>>
+            : _pow<number<b * b>, number<e / 2>, number<(e % 2 ? b * r : r)>> {
         };
+        template<int_ b, int_ r>
+        struct _pow<number<b>, number<0>, number<r>> : number<1> {};
+        template<int_ b, int_ r>
+        struct _pow<number<b>, number<1>, number<r>> : number<b * r> {};
+        template<int_ b, int_ r>
+        struct _pow<number<b>, number<-1>, number<r>> : number<1 / (b * r)> {};
+        template<int_ r>
+        struct _pow<number<0>, number<-1>, number<r>> {};
     }
     /// \endcond
 }
@@ -6071,7 +5871,7 @@ namespace metal {
 /// \defgroup number Number
 /// \ingroup metal
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_PAIR_HPP
@@ -6079,7 +5879,7 @@ namespace metal {
 /// \defgroup pair Pair
 /// \ingroup metal
 #endif
-// Copyright Bruno Dutra 2015-2017
+// Copyright Bruno Dutra 2015-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 #ifndef METAL_VALUE_HPP
@@ -6089,5 +5889,5 @@ namespace metal {
 #endif
 /// \defgroup metal Metal
 /// \namespace metal
-/// \brief Metaprogramming algorithms.
+/// \brief Metal
 #endif
