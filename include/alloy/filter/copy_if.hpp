@@ -1,4 +1,4 @@
-// Copyright Bruno Dutra 2017
+// Copyright Bruno Dutra 2017-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 
@@ -7,10 +7,7 @@
 
 #include "../config.hpp"
 #include "../constant.hpp"
-#include "../detail/dispatcher.hpp"
-#include "../detail/invoke.hpp"
-#include "../detail/picker.hpp"
-#include "../detail/traits.hpp"
+#include "../detail.hpp"
 #include "../filter/model.hpp"
 
 namespace alloy::detail {
@@ -18,15 +15,15 @@ namespace alloy::detail {
     constexpr auto copy_if_impl(Ns&&... ns) noexcept {
         return [&ns...](auto&& snk) noexcept {
             return [&ns..., &snk](auto&&... args) -> decltype(auto) {
-                using Args = metal::list<decltype(args)...>;
+                using namespace metal;
 
-                using R = metal::cascade<metal::powerset<Args>,
-                    metal::lambda<std::common_type_t>,
-                    metal::partial<metal::lambda<invoke_t>, decltype(snk)>>;
+                using Args = list<decltype(args)...>;
 
-                using Dispatcher =
-                    metal::cascade<metal::powerset<metal::indices<Args>>,
-                        metal::lambda<dispatcher>, metal::lambda<picker>>;
+                using R = cascade<powerset<Args>, lambda<std::common_type_t>,
+                    partial<lambda<invoke_t>, decltype(snk)>>;
+
+                using Dispatcher = cascade<powerset<indices<Args>>,
+                    lambda<dispatcher>, lambda<picker>>;
 
                 return Dispatcher::template dispatch<R>(
                     foldr([](bool j, std::size_t i) { return 2 * i + j; },
@@ -39,13 +36,14 @@ namespace alloy::detail {
 
     template<auto... ns>
     constexpr auto copy_if_impl(constant<ns>...) noexcept {
-        using Is = metal::copy_if<metal::indices<metal::numbers<ns...>>,
-            metal::partial<metal::lambda<metal::at>, metal::numbers<ns...>>>;
+        using namespace metal;
+
+        using Is = copy_if<indices<numbers<ns...>>,
+            partial<lambda<metal::at>, numbers<ns...>>>;
 
         return [](auto&& snk) noexcept {
             return [&snk](auto&&... args) -> decltype(auto) {
-                using Picker = metal::apply<metal::lambda<picker>, Is>;
-                return Picker::template dispatch(
+                return apply<lambda<picker>, Is>::template dispatch(
                     static_cast<decltype(snk)>(snk),
                     static_cast<decltype(args)>(args)...);
             };

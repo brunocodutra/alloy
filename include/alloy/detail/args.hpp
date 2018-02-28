@@ -1,4 +1,4 @@
-// Copyright Bruno Dutra 2017
+// Copyright Bruno Dutra 2017-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 
@@ -9,7 +9,6 @@
 #include "../constant.hpp"
 #include "../detail/invoke.hpp"
 #include "../detail/traits.hpp"
-#include "../external/metal/metal.hpp"
 
 namespace alloy::detail {
     template<typename K, typename V = K, typename = valid_t>

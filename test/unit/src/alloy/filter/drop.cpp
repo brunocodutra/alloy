@@ -9,7 +9,12 @@
 template<auto X, auto Y, auto Z>
 struct matrix {
     constexpr matrix() {
-        static_assert(values<X, Y, Z>() >> qualify<X>(alloy::sink{callable<X>(expect(values<X, Y, Z>()))}));
+        decltype(auto) z = qualify<Z>(instance<alloy::constant<Z>>);
+
+        constexpr auto given = cat(values<X, Y, Z>(), values<Z, X, Y>());
+
+        static_assert(given >> alloy::drop(Z) >> expect(values<Z, X, Y>()));
+        static_assert(given >> alloy::drop(FWD(z)) >> expect(values<Z, X, Y>()));
     }
 };
 

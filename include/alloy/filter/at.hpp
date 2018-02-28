@@ -1,4 +1,4 @@
-// Copyright Bruno Dutra 2017
+// Copyright Bruno Dutra 2017-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 
@@ -7,28 +7,24 @@
 
 #include "../config.hpp"
 #include "../constant.hpp"
-#include "../detail/dispatcher.hpp"
-#include "../detail/invoke.hpp"
-#include "../detail/picker.hpp"
+#include "../detail.hpp"
 #include "../filter/model.hpp"
-#include "../source/forward.hpp"
 
 namespace alloy::detail {
     template<typename... Is>
     constexpr auto at(Is&&... is) noexcept {
         return [&is...](auto&& snk) noexcept {
             return [&is..., &snk](auto&&... args) -> decltype(auto) {
-                using R = metal::cascade<
-                    metal::combine<metal::list<decltype(args)...>,
-                        metal::number<sizeof...(is)>>,
-                    metal::lambda<std::common_type_t>,
-                    metal::partial<metal::lambda<invoke_t>, decltype(snk)>>;
+                using namespace metal;
 
-                using Dispatcher = metal::cascade<
-                    metal::combine<
-                        metal::indices<metal::list<decltype(args)...>>,
-                        metal::number<sizeof...(is)>>,
-                    metal::lambda<dispatcher>, metal::lambda<picker>>;
+                using N = number<sizeof...(is)>;
+                using Args = list<decltype(args)...>;
+
+                using R = cascade<combine<Args, N>, lambda<std::common_type_t>,
+                    partial<lambda<invoke_t>, decltype(snk)>>;
+
+                using Dispatcher = cascade<combine<indices<Args>, N>,
+                    lambda<dispatcher>, lambda<picker>>;
 
                 return Dispatcher::template dispatch<R>(
                     foldl(

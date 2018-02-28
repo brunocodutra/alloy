@@ -1,4 +1,4 @@
-// Copyright Bruno Dutra 2017
+// Copyright Bruno Dutra 2017-2018
 // Distributed under the Boost Software License, Version 1.0.
 // See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
 
@@ -6,8 +6,7 @@
 #define ALLOY_OPERATORS_HPP
 
 #include "config.hpp"
-#include "detail/invoke.hpp"
-#include "detail/traits.hpp"
+#include "detail.hpp"
 #include "filter/model.hpp"
 #include "sink/model.hpp"
 #include "source/model.hpp"
