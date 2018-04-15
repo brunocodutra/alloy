@@ -23,7 +23,7 @@ set(ALLOY_VERSION "${ALLOY_MAJOR}.${ALLOY_MINOR}.${ALLOY_PATCH}")
 
 message(STATUS "Configuring Alloy ${ALLOY_VERSION}")
 
-add_header_library(Alloy "${ALLOY_INCLUDE_DIR}/alloy.hpp")
+add_header_library(Alloy "${ALLOY_INCLUDE_DIR}/alloy.hpp" "LICENSE")
 set_target_properties(Alloy PROPERTIES
     INTERFACE_LIB_VERSION ${ALLOY_VERSION}
     INTERFACE_COMPILE_FEATURES cxx_std_17
