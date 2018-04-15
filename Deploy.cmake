@@ -1,14 +1,18 @@
 set(THIS_FILE ${CMAKE_CURRENT_LIST_FILE})
 
+function(copyright _license _output)
+    set(output "${${_output}}")
+    file(STRINGS ${_license} lines NEWLINE_CONSUME)
+    string(REGEX REPLACE "\n$" "" lines "${lines}")
+    string(REGEX REPLACE "\n" "\n// " output "// ${lines}")
+    set(${_output} "${output}\n\n" PARENT_SCOPE)
+endfunction()
+
 function(bundle _entry _output)
     set(options)
     set(one_value_args EXCLUDED)
     set(multi_value_args EXCLUDE INCLUDE_DIRS)
     cmake_parse_arguments(ARGS "${options}" "${one_value_args}" "${multi_value_args}" ${ARGN})
-
-    if(NOT IS_ABSOLUTE ${_entry})
-        set(_entry "${CMAKE_CURRENT_SOURCE_DIR}/${_entry}")
-    endif()
 
     set(exclude)
     if(ARGS_EXCLUDE)
@@ -64,7 +68,15 @@ function(bundle _entry _output)
     set(${_output} "${output}" PARENT_SCOPE)
 endfunction()
 
-function(add_header_library _name _entry)
+function(add_header_library _name _entry _license)
+    if(NOT IS_ABSOLUTE ${_entry})
+        set(_entry "${CMAKE_CURRENT_SOURCE_DIR}/${_entry}")
+    endif()
+
+    if(NOT IS_ABSOLUTE ${_license})
+        set(_license "${CMAKE_CURRENT_SOURCE_DIR}/${_license}")
+    endif()
+
     get_filename_component(output ${_entry} NAME)
     set(output_dir "${CMAKE_BINARY_DIR}/${_name}/include")
     set(output "${output_dir}/${output}")
@@ -76,8 +88,9 @@ function(add_header_library _name _entry)
     file(WRITE ${bundle} "\
 cmake_minimum_required(VERSION ${CMAKE_VERSION})
 include(${THIS_FILE})
-bundle(${_entry} single INCLUDE_DIRS ${include_dir})
-file(WRITE \"${output}\" \"\${single}\")
+copyright(${_license} output)
+bundle(${_entry} output INCLUDE_DIRS ${include_dir})
+file(WRITE \"${output}\" \"\${output}\")
 "
     )
 
