@@ -88,11 +88,16 @@ file(WRITE \"${output}\" \"\${single}\")
         DEPENDS ${headers}
     )
 
-    add_custom_target(${_name}.bundle ALL DEPENDS ${output} SOURCES ${headers})
+    add_custom_target(${_name}.bundle DEPENDS ${output} SOURCES ${headers})
 
     add_library(${_name} INTERFACE)
     target_include_directories(${_name} INTERFACE $<BUILD_INTERFACE:${output_dir}>)
 
+    if (NOT TARGET bundle)
+        add_custom_target(bundle ALL)
+    endif()
+
+    add_dependencies(bundle ${_name}.bundle)
     add_dependencies(${_name} ${_name}.bundle)
 endfunction()
 
