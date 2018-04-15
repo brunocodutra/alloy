@@ -52,7 +52,7 @@ jobs:
             allow-empty-commit: true
             local-dir: install/include
             on:
-                branch: master
+                tags: true
 
 before_install:
   - SOURCE_PATH="${TRAVIS_BUILD_DIR}"
