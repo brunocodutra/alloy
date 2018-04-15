@@ -200,14 +200,13 @@ The following compilers are continuously tested on [Travis CI][travis.alloy].
 
 ## License
 
-Alloy is distributed under the
-[Boost Software License, Version 1.0][boost.license].
+This project is licensed under the [MIT][license].
 
-[version]:          http://badge.fury.io/gh/brunocodutra%2Falloy.svg
-[semver]:           http://semver.org
+[version]:          https://badge.fury.io/gh/brunocodutra%2Falloy.svg
+[semver]:           https://semver.org
 
-[travis.alloy]:     http://travis-ci.org/brunocodutra/alloy
-[travis.badge]:     http://travis-ci.org/brunocodutra/alloy.svg?branch=master
+[travis.alloy]:     https://travis-ci.org/brunocodutra/alloy
+[travis.badge]:     https://travis-ci.org/brunocodutra/alloy.svg?branch=master
 
 [gitter.alloy]:     https://gitter.im/brunocodutra/alloy?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge
 [gitter.badge]:     https://badges.gitter.im/brunocodutra/alloy.svg
@@ -215,6 +214,5 @@ Alloy is distributed under the
 [godbolt.alloy]:    https://godbolt.org/g/vmbXbT
 [godbolt.badge]:    https://img.shields.io/badge/try%20it-on%20godbolt-222266.svg
 
-[boost.license]:    http://boost.org/LICENSE_1_0.txt
-
-[releases]:         http://github.com/brunocodutra/alloy/releases
+[license]:          https://github.com/brunocodutra/alloy/blob/master/LICENSE
+[releases]:         https://github.com/brunocodutra/alloy/releases
