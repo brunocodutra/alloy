@@ -1,7 +1,3 @@
-# Copyright Bruno Dutra 2017-2018
-# Distributed under the Boost Software License, Version 1.0.
-# See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
-
 sudo: required
 language: cpp
 
@@ -56,7 +52,7 @@ jobs:
             allow-empty-commit: true
             local-dir: install/include
             on:
-                branch: master
+                tags: true
 
 before_install:
   - SOURCE_PATH="${TRAVIS_BUILD_DIR}"

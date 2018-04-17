@@ -1,7 +1,3 @@
-# Copyright Bruno Dutra 2017-2018
-# Distributed under the Boost Software License, Version 1.0.
-# See accompanying file LICENSE.txt or copy at http://boost.org/LICENSE_1_0.txt
-
 cmake_minimum_required(VERSION 3.8)
 
 include(cmake/Test.cmake)
@@ -27,7 +23,7 @@ set(ALLOY_VERSION "${ALLOY_MAJOR}.${ALLOY_MINOR}.${ALLOY_PATCH}")
 
 message(STATUS "Configuring Alloy ${ALLOY_VERSION}")
 
-add_header_library(Alloy "${ALLOY_INCLUDE_DIR}/alloy.hpp")
+add_header_library(Alloy "${ALLOY_INCLUDE_DIR}/alloy.hpp" "LICENSE")
 set_target_properties(Alloy PROPERTIES
     INTERFACE_LIB_VERSION ${ALLOY_VERSION}
     INTERFACE_COMPILE_FEATURES cxx_std_17
