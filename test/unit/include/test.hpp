@@ -10,7 +10,7 @@ struct tester : Matrix... {
     }
 };
 
-template<template<auto...> class matrix>
+template<template<int...> class matrix>
 struct _lift {
     template<typename... Ns>
     using impl = matrix<Ns::value...>;
@@ -18,12 +18,12 @@ struct _lift {
     using type = metal::lambda<impl>;
 };
 
-template<template<auto...> class matrix>
+template<template<int...> class matrix>
 using lift = typename _lift<matrix>::type;
 
 inline constexpr metal::int_ INF = 4;
 
-template<template<auto...> class matrix>
+template<template<int...> class matrix>
 constexpr auto test = metal::cascade<
     metal::combine<
         metal::iota<metal::number<0>, metal::number<INF>>,
@@ -33,7 +33,7 @@ constexpr auto test = metal::cascade<
     lift<matrix>
 >{};
 
-template<auto, typename T>
+template<int, typename T>
 struct nasty;
 
 template<typename T>
@@ -71,7 +71,7 @@ struct nasty<3, T> : nasty<1, T> {
 template<typename T>
 inline std::remove_reference_t<T> instance{};
 
-template<auto X, typename T>
+template<int X, typename T>
 constexpr decltype(auto) qualify(T&& t = static_cast<T&&>(instance<T>)) {
     if /****/ constexpr(X == 0) {
         return static_cast<T&>(t);
@@ -84,7 +84,7 @@ constexpr decltype(auto) qualify(T&& t = static_cast<T&&>(instance<T>)) {
     }
 }
 
-template<auto X>
+template<int X>
 struct value_t {
     template<typename I>
     constexpr auto operator<(I const& i) const noexcept {
@@ -97,12 +97,12 @@ struct value_t {
     }
 };
 
-template<auto X, auto Y, auto Z>
+template<int X, int Y, int Z>
 constexpr decltype(auto) value() {
     return qualify<X, nasty<Y, value_t<Z>>>();
 }
 
-template<auto Y, typename F>
+template<int Y, typename F>
 struct callable_t;
 
 template<typename F>
@@ -145,12 +145,12 @@ struct callable_t<3, F> {
     }
 };
 
-template<auto X, typename F>
+template<int X, typename F>
 constexpr auto callable(F&& f) {
     return callable_t<X, F>{FWD(f)};
 }
 
-template<auto X, auto Y, auto... Zs>
+template<int X, int Y, int... Zs>
 struct values_t {
     template<typename F>
     constexpr decltype(auto) operator()(F&& f) const {
@@ -158,7 +158,7 @@ struct values_t {
     }
 };
 
-template<auto X, auto Y, auto Z>
+template<int X, int Y, int Z>
 constexpr decltype(auto) values() {
     using namespace metal;
     using v = partial<lift<values_t>, number<X>, number<Y>>;
@@ -212,10 +212,8 @@ template<typename... Expected>
 constexpr auto expect(Expected&&... expected) {
     return [&expected...](auto&&... values) {
         return cat(FWD(expected)...)([](auto&&... vs) {
-            if constexpr(sizeof...(values) == sizeof...(vs))
-                return (... && std::is_same_v<decltype(values), decltype(vs)>);
-            else
-                return false;
+            using namespace metal;
+            return std::is_same_v<list<decltype(values)...>, list<decltype(vs)...>>;
         });
     };
 }
