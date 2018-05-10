@@ -2,134 +2,157 @@ sudo: required
 language: cpp
 
 git:
-    depth: 1
+  depth: 1
 
 env:
-    global:
-      - secure: pd6cIT29Kri2y4Fj5Fc/C/65f/JxzFHD0mnZ4fLcKquFrpDRAwhQ6/sUZcA2L+eckRE34hRkFeuwAI6q6zDQ56hI5BavHLMDwQbioNIpGt6daGKtbiqpgtxzdbtHV2K64bgSOTnPmoIpL8+yX54WwbS2jvZy/QTbLqHWrp3TwwbLf1o+QjBSz8azsLajGRIdNJmLeoT4xRyDQfKA3wYmzOMS3yqzKUIV/GtX17rr98F8ZGq3LPIFBbRbKUe0N7ciGrNketPk496ILCLrVi/mPn+Hb4AyoYQsfMKtkrC50iX3CzmKErzJST+uXue8AgRAYNHq2uoGzMk3s4aNo/Zi1P2xNNops9nYQQUrOgZWLe6xE+3zG2LlD3bEPnIFElz+0KP85MJEC9kOLVI9HQ8pfwZuMzkCKgIBCM6eFXytTt7b3B/LZ1itYP+5lsRqoNyUrV3n1L6sGSdNZThG2Mt4Y4gzwGPieIzpEt/bXryNmxuao4AyAqFua3vZlRanwJ9jP17VzgWJAKRggUe3cjbWt3G+PBqMg8U0Sdc0R0S4encnv7dqS6x4fS9Qlumne9B1E3tSZXDlWgri8tFnhLBdV+JH9j5VEmZKcE825pq9DWBqyrpkRFXsGkpjDVZSJ7s8DR3gML+J2qyrf4FTZdfp+o3svfJf1kKMoDYQgRNmTC0=
-      - VERSION=7
+  global:
+  - secure: pd6cIT29Kri2y4Fj5Fc/C/65f/JxzFHD0mnZ4fLcKquFrpDRAwhQ6/sUZcA2L+eckRE34hRkFeuwAI6q6zDQ56hI5BavHLMDwQbioNIpGt6daGKtbiqpgtxzdbtHV2K64bgSOTnPmoIpL8+yX54WwbS2jvZy/QTbLqHWrp3TwwbLf1o+QjBSz8azsLajGRIdNJmLeoT4xRyDQfKA3wYmzOMS3yqzKUIV/GtX17rr98F8ZGq3LPIFBbRbKUe0N7ciGrNketPk496ILCLrVi/mPn+Hb4AyoYQsfMKtkrC50iX3CzmKErzJST+uXue8AgRAYNHq2uoGzMk3s4aNo/Zi1P2xNNops9nYQQUrOgZWLe6xE+3zG2LlD3bEPnIFElz+0KP85MJEC9kOLVI9HQ8pfwZuMzkCKgIBCM6eFXytTt7b3B/LZ1itYP+5lsRqoNyUrV3n1L6sGSdNZThG2Mt4Y4gzwGPieIzpEt/bXryNmxuao4AyAqFua3vZlRanwJ9jP17VzgWJAKRggUe3cjbWt3G+PBqMg8U0Sdc0R0S4encnv7dqS6x4fS9Qlumne9B1E3tSZXDlWgri8tFnhLBdV+JH9j5VEmZKcE825pq9DWBqyrpkRFXsGkpjDVZSJ7s8DR3gML+J2qyrf4FTZdfp+o3svfJf1kKMoDYQgRNmTC0=
 
 addons:
-    apt:
-        packages: &pkgs
-          - tree
-          - g++-7
-          - clang-5.0
-          - clang-format-5.0
-        sources: &srcs
-          - ubuntu-toolchain-r-test
-          - llvm-toolchain-trusty-5.0
+  apt:
+    packages:
+    - tree
+    - g++-7
+    - g++-8
+    - cppcheck
+    - clang-5.0
+    - clang-tidy-5.0
+    - clang-6.0
+    - clang-tidy-6.0
+    sources: &srcs
+    - ubuntu-toolchain-r-test
+    - llvm-toolchain-trusty-5.0
+    - llvm-toolchain-trusty-6.0
+
+stages:
+- test
+- lint
+- deploy
 
 jobs:
-    include:
-      - os: linux
-        dist: trusty
-        stage: test
-        compiler: g++
-        env: VERSION=7
+  include:
+  - os: linux
+    dist: trusty
+    stage: test
+    compiler: g++
+    env: VERSION=7
 
-      - os: linux
-        dist: trusty
-        stage: test
-        compiler: clang++
-        env: VERSION=5.0
+  - os: linux
+    dist: trusty
+    stage: test
+    compiler: g++
+    env: VERSION=8
 
-      - os: linux
-        dist: trusty
-        stage: test
-        env: CHECK_FORMATTING=true
+  - os: linux
+    dist: trusty
+    stage: test
+    compiler: clang++
+    env: VERSION=5.0
 
-      - os: linux
-        dist: trusty
-        stage: deploy
-        script: cmake --build "${BUILD_PATH}" --target install && tree "${INSTALL_PATH}"
-        deploy:
-            provider: pages
-            target-branch: standalone
-            github-token: $GITHUB_TOKEN
-            skip-cleanup: true
-            keep-history: true
-            allow-empty-commit: true
-            local-dir: install/include
-            on:
-                tags: true
+  - os: linux
+    dist: trusty
+    stage: test
+    compiler: clang++
+    env: VERSION=6.0
+
+  - os: linux
+    dist: trusty
+    stage: lint
+    compiler: clang++
+    env: VERSION=6.0
+    script: (cd "${BUILD_PATH}" && ctest --output-on-failure -R ^test.format)
+    addons:
+      apt:
+        packages:
+        - clang-6.0
+        - clang-format-6.0
+        sources: *srcs
+
+  - os: linux
+    dist: trusty
+    stage: deploy
+    compiler: g++
+    env: VERSION=7
+    script: cmake --build "${BUILD_PATH}" --target install && tree "${INSTALL_PATH}"
+    deploy:
+      provider: pages
+      target-branch: standalone
+      github-token: $GITHUB_TOKEN
+      skip-cleanup: true
+      keep-history: true
+      allow-empty-commit: true
+      local-dir: install/include
+      on:
+        tags: true
 
 before_install:
-  - SOURCE_PATH="${TRAVIS_BUILD_DIR}"
+- SOURCE_PATH="${TRAVIS_BUILD_DIR}"
 
-  - BUILD_PATH="${TRAVIS_BUILD_DIR}/build"
-  - mkdir -p "${BUILD_PATH}"
+- BUILD_PATH="${TRAVIS_BUILD_DIR}/build"
+- mkdir -p "${BUILD_PATH}"
 
-  - INSTALL_PATH="${TRAVIS_BUILD_DIR}/install"
-  - mkdir -p "${INSTALL_PATH}"
+- INSTALL_PATH="${TRAVIS_BUILD_DIR}/install"
+- mkdir -p "${INSTALL_PATH}"
 
-  - DEPS_PATH="${TRAVIS_BUILD_DIR}/deps"
-  - mkdir -p "${DEPS_PATH}"
+- DEPS_PATH="${TRAVIS_BUILD_DIR}/deps"
+- mkdir -p "${DEPS_PATH}"
 
-  - GITHUB_PATH="${TRAVIS_BUILD_DIR}/github"
-  - mkdir -p "${GITHUB_PATH}"
+- export CXXFLAGS="${CXXFLAGS} -fsanitize=address,undefined"
 
-  - export CXXFLAGS="${CXXFLAGS} -fsanitize=address,undefined"
+- |
+  if [[ "${CXX}" == "g++" ]]
+  then
+    export CXXFLAGS="${CXXFLAGS} -fuse-ld=gold"
+  fi
 
-  - |
-    if [[ "${CXX}" == "g++" ]]
-    then
-        export CXXFLAGS="${CXXFLAGS} -fuse-ld=gold"
-    fi
-
-  - |
-    if [[ -n "${VERSION}" ]]
-    then
-        export CC="${CC}-${VERSION}"
-        export CXX="${CXX}-${VERSION}"
-    fi
+- |
+  if [[ -n "${VERSION}" ]]
+  then
+    export CC="${CC}-${VERSION}"
+    export CXX="${CXX}-${VERSION}"
+  fi
 
 install:
-  # libc++
-  - |
-    if [[ ${CC} == clang* && ${CXX} == clang++* ]]
-    then
-        git clone --depth 1 http://llvm.org/git/llvm.git "${DEPS_PATH}/llvm" || exit $?
-        git clone --depth 1 http://llvm.org/git/libcxx.git "${DEPS_PATH}/llvm/projects/libcxx" || exit $?
-        git clone --depth 1 http://llvm.org/git/libcxxabi.git "${DEPS_PATH}/llvm/projects/libcxxabi" || exit $?
+# libc++
+- |
+  if [[ ${CC} == clang* && ${CXX} == clang++* ]]
+  then
+    git clone --depth 1 http://llvm.org/git/llvm.git "${DEPS_PATH}/llvm" || exit $?
+    git clone --depth 1 http://llvm.org/git/libcxx.git "${DEPS_PATH}/llvm/projects/libcxx" || exit $?
+    git clone --depth 1 http://llvm.org/git/libcxxabi.git "${DEPS_PATH}/llvm/projects/libcxxabi" || exit $?
 
-        LLVM_CMAKE_ARGS+=(-H"${DEPS_PATH}/llvm")
-        LLVM_CMAKE_ARGS+=(-B"${DEPS_PATH}/llvm/build")
-        LLVM_CMAKE_ARGS+=(-DCMAKE_INSTALL_PREFIX="${DEPS_PATH}/llvm/install")
-        LLVM_CMAKE_ARGS+=(-DLLVM_USE_SANITIZER="Undefined;Address")
+    LLVM_CMAKE_ARGS+=(-H"${DEPS_PATH}/llvm")
+    LLVM_CMAKE_ARGS+=(-B"${DEPS_PATH}/llvm/build")
+    LLVM_CMAKE_ARGS+=(-DCMAKE_INSTALL_PREFIX="${DEPS_PATH}/llvm/install")
+    LLVM_CMAKE_ARGS+=(-DLLVM_USE_SANITIZER="Undefined;Address")
 
-        CFLAGS="" CXXFLAGS="" LDFLAGS="" cmake ${LLVM_CMAKE_ARGS[@]} || exit $?
-        make -C "${DEPS_PATH}/llvm/build" -j install-cxx install-cxxabi || exit $?
+    CFLAGS="" CXXFLAGS="" LDFLAGS="" cmake ${LLVM_CMAKE_ARGS[@]} || exit $?
+    make -C "${DEPS_PATH}/llvm/build" -j install-cxx install-cxxabi || exit $?
 
-        export CXXFLAGS="${CXXFLAGS} -stdlib=libc++ -nostdinc++ -isystem ${DEPS_PATH}/llvm/install/include/c++/v1"
-        export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${DEPS_PATH}/llvm/install/lib"
-        export LDFLAGS="${LDFLAGS} -L${DEPS_PATH}/llvm/install/lib"
-    fi
+    export CXXFLAGS="${CXXFLAGS} -stdlib=libc++ -nostdinc++ -isystem ${DEPS_PATH}/llvm/install/include/c++/v1"
+    export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${DEPS_PATH}/llvm/install/lib"
+    export LDFLAGS="${LDFLAGS} -L${DEPS_PATH}/llvm/install/lib"
+  fi
 
 before_script:
-  - CMAKE_ARGS+=("-H${SOURCE_PATH}")
-  - CMAKE_ARGS+=("-B${BUILD_PATH}")
-  - CMAKE_ARGS+=("-DCMAKE_INSTALL_PREFIX=${INSTALL_PATH}")
+- CMAKE_ARGS+=("-H${SOURCE_PATH}")
+- CMAKE_ARGS+=("-B${BUILD_PATH}")
+- CMAKE_ARGS+=("-DCMAKE_INSTALL_PREFIX=${INSTALL_PATH}")
 
-  - |
-    if [[ "${CHECK_FORMATTING}" == "true" ]]
-    then
-        CMAKE_ARGS+=("-DCLANG_FORMAT=/usr/bin/clang-format-5.0")
-    fi
+- |
+  if [[ ${CC} == clang* && ${CXX} == clang++* ]]
+  then
+    CMAKE_ARGS+=("-DCLANG_TIDY=/usr/bin/clang-tidy-${VERSION}")
+    CMAKE_ARGS+=("-DCLANG_FORMAT=/usr/bin/clang-format-${VERSION}")
+  fi
 
-  - cmake ${CMAKE_ARGS[@]}
+- cmake ${CMAKE_ARGS[@]}
 
 script:
-  - |
-    if [[ "${CHECK_FORMATTING}" == "true" ]]
-    then
-        (cd "${BUILD_PATH}" && ctest --output-on-failure -R ^test.format)
-    else
-        (cd "${BUILD_PATH}" && ctest --output-on-failure -E ^test.format)
-    fi
+- (cd "${BUILD_PATH}" && ctest --output-on-failure -E ^test.format)
 
 notifications:
   webhooks:
-    urls: https://webhooks.gitter.im/e/f6f076c43196d662f905
-    on_success: change
-    on_failure: always
+  urls: https://webhooks.gitter.im/e/f6f076c43196d662f905
+  on_success: change
+  on_failure: always

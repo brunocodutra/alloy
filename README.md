@@ -196,7 +196,9 @@ The following compilers are continuously tested on [Travis CI][travis.alloy].
 | Compiler          | Version   | Operating System
 |-------------------|-----------|-----------------------
 | GCC               | 7         | Ubuntu 14.04 LTS
+| GCC               | 8         | Ubuntu 14.04 LTS
 | Clang             | 5.0       | Ubuntu 14.04 LTS
+| Clang             | 6.0       | Ubuntu 14.04 LTS
 
 ## License
 
