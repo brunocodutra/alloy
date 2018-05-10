@@ -18,7 +18,7 @@ namespace alloy::detail {
         }
 
         template<typename... Args>
-        constexpr decltype(auto) operator()(Args&&... args) const & {
+        constexpr decltype(auto) operator()(Args&&... args) const& {
             return invoke(static_cast<base const&>(*this)(invoke),
                 static_cast<Args&&>(args)...);
         }
@@ -30,7 +30,7 @@ namespace alloy::detail {
         }
 
         template<typename... Args>
-        constexpr decltype(auto) operator()(Args&&... args) const && {
+        constexpr decltype(auto) operator()(Args&&... args) const&& {
             return invoke(static_cast<base const&&>(*this)(invoke),
                 static_cast<Args&&>(args)...);
         }

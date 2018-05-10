@@ -9,9 +9,10 @@ AlignTrailingComments: false
 AllowAllParametersOfDeclarationOnNextLine: true
 AllowShortBlocksOnASingleLine: false
 AllowShortCaseLabelsOnASingleLine: false
-AllowShortFunctionsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: Empty
 AllowShortIfStatementsOnASingleLine: false
 AllowShortLoopsOnASingleLine: false
+AlwaysBreakAfterDefinitionReturnType: None
 AlwaysBreakAfterReturnType: None
 AlwaysBreakBeforeMultilineStrings: true
 AlwaysBreakTemplateDeclarations: true
@@ -31,8 +32,10 @@ BraceWrapping:
   IndentBraces: false
 BreakBeforeBinaryOperators: NonAssignment
 BreakBeforeBraces: Attach
+BreakBeforeInheritanceComma: true
 BreakBeforeTernaryOperators: true
 BreakConstructorInitializersBeforeComma: true
+BreakConstructorInitializers: BeforeColon
 BreakStringLiterals: true
 ColumnLimit: 80
 CommentPragmas: ''
@@ -44,13 +47,12 @@ Cpp11BracedListStyle: true
 DerivePointerAlignment: false
 DisableFormat: false
 FixNamespaceComments: false
+IncludeBlocks: Regroup
 IncludeCategories:
-  - Regex: '^".*config.*"$'
-    Priority: 1
   - Regex: '^".*"$'
-    Priority: 2
+    Priority: 1
   - Regex: '.*'
-    Priority: 3
+    Priority: 2
 IncludeIsMainRegex: '$'
 IndentCaseLabels: true
 IndentWidth: 4
@@ -70,6 +72,7 @@ PenaltyReturnTypeOnItsOwnLine: 10
 PointerAlignment: Left
 ReflowComments: false
 SortIncludes: true
+SortUsingDeclarations: true
 SpaceAfterCStyleCast: false
 SpaceAfterTemplateKeyword: false
 SpaceBeforeAssignmentOperators: true
@@ -85,4 +88,3 @@ Standard: Cpp11
 TabWidth: 4
 UseTab: Never
 ...
-

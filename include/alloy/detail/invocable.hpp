@@ -13,8 +13,7 @@ namespace alloy::detail {
         constexpr invocable(invocable&&) = default;
         constexpr invocable(invocable const&) = default;
 
-        constexpr invocable(F&& f) : f{static_cast<F&&>(f)} {
-        }
+        constexpr invocable(F&& f) : f{static_cast<F&&>(f)} {}
 
         template<typename... Args>
         constexpr decltype(auto) operator()(Args&&... args) & {
@@ -22,7 +21,7 @@ namespace alloy::detail {
         }
 
         template<typename... Args>
-        constexpr decltype(auto) operator()(Args&&... args) const & {
+        constexpr decltype(auto) operator()(Args&&... args) const& {
             return invoke(
                 static_cast<F const&>(f), static_cast<Args&&>(args)...);
         }
@@ -33,7 +32,7 @@ namespace alloy::detail {
         }
 
         template<typename... Args>
-        constexpr decltype(auto) operator()(Args&&... args) const && {
+        constexpr decltype(auto) operator()(Args&&... args) const&& {
             return invoke(
                 static_cast<F const&&>(f), static_cast<Args&&>(args)...);
         }
@@ -44,8 +43,7 @@ namespace alloy::detail {
         using base = F;
         using base::base;
 
-        constexpr invocable(F&& f) : base{static_cast<F&&>(f)} {
-        }
+        constexpr invocable(F&& f) : base{static_cast<F&&>(f)} {}
     };
 }
 

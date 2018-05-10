@@ -17,14 +17,13 @@ namespace alloy::detail {
         constexpr arg(arg&&) = default;
         constexpr arg(arg const&) = default;
 
-        constexpr arg(V&& v) : v{static_cast<V&&>(v)} {
-        }
+        constexpr arg(V&& v) : v{static_cast<V&&>(v)} {}
 
         constexpr operator transfer<arg&, V>() & noexcept {
             return static_cast<transfer<arg&, V>>(v);
         }
 
-        constexpr operator transfer<arg const&, V>() const & noexcept {
+        constexpr operator transfer<arg const&, V>() const& noexcept {
             return static_cast<transfer<arg const&, V>>(v);
         }
 
@@ -32,7 +31,7 @@ namespace alloy::detail {
             return static_cast<transfer<arg&&, V>>(v);
         }
 
-        constexpr operator transfer<arg const&&, V>() const && noexcept {
+        constexpr operator transfer<arg const&&, V>() const&& noexcept {
             return static_cast<transfer<arg const&&, V>>(v);
         }
     };
@@ -45,8 +44,7 @@ namespace alloy::detail {
         constexpr arg(arg&&) = default;
         constexpr arg(arg const&) = default;
 
-        constexpr arg(V&& v) : V{static_cast<V&&>(v)} {
-        }
+        constexpr arg(V&& v) : V{static_cast<V&&>(v)} {}
     };
 
     template<typename...>
@@ -57,8 +55,7 @@ namespace alloy::detail {
         constexpr args(args&&) = default;
         constexpr args(args const&) = default;
 
-        constexpr args(Vs&&... vs) : arg<Ks, Vs>{static_cast<Vs&&>(vs)}... {
-        }
+        constexpr args(Vs&&... vs) : arg<Ks, Vs>{static_cast<Vs&&>(vs)}... {}
 
         /* clang-format off */
 
@@ -98,7 +95,7 @@ namespace alloy::detail {
         }
 
         template<typename F>
-        constexpr decltype(auto) operator()(F&& f) const & {
+        constexpr decltype(auto) operator()(F&& f) const& {
             return args::call(
                 static_cast<args const&>(*this), static_cast<F&&>(f));
         }
@@ -109,7 +106,7 @@ namespace alloy::detail {
         }
 
         template<typename F>
-        constexpr decltype(auto) operator()(F&& f) const && {
+        constexpr decltype(auto) operator()(F&& f) const&& {
             return args::call(
                 static_cast<args const&&>(*this), static_cast<F&&>(f));
         }
