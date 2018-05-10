@@ -26,8 +26,8 @@
 #define ALLOY_CONFIG_HPP
 #ifndef ALLOY_CONFIG_VERSION_HPP
 #define ALLOY_CONFIG_VERSION_HPP
-#define ALLOY_MAJOR 0
-#define ALLOY_MINOR 2
+#define ALLOY_MAJOR 1
+#define ALLOY_MINOR 0
 #define ALLOY_PATCH 0
 #define ALLOY_SEMVER(MAJOR, MINOR, PATCH) (((MAJOR)*1000000) + ((MINOR)*10000) + (PATCH))
 #define ALLOY_VERSION ALLOY_SEMVER(ALLOY_MAJOR, ALLOY_MINOR, ALLOY_PATCH)
@@ -5759,18 +5759,17 @@ namespace alloy::detail {
         constexpr arg() = delete;
         constexpr arg(arg&&) = default;
         constexpr arg(arg const&) = default;
-        constexpr arg(V&& v) : v{static_cast<V&&>(v)} {
-        }
+        constexpr arg(V&& v) : v{static_cast<V&&>(v)} {}
         constexpr operator transfer<arg&, V>() & noexcept {
             return static_cast<transfer<arg&, V>>(v);
         }
-        constexpr operator transfer<arg const&, V>() const & noexcept {
+        constexpr operator transfer<arg const&, V>() const& noexcept {
             return static_cast<transfer<arg const&, V>>(v);
         }
         constexpr operator transfer<arg&&, V>() && noexcept {
             return static_cast<transfer<arg&&, V>>(v);
         }
-        constexpr operator transfer<arg const&&, V>() const && noexcept {
+        constexpr operator transfer<arg const&&, V>() const&& noexcept {
             return static_cast<transfer<arg const&&, V>>(v);
         }
     };
@@ -5780,8 +5779,7 @@ namespace alloy::detail {
         constexpr arg() = delete;
         constexpr arg(arg&&) = default;
         constexpr arg(arg const&) = default;
-        constexpr arg(V&& v) : V{static_cast<V&&>(v)} {
-        }
+        constexpr arg(V&& v) : V{static_cast<V&&>(v)} {}
     };
     template<typename...>
     struct args;
@@ -5789,8 +5787,7 @@ namespace alloy::detail {
     struct args<arg<Ks, Vs>...> : arg<Ks, Vs>... {
         constexpr args(args&&) = default;
         constexpr args(args const&) = default;
-        constexpr args(Vs&&... vs) : arg<Ks, Vs>{static_cast<Vs&&>(vs)}... {
-        }
+        constexpr args(Vs&&... vs) : arg<Ks, Vs>{static_cast<Vs&&>(vs)}... {}
         /* clang-format off */
         template<auto i,
             typename Arg = metal::at<metal::as_list<args>, metal::number<i>>
@@ -5822,7 +5819,7 @@ namespace alloy::detail {
             return args::call(static_cast<args&>(*this), static_cast<F&&>(f));
         }
         template<typename F>
-        constexpr decltype(auto) operator()(F&& f) const & {
+        constexpr decltype(auto) operator()(F&& f) const& {
             return args::call(
                 static_cast<args const&>(*this), static_cast<F&&>(f));
         }
@@ -5831,7 +5828,7 @@ namespace alloy::detail {
             return args::call(static_cast<args&&>(*this), static_cast<F&&>(f));
         }
         template<typename F>
-        constexpr decltype(auto) operator()(F&& f) const && {
+        constexpr decltype(auto) operator()(F&& f) const&& {
             return args::call(
                 static_cast<args const&&>(*this), static_cast<F&&>(f));
         }
@@ -5925,14 +5922,13 @@ namespace alloy::detail {
         constexpr invocable() = delete;
         constexpr invocable(invocable&&) = default;
         constexpr invocable(invocable const&) = default;
-        constexpr invocable(F&& f) : f{static_cast<F&&>(f)} {
-        }
+        constexpr invocable(F&& f) : f{static_cast<F&&>(f)} {}
         template<typename... Args>
         constexpr decltype(auto) operator()(Args&&... args) & {
             return invoke(static_cast<F&>(f), static_cast<Args&&>(args)...);
         }
         template<typename... Args>
-        constexpr decltype(auto) operator()(Args&&... args) const & {
+        constexpr decltype(auto) operator()(Args&&... args) const& {
             return invoke(
                 static_cast<F const&>(f), static_cast<Args&&>(args)...);
         }
@@ -5941,7 +5937,7 @@ namespace alloy::detail {
             return invoke(static_cast<F&&>(f), static_cast<Args&&>(args)...);
         }
         template<typename... Args>
-        constexpr decltype(auto) operator()(Args&&... args) const && {
+        constexpr decltype(auto) operator()(Args&&... args) const&& {
             return invoke(
                 static_cast<F const&&>(f), static_cast<Args&&>(args)...);
         }
@@ -5950,8 +5946,7 @@ namespace alloy::detail {
     struct invocable<F, requires<inheritable<F>>> : F {
         using base = F;
         using base::base;
-        constexpr invocable(F&& f) : base{static_cast<F&&>(f)} {
-        }
+        constexpr invocable(F&& f) : base{static_cast<F&&>(f)} {}
     };
 }
 #endif
@@ -5985,7 +5980,7 @@ namespace alloy::detail {
                 static_cast<Args&&>(args)...);
         }
         template<typename... Args>
-        constexpr decltype(auto) operator()(Args&&... args) const & {
+        constexpr decltype(auto) operator()(Args&&... args) const& {
             return invoke(static_cast<base const&>(*this)(invoke),
                 static_cast<Args&&>(args)...);
         }
@@ -5995,7 +5990,7 @@ namespace alloy::detail {
                 static_cast<Args&&>(args)...);
         }
         template<typename... Args>
-        constexpr decltype(auto) operator()(Args&&... args) const && {
+        constexpr decltype(auto) operator()(Args&&... args) const&& {
             return invoke(static_cast<base const&&>(*this)(invoke),
                 static_cast<Args&&>(args)...);
         }
