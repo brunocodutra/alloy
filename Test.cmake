@@ -17,14 +17,28 @@ endif()
 
 include(CheckCXXCompilerFlag)
 function(target_weak_compile_options _target _visibility _flag)
+    set(options)
+    set(one_value_args)
+    set(multi_value_args CONFIGS)
+    cmake_parse_arguments(ARGS "${options}" "${one_value_args}" "${multi_value_args}" ${ARGN})
+
     set(result "has${_flag}")
     string(REGEX REPLACE "[ ]" "" result "${result}")
     string(REGEX REPLACE "[+]" "x" result "${result}")
     string(REGEX REPLACE "[^a-zA-Z0-9_]" "_" result "${result}")
 
+    set(CMAKE_REQUIRED_LIBRARIES ${_flag})
     check_cxx_compiler_flag(${_flag} ${result})
     if(${result})
-        target_compile_options(${_target} ${_visibility} ${_flag})
+        if(NOT ARGS_CONFIGS)
+            target_compile_options(${_target} ${_visibility} ${_flag})
+            target_link_libraries(${_target} ${_visibility} ${_flag})
+        else()
+            foreach(config ${ARGS_CONFIGS})
+                target_compile_options(${_target} ${_visibility} "$<$<CONFIG:${config}>:${_flag}>")
+                target_link_libraries(${_target} ${_visibility} "$<$<CONFIG:${config}>:${_flag}>")
+            endforeach()
+        endif()
     endif()
 endfunction()
 
@@ -58,6 +72,11 @@ function(test _target)
 
     set(driver ${_target})
     if(target_type STREQUAL "EXECUTABLE")
+        target_weak_compile_options(${_target} PRIVATE -ftest-coverage CONFIGS DEBUG)
+        target_weak_compile_options(${_target} PRIVATE -fprofile-arcs CONFIGS DEBUG)
+        target_weak_compile_options(${_target} PRIVATE -fprofile-instr-generate CONFIGS DEBUG)
+        target_weak_compile_options(${_target} PRIVATE -fcoverage-mapping CONFIGS DEBUG)
+
         add_custom_target(${_target}.run
             COMMAND ${_target}
             WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
