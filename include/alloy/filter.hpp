@@ -7,5 +7,6 @@
 #include "filter/drop.hpp"
 #include "filter/model.hpp"
 #include "filter/prepend.hpp"
+#include "filter/reverse.hpp"
 
 #endif
