@@ -74,6 +74,9 @@ namespace alloy::detail {
     template<typename X>
     constexpr bool inheritable = std::is_class<X>::value
         && !std::is_polymorphic<X>::value && !std::is_final<X>::value;
+
+    template<typename... Xs>
+    using common = metal::fold_left<metal::lambda<std::common_type_t>, Xs...>;
 }
 
 #endif
