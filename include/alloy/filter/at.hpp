@@ -16,7 +16,7 @@ namespace alloy::detail {
                 using N = number<sizeof...(is)>;
                 using Args = list<decltype(args)...>;
 
-                using R = cascade<combine<Args, N>, lambda<std::common_type_t>,
+                using R = cascade<combine<Args, N>, lambda<common>,
                     partial<lambda<invoke_t>, decltype(snk)>>;
 
                 using Dispatcher = cascade<combine<indices<Args>, N>,

@@ -15,7 +15,7 @@ namespace alloy::detail {
 
                 using Args = list<decltype(args)...>;
 
-                using R = cascade<powerset<Args>, lambda<std::common_type_t>,
+                using R = cascade<powerset<Args>, lambda<common>,
                     partial<lambda<invoke_t>, decltype(snk)>>;
 
                 using Dispatcher = cascade<powerset<indices<Args>>,

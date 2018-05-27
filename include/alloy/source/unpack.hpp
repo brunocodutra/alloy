@@ -65,9 +65,8 @@ namespace alloy::detail {
         return [&xs...](auto&& snk) -> decltype(auto) {
             using namespace metal;
 
-            using R =
-                cascade<inner<lambda<list>, Xs...>, lambda<std::common_type_t>,
-                    partial<lambda<invoke_t>, decltype(snk)>>;
+            using R = cascade<inner<lambda<list>, Xs...>, lambda<common>,
+                partial<lambda<invoke_t>, decltype(snk)>>;
 
             using indices = bind<lambda<indices>, lambda<list>>;
 

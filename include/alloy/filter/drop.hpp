@@ -18,7 +18,7 @@ namespace alloy::detail {
 
                 using R =
                     cascade<transform<partial<lambda<metal::drop>, Args>, Ns>,
-                        lambda<std::common_type_t>,
+                        lambda<common>,
                         partial<lambda<invoke_t>, decltype(snk)>>;
 
                 using Dispatcher = cascade<
