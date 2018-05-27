@@ -3,7 +3,6 @@
 
 #include "alloy/config.hpp"
 #include "alloy/constant.hpp"
-#include "alloy/defer.hpp"
 #include "alloy/detail.hpp"
 #include "alloy/external.hpp"
 #include "alloy/filter.hpp"
