@@ -162,7 +162,8 @@ template<int X, int Y, int Z>
 constexpr decltype(auto) values() {
     using namespace metal;
     using v = partial<lift<values_t>, number<X>, number<Y>>;
-    return qualify<X, nasty<Y, callable_t<X, apply<v, iota<number<0>, number<Z>>>>>>();
+    using is = iota<number<(Z > 0) ? 0 : - 1 - Z>, number<Z>>;
+    return qualify<X, nasty<Y, callable_t<X, apply<v, is>>>>();
 }
 
 inline constexpr struct {
@@ -210,10 +211,10 @@ constexpr auto cat(Head&& head, Tail&&... tail) {
 
 template<typename... Expected>
 constexpr auto expect(Expected&&... expected) {
-    return [&expected...](auto&&... values) {
-        return cat(FWD(expected)...)([](auto&&... vs) {
+    return [&expected...](auto&&... rs) {
+        return cat(FWD(expected)...)([](auto&&... es) {
             using namespace metal;
-            return std::is_same_v<list<decltype(values)...>, list<decltype(vs)...>>;
+            return std::is_same_v<list<decltype(rs)...>, list<decltype(es)...>>;
         });
     };
 }
@@ -224,3 +225,5 @@ constexpr T const& copy(T const& t) noexcept {
 }
 
 #endif
+
+
