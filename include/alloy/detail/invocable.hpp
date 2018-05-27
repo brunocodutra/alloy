@@ -2,6 +2,7 @@
 #define ALLOY_DETAIL_INVOCABLE_HPP
 
 #include "../config.hpp"
+#include "../detail/invoke.hpp"
 #include "../detail/traits.hpp"
 
 namespace alloy::detail {
