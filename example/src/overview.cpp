@@ -20,17 +20,17 @@ int main() {
     // all you need is to connect the ends
     data >> print; // Hello World!
 
-    // and maybe add a filter in between
+    // just as easily you can build data pipelines
     auto predicate = [](auto x) {
         return std::string{x} != "!";
     };
 
-    data >> alloy::copy_if(predicate) >> print; // Hello World
+    data >> alloy::filter(predicate) >> print; // Hello World
 
     // with Alloy you can kiss `std::apply` goodbye
     alloy::unpack(std::make_tuple(3, '.', "14")) >> print; // 3.14
 
-    // you can even iterate through tuples in a for-loop
+    // you can even iterate through tuples in a regular for-loop
     auto tup = std::make_tuple(3, '.', "14");
 
     for(std::size_t i = 0; i < std::tuple_size<decltype(tup)>{}; ++i)
@@ -63,14 +63,14 @@ int main() {
     produce >> alloy::sink{print};
     alloy::source{produce} >> alloy::sink{print};
 
-    // and your very own filters too
+    // and your very own streams too
     auto process = [](auto const& sink) {
         return [&sink](auto hello, auto _, auto world) {
             return sink(hello, _, "brave", _, "new", _, world, '!');
         };
     };
 
-    produce >> alloy::filter{process} >> print; // Hello brave new World!
+    produce >> alloy::stream{process} >> print; // Hello brave new World!
 
     // embrace (post) modern C++
 
@@ -80,7 +80,7 @@ int main() {
         };
     };
 
-    alloy::forward("post") >> alloy::filter{wrap}
+    alloy::forward("post") >> alloy::stream{wrap}
                            >> alloy::prepend("embrace", ' ')
                            >> alloy::append(' ', "modern C++") >> print;
 }
