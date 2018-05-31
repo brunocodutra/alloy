@@ -6,6 +6,7 @@
 #include "stream/drop.hpp"
 #include "stream/filter.hpp"
 #include "stream/foldl.hpp"
+#include "stream/foldr.hpp"
 #include "stream/model.hpp"
 #include "stream/prepend.hpp"
 #include "stream/reverse.hpp"
