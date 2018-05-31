@@ -122,6 +122,30 @@ constexpr decltype(auto) operator-(nasty<Y, value_t<Z>> const&&) noexcept {
     return value<3, Y, -Z>();
 }
 
+template<int Y, int A, int B>
+constexpr decltype(auto)
+    operator-(nasty<Y, value_t<A>>&, nasty<Y, value_t<B>>&) noexcept {
+    return value<0, Y, A - B>();
+}
+
+template<int Y, int A, int B>
+constexpr decltype(auto)
+    operator-(nasty<Y, value_t<A>>&&, nasty<Y, value_t<B>>&&) noexcept {
+    return value<1, Y, A - B>();
+}
+
+template<int Y, int A, int B>
+constexpr decltype(auto) operator-(
+    nasty<Y, value_t<A>> const&, nasty<Y, value_t<B>> const&) noexcept {
+    return value<2, Y, A - B>();
+}
+
+template<int Y, int A, int B>
+constexpr decltype(auto) operator-(
+    nasty<Y, value_t<A>> const&&, nasty<Y, value_t<B>> const&&) noexcept {
+    return value<3, Y, A - B>();
+}
+
 template<int Y, typename F>
 struct callable_t;
 
