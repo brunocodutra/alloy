@@ -48,7 +48,7 @@ struct nasty<1, T> : T {
     constexpr nasty() noexcept(false) {}
     constexpr nasty(nasty&&) noexcept(false) {}
     constexpr nasty(nasty const&) noexcept(false) {}
-    constexpr nasty(nasty const&&) noexcept(false) {};
+    constexpr nasty(nasty const&&) noexcept(false){};
 
     template<typename... Xs>
     constexpr nasty(Xs&&...) = delete;
@@ -100,6 +100,26 @@ struct value_t {
 template<int X, int Y, int Z>
 constexpr decltype(auto) value() {
     return qualify<X, nasty<Y, value_t<Z>>>();
+}
+
+template<int Y, int Z>
+constexpr decltype(auto) operator-(nasty<Y, value_t<Z>>&) noexcept {
+    return value<0, Y, -Z>();
+}
+
+template<int Y, int Z>
+constexpr decltype(auto) operator-(nasty<Y, value_t<Z>>&&) noexcept {
+    return value<1, Y, -Z>();
+}
+
+template<int Y, int Z>
+constexpr decltype(auto) operator-(nasty<Y, value_t<Z>> const&) noexcept {
+    return value<2, Y, -Z>();
+}
+
+template<int Y, int Z>
+constexpr decltype(auto) operator-(nasty<Y, value_t<Z>> const&&) noexcept {
+    return value<3, Y, -Z>();
 }
 
 template<int Y, typename F>
@@ -158,11 +178,12 @@ struct values_t {
     }
 };
 
-template<int X, int Y, int Z>
+template<int X, int Y, int Z, int K = 0>
 constexpr decltype(auto) values() {
     using namespace metal;
     using v = partial<lift<values_t>, number<X>, number<Y>>;
-    using is = iota<number<(Z > 0) ? 0 : - 1 - Z>, number<Z>>;
+    using f = partial<lambda<add>, number<K>>;
+    using is = transform<f, iota<number<(Z > 0) ? 0 : -1 - Z>, number<Z>>>;
     return qualify<X, nasty<Y, callable_t<X, apply<v, is>>>>();
 }
 
@@ -170,7 +191,7 @@ inline constexpr struct {
     template<typename... Ts>
     constexpr auto operator()(Ts&&...) const {
         struct _ {};
-        return  _{};
+        return _{};
     }
 } sink = {};
 
@@ -182,9 +203,7 @@ template<typename T>
 using is_source = metal::is_invocable<metal::lambda<is_source_impl>, T>;
 
 constexpr auto cat() {
-    return [](auto&& f) {
-        return FWD(f)();
-    };
+    return [](auto&& f) { return FWD(f)(); };
 }
 
 template<typename Head>
@@ -192,9 +211,7 @@ constexpr decltype(auto) cat(Head&& head) {
     if constexpr(is_source<Head>{}) {
         return FWD(head);
     } else {
-        return [&head](auto&& f) {
-            return FWD(f)(FWD(head));
-        };
+        return [&head](auto&& f) { return FWD(f)(FWD(head)); };
     }
 }
 
@@ -225,5 +242,3 @@ constexpr T const& copy(T const& t) noexcept {
 }
 
 #endif
-
-

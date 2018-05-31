@@ -8,5 +8,6 @@
 #include "stream/model.hpp"
 #include "stream/prepend.hpp"
 #include "stream/reverse.hpp"
+#include "stream/transform.hpp"
 
 #endif
