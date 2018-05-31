@@ -1,12 +1,12 @@
-#ifndef ALLOY_FILTER_MODEL_HPP
-#define ALLOY_FILTER_MODEL_HPP
+#ifndef ALLOY_STREAM_MODEL_HPP
+#define ALLOY_STREAM_MODEL_HPP
 
 #include "../config.hpp"
 #include "../detail.hpp"
 
 namespace alloy {
     template<typename S>
-    struct filter : detail::invocable<S> {
+    struct stream : detail::invocable<S> {
         using base = detail::invocable<S>;
 
         using base::base;
@@ -14,7 +14,7 @@ namespace alloy {
     };
 
     template<typename S>
-    filter(S &&)->filter<S>;
+    stream(S &&)->stream<S>;
 }
 
 #endif

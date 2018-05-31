@@ -1,9 +1,9 @@
-#ifndef ALLOY_FILTER_REVERSE_HPP
-#define ALLOY_FILTER_REVERSE_HPP
+#ifndef ALLOY_STREAM_REVERSE_HPP
+#define ALLOY_STREAM_REVERSE_HPP
 
 #include "../config.hpp"
 #include "../detail.hpp"
-#include "../filter/model.hpp"
+#include "../stream/model.hpp"
 
 namespace alloy::detail {
     constexpr auto reverse() noexcept {
@@ -23,7 +23,7 @@ namespace alloy::detail {
 }
 
 namespace alloy {
-    inline constexpr auto reverse = []() { return filter{detail::reverse()}; };
+    inline constexpr auto reverse = []() { return stream{detail::reverse()}; };
 }
 
 #endif

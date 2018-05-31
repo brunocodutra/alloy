@@ -1,10 +1,10 @@
-#ifndef ALLOY_FILTER_DROP_HPP
-#define ALLOY_FILTER_DROP_HPP
+#ifndef ALLOY_STREAM_DROP_HPP
+#define ALLOY_STREAM_DROP_HPP
 
 #include "../config.hpp"
 #include "../constant.hpp"
 #include "../detail.hpp"
-#include "../filter/model.hpp"
+#include "../stream/model.hpp"
 
 namespace alloy::detail {
     template<typename I>
@@ -51,7 +51,7 @@ namespace alloy::detail {
 
 namespace alloy {
     inline constexpr auto drop = [](auto&& i) {
-        return filter{detail::drop(static_cast<decltype(i)>(i))};
+        return stream{detail::drop(static_cast<decltype(i)>(i))};
     };
 }
 

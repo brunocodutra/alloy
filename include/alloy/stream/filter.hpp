@@ -1,14 +1,14 @@
-#ifndef ALLOY_FILTER_COPY_IF_HPP
-#define ALLOY_FILTER_COPY_IF_HPP
+#ifndef ALLOY_STREAM_FILTER_HPP
+#define ALLOY_STREAM_FILTER_HPP
 
 #include "../config.hpp"
 #include "../constant.hpp"
 #include "../detail.hpp"
-#include "../filter/model.hpp"
+#include "../stream/model.hpp"
 
 namespace alloy::detail {
     template<typename... Ns>
-    constexpr auto copy_if_impl(Ns&&... ns) noexcept {
+    constexpr auto filter(Ns&&... ns) noexcept {
         return [&ns...](auto&& snk) noexcept {
             return [&ns..., &snk](auto&&... args) -> decltype(auto) {
                 using namespace metal;
@@ -31,7 +31,7 @@ namespace alloy::detail {
     }
 
     template<auto... ns>
-    constexpr auto copy_if_impl(constant<ns>...) noexcept {
+    constexpr auto filter(constant<ns>...) noexcept {
         using namespace metal;
 
         using Is = copy_if<indices<numbers<ns...>>,
@@ -46,7 +46,7 @@ namespace alloy::detail {
         };
     }
 
-    constexpr auto copy_if_impl() noexcept {
+    constexpr auto filter() noexcept {
         return [](auto&& snk) noexcept {
             return [&snk](auto&&... args) -> decltype(auto) {
                 return picker<>::template dispatch(
@@ -57,22 +57,20 @@ namespace alloy::detail {
     }
 }
 
-/* clang-format off */
 namespace alloy {
-    inline constexpr auto copy_if = [](auto&& f) {
-        return filter{
-            [&f](auto&& snk) noexcept {
-                return [&f, &snk](auto&&... args) -> decltype(auto) {
-                    return detail::copy_if_impl(
-                        detail::invoke(static_cast<decltype(f)>(f),
-                            static_cast<decltype(args)>(args))...)(
-                                static_cast<decltype(snk)>(snk))(
-                                    static_cast<decltype(args)>(args)...);
-                };
-            }
+    inline constexpr auto filter = [](auto&& f) {
+        stream impl = [&f](auto&& snk) noexcept {
+            return [&f, &snk](auto&&... args) -> decltype(auto) {
+                return detail::filter(
+                    detail::invoke(static_cast<decltype(f)>(f),
+                        static_cast<decltype(args)>(args))...)(
+                    static_cast<decltype(snk)>(snk))(
+                    static_cast<decltype(args)>(args)...);
+            };
         };
+
+        return impl;
     };
 }
-/* clang-format off */
 
 #endif

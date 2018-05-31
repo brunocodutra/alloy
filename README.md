@@ -27,17 +27,17 @@ int main() {
     // all you need is to connect the ends
     data >> print; // Hello World!
 
-    // and maybe add a filter in between
+    // just as easily you can build data pipelines
     auto predicate = [](auto x) {
         return std::string{x} != "!";
     };
 
-    data >> alloy::copy_if(predicate) >> print; // Hello World
+    data >> alloy::filter(predicate) >> print; // Hello World
 
     // with Alloy you can kiss `std::apply` goodbye
     alloy::unpack(std::make_tuple(3, '.', "14")) >> print; // 3.14
 
-    // you can even iterate through tuples in a for-loop
+    // you can even iterate through tuples in a regular for-loop
     auto tup = std::make_tuple(3, '.', "14");
 
     for(std::size_t i = 0; i < std::tuple_size<decltype(tup)>{}; ++i)
@@ -70,14 +70,14 @@ int main() {
     produce >> alloy::sink{print};
     alloy::source{produce} >> alloy::sink{print};
 
-    // and your very own filters too
+    // and your very own streams too
     auto process = [](auto const& sink) {
         return [&sink](auto hello, auto _, auto world) {
             return sink(hello, _, "brave", _, "new", _, world, '!');
         };
     };
 
-    produce >> alloy::filter{process} >> print; // Hello brave new World!
+    produce >> alloy::stream{process} >> print; // Hello brave new World!
 
     // embrace (post) modern C++
 
@@ -87,7 +87,7 @@ int main() {
         };
     };
 
-    alloy::forward("post") >> alloy::filter{wrap}
+    alloy::forward("post") >> alloy::stream{wrap}
                            >> alloy::prepend("embrace", ' ')
                            >> alloy::append(' ', "modern C++") >> print;
 }
@@ -120,9 +120,9 @@ Can you deduce the type of `x` this time?
 
 ```.cpp
 template<typename Tuple, typename Predicate>
-decltype(auto) copy_if(Tuple&&, Predicate&&);
+decltype(auto) filter(Tuple&&, Predicate&&);
 
-auto x = copy_if(std::make_tuple(1, 1.0, '1', "one"), [](auto&&) {
+auto x = filter(std::make_tuple(1, 1.0, '1', "one"), [](auto&&) {
     return std::rand() % 2;
 });
 ```
@@ -135,7 +135,7 @@ function instead.
 
 ```.cpp
 template<typename Tuple, typename Predicate, typename Callback>
-void copy_if(Tuple&&, Predicate&&, Callback&&);
+void filter(Tuple&&, Predicate&&, Callback&&);
 
 auto predicate = [](auto&&) {
     return std::rand() % 2;
@@ -143,11 +143,11 @@ auto predicate = [](auto&&) {
 
 auto callback = [](auto&&... /*args*/) { /* ... */ };
 
-copy_if(std::make_tuple(1, 1.0, '1', "one"), predicate, callback);
+filter(std::make_tuple(1, 1.0, '1', "one"), predicate, callback);
 ```
 
 That was easy after all... or was it? Let us not forget that we still need to
-implement `copy_if`.
+implement `filter`.
 
 How can the standard library help us get there, you might have asked yourself,
 and the answer is quite simple in fact: _It can't really._
@@ -157,7 +157,7 @@ about all the standard library can do for us, from then on we are on our own.
 
 ```.cpp
 template<typename Tuple, typename Predicate, typename Callback>
-void copy_if(Tuple&& tuple, Predicate&& predicate, Callback&& callback) {
+void filter(Tuple&& tuple, Predicate&& predicate, Callback&& callback) {
     constexpr auto impl = [&predicate, &callback](auto&&... elements) {
         // TODO: do the heavy lifting :(
     };
@@ -178,7 +178,7 @@ auto predicate = [](auto&&) {
 
 auto callback = [](auto&&... /*args*/) { /* ... */ };
 
-alloy::unpack(tuple) >> alloy::copy_if(predicate) >> callback;
+alloy::unpack(tuple) >> alloy::filter(predicate) >> callback;
 ```
 
 We need Alloy.
