@@ -16,21 +16,29 @@ addons:
     - g++-8
     - cppcheck
     - clang-5.0
-    - clang-tidy-5.0
     - clang-6.0
+    - clang-tidy-5.0
     - clang-tidy-6.0
-    sources: &srcs
+    - clang-format-6.0
+    sources:
     - ubuntu-toolchain-r-test
     - llvm-toolchain-trusty-5.0
     - llvm-toolchain-trusty-6.0
 
 stages:
-- test
 - lint
+- test
 - deploy
 
 jobs:
   include:
+  - os: linux
+    dist: trusty
+    stage: lint
+    compiler: clang++
+    env: VERSION=6.0
+    script: (cd "${BUILD_PATH}" && ctest --output-on-failure -R ^test.format)
+
   - os: linux
     dist: trusty
     stage: test
@@ -54,19 +62,6 @@ jobs:
     stage: test
     compiler: clang++
     env: VERSION=6.0
-
-  - os: linux
-    dist: trusty
-    stage: lint
-    compiler: clang++
-    env: VERSION=6.0
-    script: (cd "${BUILD_PATH}" && ctest --output-on-failure -R ^test.format)
-    addons:
-      apt:
-        packages:
-        - clang-6.0
-        - clang-format-6.0
-        sources: *srcs
 
   - os: linux
     dist: trusty
@@ -110,28 +105,6 @@ before_install:
   then
     export CC="${CC}-${VERSION}"
     export CXX="${CXX}-${VERSION}"
-  fi
-
-install:
-# libc++
-- |
-  if [[ ${CC} == clang* && ${CXX} == clang++* ]]
-  then
-    git clone --depth 1 http://llvm.org/git/llvm.git "${DEPS_PATH}/llvm" || exit $?
-    git clone --depth 1 http://llvm.org/git/libcxx.git "${DEPS_PATH}/llvm/projects/libcxx" || exit $?
-    git clone --depth 1 http://llvm.org/git/libcxxabi.git "${DEPS_PATH}/llvm/projects/libcxxabi" || exit $?
-
-    LLVM_CMAKE_ARGS+=(-H"${DEPS_PATH}/llvm")
-    LLVM_CMAKE_ARGS+=(-B"${DEPS_PATH}/llvm/build")
-    LLVM_CMAKE_ARGS+=(-DCMAKE_INSTALL_PREFIX="${DEPS_PATH}/llvm/install")
-    LLVM_CMAKE_ARGS+=(-DLLVM_USE_SANITIZER="Undefined;Address")
-
-    CFLAGS="" CXXFLAGS="" LDFLAGS="" cmake ${LLVM_CMAKE_ARGS[@]} || exit $?
-    make -C "${DEPS_PATH}/llvm/build" -j install-cxx install-cxxabi || exit $?
-
-    export CXXFLAGS="${CXXFLAGS} -stdlib=libc++ -nostdinc++ -isystem ${DEPS_PATH}/llvm/install/include/c++/v1"
-    export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${DEPS_PATH}/llvm/install/lib"
-    export LDFLAGS="${LDFLAGS} -L${DEPS_PATH}/llvm/install/lib"
   fi
 
 before_script:
