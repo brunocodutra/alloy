@@ -61,8 +61,10 @@ namespace alloy::detail {
     struct _instanceof : std::false_type {};
 
     template<typename... Xs,
-        template<typename...> class X,
-        template<typename...> class Y>
+        template<typename...>
+        class X,
+        template<typename...>
+        class Y>
     struct _instanceof<X<Xs...>, Y, requires<metal::is_value<Y<Xs...>>::value>>
         : std::is_same<X<Xs...>, Y<Xs...>> {};
 
