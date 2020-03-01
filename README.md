@@ -1,4 +1,4 @@
-# Alloy [![version]][semver] [![travis.badge]][travis.alloy] [![gitter.badge]][gitter.alloy] [![godbolt.badge]][godbolt.alloy]
+# Alloy [![version]][semver] [![gitter.badge]][gitter.alloy] [![godbolt.badge]][godbolt.alloy]
 Embrace (post) modern C++
 
 ## Overview
@@ -191,14 +191,7 @@ We need Alloy.
 
 ## Portability
 
-The following compilers are continuously tested on [Travis CI][travis.alloy].
-
-| Compiler          | Version   | Operating System
-|-------------------|-----------|-----------------------
-| GCC               | 7         | Ubuntu 14.04 LTS
-| GCC               | 8         | Ubuntu 14.04 LTS
-| Clang             | 5.0       | Ubuntu 14.04 LTS
-| Clang             | 6.0       | Ubuntu 14.04 LTS
+Alloy requires C++17 and is known to work on GCC 7+ and Clang 5+.
 
 ## License
 
@@ -206,9 +199,6 @@ This project is licensed under the [MIT][license].
 
 [version]:          https://badge.fury.io/gh/brunocodutra%2Falloy.svg
 [semver]:           https://semver.org
-
-[travis.alloy]:     https://travis-ci.org/brunocodutra/alloy
-[travis.badge]:     https://travis-ci.org/brunocodutra/alloy.svg?branch=master
 
 [gitter.alloy]:     https://gitter.im/brunocodutra/alloy?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge
 [gitter.badge]:     https://badges.gitter.im/brunocodutra/alloy.svg
