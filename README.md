@@ -203,7 +203,7 @@ This project is licensed under the [MIT][license].
 [gitter.alloy]:     https://gitter.im/brunocodutra/alloy?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge
 [gitter.badge]:     https://badges.gitter.im/brunocodutra/alloy.svg
 
-[godbolt.alloy]:    https://godbolt.org/g/vmbXbT
+[godbolt.alloy]:    https://godbolt.org/z/SfXD6H
 [godbolt.badge]:    https://img.shields.io/badge/try%20it-on%20godbolt-222266.svg
 
 [license]:          https://github.com/brunocodutra/alloy/blob/master/LICENSE
