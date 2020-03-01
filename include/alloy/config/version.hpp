@@ -2,7 +2,7 @@
 #define ALLOY_CONFIG_VERSION_HPP
 
 #define ALLOY_MAJOR 1
-#define ALLOY_MINOR 0
+#define ALLOY_MINOR 1
 #define ALLOY_PATCH 0
 
 #define ALLOY_SEMVER(MAJOR, MINOR, PATCH) \
