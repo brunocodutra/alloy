@@ -6,8 +6,8 @@
 #include <type_traits>
 
 namespace alloy {
-    template<auto c>
-    using constant = std::integral_constant<decltype(c), c>;
+template <auto c>
+using constant = std::integral_constant<decltype(c), c>;
 }
 
 #endif

@@ -7,59 +7,62 @@
 #include "../stream/model.hpp"
 
 namespace alloy::detail {
-    template<typename... Is>
-    constexpr auto at(Is&&... is) noexcept {
-        return [&is...](auto&& snk) noexcept {
-            return [&is..., &snk](auto&&... args) -> decltype(auto) {
-                using namespace metal;
+template <typename... Is>
+constexpr auto at(Is&&... is) noexcept
+{
+    return [&is...](auto&& snk) noexcept {
+        return [&is..., &snk](auto&&... args) -> decltype(auto) {
+            using namespace metal;
 
-                using N = number<sizeof...(is)>;
-                using Args = list<decltype(args)...>;
+            using N = number<sizeof...(is)>;
+            using Args = list<decltype(args)...>;
 
-                using R = cascade<combine<Args, N>, lambda<common>,
-                    partial<lambda<invoke_t>, decltype(snk)>>;
+            using R = cascade<combine<Args, N>, lambda<common>,
+                partial<lambda<invoke_t>, decltype(snk)>>;
 
-                using Dispatcher = cascade<combine<indices<Args>, N>,
-                    lambda<dispatcher>, lambda<picker>>;
+            using Dispatcher = cascade<combine<indices<Args>, N>,
+                lambda<dispatcher>, lambda<picker>>;
 
-                return Dispatcher::template dispatch<R>(
-                    foldl(
-                        [](std::size_t i, std::size_t j) {
-                            return sizeof...(args) * i + j;
-                        },
-                        0U, static_cast<Is&&>(is)...),
-                    static_cast<decltype(snk)>(snk),
-                    static_cast<decltype(args)>(args)...);
-            };
+            return Dispatcher::template dispatch<R>(
+                foldl(
+                    [](std::size_t i, std::size_t j) {
+                        return sizeof...(args) * i + j;
+                    },
+                    0U, static_cast<Is&&>(is)...),
+                static_cast<decltype(snk)>(snk),
+                static_cast<decltype(args)>(args)...);
         };
-    }
+    };
+}
 
-    template<auto... is>
-    constexpr auto at(constant<is>...) noexcept {
-        return [](auto&& snk) noexcept {
-            return [&snk](auto&&... args) -> decltype(auto) {
-                return picker<constant<is>...>::template dispatch(
-                    static_cast<decltype(snk)>(snk),
-                    static_cast<decltype(args)>(args)...);
-            };
+template <auto... is>
+constexpr auto at(constant<is>...) noexcept
+{
+    return [](auto&& snk) noexcept {
+        return [&snk](auto&&... args) -> decltype(auto) {
+            return picker<constant<is>...>::template dispatch(
+                static_cast<decltype(snk)>(snk),
+                static_cast<decltype(args)>(args)...);
         };
-    }
+    };
+}
 
-    constexpr auto at() noexcept {
-        return [](auto&& snk) noexcept {
-            return [&snk](auto&&... args) -> decltype(auto) {
-                return picker<>::template dispatch(
-                    static_cast<decltype(snk)>(snk),
-                    static_cast<decltype(args)>(args)...);
-            };
+constexpr auto at() noexcept
+{
+    return [](auto&& snk) noexcept {
+        return [&snk](auto&&... args) -> decltype(auto) {
+            return picker<>::template dispatch(
+                static_cast<decltype(snk)>(snk),
+                static_cast<decltype(args)>(args)...);
         };
-    }
+    };
+}
 }
 
 namespace alloy {
-    inline constexpr auto at = [](auto&&... is) {
-        return stream{detail::at(static_cast<decltype(is)>(is)...)};
-    };
+inline constexpr auto at = [](auto&&... is) {
+    return stream { detail::at(static_cast<decltype(is)>(is)...) };
+};
 }
 
 #endif

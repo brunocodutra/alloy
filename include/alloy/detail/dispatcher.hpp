@@ -6,16 +6,18 @@
 #include <cstddef>
 
 namespace alloy::detail {
-    template<typename... Targets>
-    struct dispatcher {
-        template<typename R, typename... Args>
-        static constexpr R dispatch(std::size_t i, Args&&... args) {
-            constexpr R (*targets[])(Args && ...) = {
-                &Targets::template dispatch<R, Args...>...};
+template <typename... Targets>
+struct dispatcher {
+    template <typename R, typename... Args>
+    static constexpr R dispatch(std::size_t i, Args&&... args)
+    {
+        constexpr R (*targets[])(Args && ...) = {
+            &Targets::template dispatch<R, Args...>...
+        };
 
-            return targets[i](static_cast<Args&&>(args)...);
-        }
-    };
+        return targets[i](static_cast<Args&&>(args)...);
+    }
+};
 }
 
 #endif

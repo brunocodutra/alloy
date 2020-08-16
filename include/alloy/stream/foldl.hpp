@@ -6,18 +6,18 @@
 #include "../stream/model.hpp"
 
 namespace alloy {
-    inline constexpr auto foldl = [](auto&& f, auto&& init) {
-        stream impl = [&f, &init](auto&& snk) noexcept {
-            return [&f, &init, &snk](auto&&... args) -> decltype(auto) {
-                return detail::invoke(static_cast<decltype(snk)>(snk),
-                    detail::foldl(static_cast<decltype(f)>(f),
-                        static_cast<decltype(init)>(init),
-                        static_cast<decltype(args)>(args)...));
-            };
+inline constexpr auto foldl = [](auto&& f, auto&& init) {
+    stream impl = [&f, &init](auto&& snk) noexcept {
+        return [&f, &init, &snk](auto&&... args) -> decltype(auto) {
+            return detail::invoke(static_cast<decltype(snk)>(snk),
+                detail::foldl(static_cast<decltype(f)>(f),
+                    static_cast<decltype(init)>(init),
+                    static_cast<decltype(args)>(args)...));
         };
-
-        return impl;
     };
+
+    return impl;
+};
 }
 
 #endif
