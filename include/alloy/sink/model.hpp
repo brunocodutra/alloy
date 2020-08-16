@@ -5,16 +5,16 @@
 #include "../detail.hpp"
 
 namespace alloy {
-    template<typename S>
-    struct sink : detail::invocable<S> {
-        using base = detail::invocable<S>;
+template <typename S>
+struct sink : detail::invocable<S> {
+    using base = detail::invocable<S>;
 
-        using base::base;
-        using base::operator();
-    };
+    using base::base;
+    using base::operator();
+};
 
-    template<typename S>
-    sink(S &&)->sink<S>;
+template <typename S>
+sink(S &&) -> sink<S>;
 }
 
 #endif
