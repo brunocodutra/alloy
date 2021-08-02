@@ -33,19 +33,8 @@ jobs:
   gcc:
     needs: [format]
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        version: ['7', '']
-
-        include:
-        - version: '7'
-          compiler: 'g++-7'
-
-        - version: ''
-          compiler: 'g++'
     env:
-      CXX: "${{ matrix.compiler }}"
+      CXX: 'g++'
       CXXFLAGS: '-fsanitize=address,undefined -fuse-ld=gold'
     steps:
     - uses: actions/checkout@v1
@@ -53,7 +42,7 @@ jobs:
       run: |
         sudo add-apt-repository ppa:ubuntu-toolchain-r/test
         sudo apt-get update
-        sudo apt-get install -y ${{ matrix.compiler }} cppcheck
+        sudo apt-get install -y g++ cppcheck
     - name: configure
       run: cmake -H. -Bbuild/
     - name: test
@@ -62,33 +51,20 @@ jobs:
   clang:
     needs: [format]
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        version: ['5', '']
-
-        include:
-        - version: '5'
-          compiler: 'clang++-5.0'
-          cxxflags: '-fsanitize=address,undefined -stdlib=libc++'
-
-        - version: ''
-          compiler: 'clang++'
-          cxxflags: '-fsanitize=address,undefined'
     env:
-      CXX: "${{ matrix.compiler }}"
-      CXXFLAGS: "${{ matrix.cxxflags }}"
+      CXX: 'clang++'
+      CXXFLAGS: '-fsanitize=address,undefined'
     steps:
     - uses: actions/checkout@v1
     - name: install
       run: |
         sudo wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add -
-        sudo add-apt-repository "deb http://apt.llvm.org/$(lsb_release -sc)/ llvm-toolchain-$(lsb_release -sc)${CXX##*${CXX%-*}} main"
+        sudo add-apt-repository "deb http://apt.llvm.org/$(lsb_release -sc)/ llvm-toolchain-$(lsb_release -sc) main"
         sudo add-apt-repository ppa:ubuntu-toolchain-r/test
         sudo apt-get update
-        sudo apt-get install -y clang${CXX##*${CXX%-*}} clang-tidy${CXX##*${CXX%-*}} libc++-dev libc++abi-dev
+        sudo apt-get install -y clang clang-tidy
     - name: configure
-      run: cmake -H. -Bbuild/ -DCLANG_TIDY=/usr/bin/clang-tidy${CXX##*${CXX%-*}}
+      run: cmake -H. -Bbuild/ -DCLANG_TIDY=/usr/bin/clang-tidy
     - name: test
       run: cd build && ctest --output-on-failure -E ^test.format
 

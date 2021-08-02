@@ -191,7 +191,7 @@ We need Alloy.
 
 ## Portability
 
-Alloy requires C++17 and is known to work on GCC 7+ and Clang 5+.
+Alloy requires C++17 and is known to work on GCC and Clang.
 
 ## License
 
