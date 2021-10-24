@@ -200,7 +200,7 @@ This project is licensed under the [MIT][license].
 [version]:          https://badge.fury.io/gh/brunocodutra%2Falloy.svg
 [semver]:           https://semver.org
 
-[godbolt.alloy]:    https://godbolt.org/z/SfXD6H
+[godbolt.alloy]:    https://godbolt.org/z/4P38zfnMh
 [godbolt.badge]:    https://img.shields.io/badge/try%20it-on%20godbolt-222266.svg
 
 [license]:          https://github.com/brunocodutra/alloy/blob/master/LICENSE
