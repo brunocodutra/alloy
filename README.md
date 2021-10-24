@@ -1,4 +1,4 @@
-# Alloy [![version]][semver] [![gitter.badge]][gitter.alloy] [![godbolt.badge]][godbolt.alloy]
+# Alloy [![version]][semver] [![godbolt.badge]][godbolt.alloy]
 Embrace (post) modern C++
 
 ## Overview
@@ -199,9 +199,6 @@ This project is licensed under the [MIT][license].
 
 [version]:          https://badge.fury.io/gh/brunocodutra%2Falloy.svg
 [semver]:           https://semver.org
-
-[gitter.alloy]:     https://gitter.im/brunocodutra/alloy?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge
-[gitter.badge]:     https://badges.gitter.im/brunocodutra/alloy.svg
 
 [godbolt.alloy]:    https://godbolt.org/z/SfXD6H
 [godbolt.badge]:    https://img.shields.io/badge/try%20it-on%20godbolt-222266.svg
